@@ -1,0 +1,253 @@
+#ifndef PLATFORM_H
+#define	PLATFORM_H
+
+#ifndef _SUPPRESS_PLIB_WARNING
+#define _SUPPRESS_PLIB_WARNING
+#endif
+
+#ifdef	__cplusplus
+extern "C" {
+#endif
+
+#include <xc.h>
+#include <plib.h>
+
+#include <string.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <time.h>
+#include <limits.h>
+#include "../../xmem.h"
+
+#include "disksd.h"
+#include "../../fatfs/source/ff.h"
+#include "../../fatfs/source/diskio.h"
+
+#ifndef BIT
+#define BIT(b) (1ul << (b))
+#endif
+
+#define _XTAL_FREQ      50000000ul  // oscillator frequency as defined in the configuration bits
+#define _PB_FREQ        50000000ul  // peripheral bus frequency as defined in the configuration bits
+
+#define IFS_DRV_KB      67          // IFS drive size in kB (this can be 0 if IFS drive is not required)
+#define RAM_DRV_KB      0           // RAM drive size in kB (this can be 0 if RAM drive is not required)
+
+#define SERIAL_BAUDRATE 38400       // serial console baudrate; protocol 8N1
+#define SERIAL_TX       LATBbits.LATB7      // serial console Tx line (Rx is fixed at RB5)
+#define SERIAL_TX_TRIS  TRISBbits.TRISB7
+
+extern unsigned char ifs_data[];    // the C: drive area
+
+
+// SYSTEM DEFINITIONS ===========================================================================
+
+#define DEFAULT_KBD_FLAGS   0           // Scroll / Num / Caps flags
+
+void __attribute__((nomips16)) _general_exception_handler(void);
+void __attribute__ ((nomips16)) reset(void);
+void initPlatform(void);
+
+#define CON_BUFFER_SIZE 160 // size of the input console buffer
+#define MSK_WAIT_MS     10  // give this many milliseconds time for the next key in escape sequences
+
+unsigned char *SysMem;      // system memory
+unsigned long SysMemSize;   // size in bytes of the allocated system memory
+
+
+// VIDEO GENERATOR AND HARDWARE-DEPENDENT BASIC VIDEO FUNCTIONS =================================
+
+unsigned char *VidMem;      // video memory
+unsigned long VidMemSize;   // size in bytes of the allocated video memory
+
+extern unsigned int VideoParams[1][8];
+
+uint32_t VpageAddr;     // VM memory address where the video page starts
+uint16_t Hres, Vres;    // video resolution in pixels
+uint8_t Vmode;          // video mode
+
+void initVideo(uint8_t mode);
+void clearScreen(int c);
+void scrollUp(int vl, int c);
+void setPixel(int x, int y, int c);
+int getPixel(int x, int y);
+
+__attribute__ ((used)) void _mon_putc(char ch);
+__attribute__ ((used)) void _mon_puts(const char *s);
+
+
+// PS/2 KEYBOARD ================================================================================
+
+volatile uint8_t kbdFlags;      // keyboard LED flags: [.0] ScrollLock; [.1] NumLock; [.2] CapsLock
+volatile int16_t keyDown;       // -1 or key code of a pressed key
+volatile uint32_t msKbdTimer;   // self-resettable millisecond countdown timer
+
+void setKbdLEDs(uint8_t flags);
+void initKeyboard(void);
+
+__attribute__ ((used)) int _mon_getc(int blocking);
+__attribute__ ((used)) int kbhit(void);
+__attribute__ ((used)) char getch(void);
+
+
+// USB ==========================================================================================
+
+#ifdef MULTI_CLASS_DEVICE
+uint8_t cdc_interfaces[];
+uint8_t msc_interfaces[];
+#endif
+
+void doUSB(void);
+
+
+// TIMING =======================================================================================
+
+volatile unsigned long msCountdown; /* internal countdown timer used by mSec() */
+volatile unsigned long msClock;     /* counter of the milliseconds since the last system initialisation */
+volatile unsigned long sUTime;      /* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
+
+// delays for microseconds and milliseconds
+#define uSec(us) { unsigned int i = ((((unsigned int) (us) * 1000) - 600) / (2000000000 / _XTAL_FREQ)); \
+                   WriteCoreTimer(0); while(ReadCoreTimer() < i); }
+#define mSec(ms) { msCountdown = ms; while(msCountdown); }
+
+clock_t clock(void);
+time_t time(time_t *t);
+
+
+// SYSTEM SPI AND FILE SYSTEM ===================================================================
+
+#define SYSTEM_SPI      SPI_CHANNEL1    /* openSPI() assumes only SPI1 in ELLO 1A */
+
+#define SD1_nCS_BIT     BIT(1)  /* RA1 is the CS# of SD1 card */
+#define SD2_nCS_BIT     BIT(0)  /* RA0 is used as CS# for an externally connected SD2 card */
+#define SD_nCS_LAT      LATA
+#define SD_nCS_TRIS     TRISA
+
+int openSPI(char channel, unsigned char spi_mode, unsigned char bits, unsigned long speed);
+unsigned long xchgSPI(char channel, unsigned long tx_data);
+
+/* SD card SPI clock in Hz */
+#define SD_CARD_CLK	10000000ul
+
+FATFS FatFs;    /* work area for FatFs */
+
+// USB ==========================================================================================
+
+void checkUSB(void);
+
+
+// SPECIAL VERSION OF NVMProgram() ADAPTED FOR PIC32MX1xx/2xx ===================================
+
+#ifdef PAGE_SIZE
+#undef PAGE_SIZE
+#undef BYTE_PAGE_SIZE
+#undef ROW_SIZE
+#undef BYTE_ROW_SIZE
+#undef NUM_ROWS_PAGE
+#endif
+
+#define PAGE_SIZE       256             // # of 32-bit Instructions per Page
+#define BYTE_PAGE_SIZE  (4 * PAGE_SIZE) // Page size in Bytes
+#define ROW_SIZE        32              // # of 32-bit Instructions per Row
+#define BYTE_ROW_SIZE   (4 * ROW_SIZE)  // # Row size in Bytes
+#define NUM_ROWS_PAGE   8               // Number of Rows per Page
+
+unsigned int NVMProgramMX1(unsigned char *address, unsigned char *data, unsigned int size, unsigned char *pagebuff);
+
+
+// SOUND ========================================================================================
+
+void sound(int freq, int vol);      /* frequency in Hz, sound volume between 0 and 1000 */
+void beep(void);                    /* default system beep */
+
+
+// I2C ==========================================================================================
+
+#define I2C_TRIS        TRISB
+#define I2C_PORT        PORTB
+#define I2C_LAT         LATB
+#define I2C_PULLUP      CNPUB
+
+#define SCL             (1 << 8)
+#define SDA             (1 << 9)
+
+#define I2C_TIMEOUT     200         /* I2C timeout in multiples of 5usec */
+#define I2C_BIT_US      10          /* I2C bit length in microseconds (10us = 100Kbps) */
+
+int i2cInit(int baudrate);
+void i2cStart(void);
+void i2cRepStart(void);
+void i2cStop(void);
+int i2cSend(unsigned char data8);
+unsigned char i2cRecv(int ack);
+
+
+// RTC ==========================================================================================
+
+#define I2C_DS3231      0xD0
+
+int i2cGetTime(struct tm *t);
+int i2cSetTime(struct tm *t);
+
+
+// I/O ports ====================================================================================
+
+/* offsets from the base address for the port-associated registers */
+#define ANSEL      -8
+#define ANSELCLR   -7
+#define ANSELSET   -6
+#define ANSELINV   -5
+#define TRIS       -4
+#define TRISCLR    -3
+#define TRISSET    -2
+#define TRISINV    -1
+#define PORT        0
+#define PORTCLR     1
+#define PORTSET     2
+#define PORTINV     3
+#define LAT         4
+#define LATCLR      5
+#define LATSET      6
+#define LATINV      7
+#define ODC         8
+#define ODCCLR      9
+#define ODCSET      10
+#define ODCINV      11
+#define CNPU        12
+#define CNPUCLR     13
+#define CNPUSET     14
+#define CNPUINV     15
+#define CNPD        16
+#define CNPDCLR     17
+#define CNPDSET     18
+#define CNPDINV     19
+#define CNCON       20
+#define CNCONCLR    21
+#define CNCONSET    22
+#define CNCONINV    23
+#define CNEN        24
+#define CNENCLR     25
+#define CNENSET     26
+#define CNENINV     27
+#define CNSTAT      28
+#define CNSTATCLR   29
+#define CNSTATSET   30
+#define CNSTATINV   31
+
+/* base address of the hardware ports */
+#define BASEA  ((volatile unsigned int *) 0xBF886020)
+#define BASEB  ((volatile unsigned int *) 0xBF886120)
+#define BASEC  ((volatile unsigned int *) 0xBF886220)
+#define BASED  ((volatile unsigned int *) 0xBF886220)
+#define BASEE  ((volatile unsigned int *) 0xBF886220)
+#define BASEF  ((volatile unsigned int *) 0xBF886220)
+#define BASEG  ((volatile unsigned int *) 0xBF886220)
+
+extern const volatile unsigned int *pbase[];
+
+#ifdef	__cplusplus
+}
+#endif
+
+#endif

@@ -1,0 +1,1166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Config-Bit Settings for PIC32MX270F256D</title>
+</head>
+<body bgcolor="#FFFFE0" style="font-family: sans-serif">
+<p>[ <a href="../XC32MasterIndex.htm">Documentation Index</a> | <a href="../PIC32ConfigSet.html">Device index</a> ]</p>
+<h1>Configuration-Bit Settings for PIC32MX270F256D</h1><p>(Data Sheet # <a href="http://www.microchip.com/wwwproducts/Devices.aspx?Product=PIC32MX270F256D&amp;ds=1" target="Datasheet">DS-60001168</a>)</p>
+<p>Usage:<br><strong>#pragma config</strong> <em>SETTING</em> = <em>VALUE</em><br>
+</p>
+<table frame=box rules=cols summary='' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>USERID</th><th></th></tr><tr><td>USERID = 00000000</td><td><font size="2">
+Range is from 0 to 0xffff
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Peripheral Module Disable Configuration' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>PMDL1WAY</th><th>Peripheral Module Disable Configuration</th></tr><tr><td>PMDL1WAY = ON</td><td><font size="2">
+Allow only one reconfiguration
+</font></td></tr>
+<tr><td>PMDL1WAY = OFF</td><td><font size="2">
+Allow multiple reconfigurations
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Peripheral Pin Select Configuration' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>IOL1WAY</th><th>Peripheral Pin Select Configuration</th></tr><tr><td>IOL1WAY = ON</td><td><font size="2">
+Allow only one reconfiguration
+</font></td></tr>
+<tr><td>IOL1WAY = OFF</td><td><font size="2">
+Allow multiple reconfigurations
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='USB USID Selection' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FUSBIDIO</th><th>USB USID Selection</th></tr><tr><td>FUSBIDIO = OFF</td><td><font size="2">
+Controlled by Port Function
+</font></td></tr>
+<tr><td>FUSBIDIO = ON</td><td><font size="2">
+Controlled by the USB Module
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='USB VBUS ON Selection' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FVBUSONIO</th><th>USB VBUS ON Selection</th></tr><tr><td>FVBUSONIO = OFF</td><td><font size="2">
+Controlled by Port Function
+</font></td></tr>
+<tr><td>FVBUSONIO = ON</td><td><font size="2">
+Controlled by USB Module
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='PLL Input Divider' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FPLLIDIV</th><th>PLL Input Divider</th></tr><tr><td>FPLLIDIV = DIV_1</td><td><font size="2">
+1x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_2</td><td><font size="2">
+2x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_3</td><td><font size="2">
+3x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_4</td><td><font size="2">
+4x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_5</td><td><font size="2">
+5x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_6</td><td><font size="2">
+6x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_10</td><td><font size="2">
+10x Divider
+</font></td></tr>
+<tr><td>FPLLIDIV = DIV_12</td><td><font size="2">
+12x Divider
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='PLL Multiplier' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FPLLMUL</th><th>PLL Multiplier</th></tr><tr><td>FPLLMUL = MUL_15</td><td><font size="2">
+15x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_16</td><td><font size="2">
+16x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_17</td><td><font size="2">
+17x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_18</td><td><font size="2">
+18x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_19</td><td><font size="2">
+19x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_20</td><td><font size="2">
+20x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_21</td><td><font size="2">
+21x Multiplier
+</font></td></tr>
+<tr><td>FPLLMUL = MUL_24</td><td><font size="2">
+24x Multiplier
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='USB PLL Input Divider' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>UPLLIDIV</th><th>USB PLL Input Divider</th></tr><tr><td>UPLLIDIV = DIV_1</td><td><font size="2">
+1x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_2</td><td><font size="2">
+2x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_3</td><td><font size="2">
+3x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_4</td><td><font size="2">
+4x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_5</td><td><font size="2">
+5x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_6</td><td><font size="2">
+6x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_10</td><td><font size="2">
+10x Divider
+</font></td></tr>
+<tr><td>UPLLIDIV = DIV_12</td><td><font size="2">
+12x Divider
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='USB PLL Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>UPLLEN</th><th>USB PLL Enable</th></tr><tr><td>UPLLEN = ON</td><td><font size="2">
+Enabled
+</font></td></tr>
+<tr><td>UPLLEN = OFF</td><td><font size="2">
+Disabled and Bypassed
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='System PLL Output Clock Divider' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FPLLODIV</th><th>System PLL Output Clock Divider</th></tr><tr><td>FPLLODIV = DIV_1</td><td><font size="2">
+PLL Divide by 1
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_2</td><td><font size="2">
+PLL Divide by 2
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_4</td><td><font size="2">
+PLL Divide by 4
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_8</td><td><font size="2">
+PLL Divide by 8
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_16</td><td><font size="2">
+PLL Divide by 16
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_32</td><td><font size="2">
+PLL Divide by 32
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_64</td><td><font size="2">
+PLL Divide by 64
+</font></td></tr>
+<tr><td>FPLLODIV = DIV_256</td><td><font size="2">
+PLL Divide by 256
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Oscillator Selection Bits' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FNOSC</th><th>Oscillator Selection Bits</th></tr><tr><td>FNOSC = FRC</td><td><font size="2">
+Fast RC Osc (FRC)
+</font></td></tr>
+<tr><td>FNOSC = FRCPLL</td><td><font size="2">
+Fast RC Osc with PLL
+</font></td></tr>
+<tr><td>FNOSC = PRI</td><td><font size="2">
+Primary Osc (XT,HS,EC)
+</font></td></tr>
+<tr><td>FNOSC = PRIPLL</td><td><font size="2">
+Primary Osc w/PLL (XT+,HS+,EC+PLL)
+</font></td></tr>
+<tr><td>FNOSC = SOSC</td><td><font size="2">
+Low Power Secondary Osc (SOSC)
+</font></td></tr>
+<tr><td>FNOSC = LPRC</td><td><font size="2">
+Low Power RC Osc (LPRC)
+</font></td></tr>
+<tr><td>FNOSC = FRCDIV16</td><td><font size="2">
+Fast RC Osc w/Div-by-16 (FRC/16)
+</font></td></tr>
+<tr><td>FNOSC = FRCDIV</td><td><font size="2">
+Fast RC Osc w/Div-by-N (FRCDIV)
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Secondary Oscillator Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FSOSCEN</th><th>Secondary Oscillator Enable</th></tr><tr><td>FSOSCEN = OFF</td><td><font size="2">
+Disabled
+</font></td></tr>
+<tr><td>FSOSCEN = ON</td><td><font size="2">
+Enabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Internal/External Switch Over' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>IESO</th><th>Internal/External Switch Over</th></tr><tr><td>IESO = OFF</td><td><font size="2">
+Disabled
+</font></td></tr>
+<tr><td>IESO = ON</td><td><font size="2">
+Enabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Primary Oscillator Configuration' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>POSCMOD</th><th>Primary Oscillator Configuration</th></tr><tr><td>POSCMOD = EC</td><td><font size="2">
+External clock mode
+</font></td></tr>
+<tr><td>POSCMOD = XT</td><td><font size="2">
+XT osc mode
+</font></td></tr>
+<tr><td>POSCMOD = HS</td><td><font size="2">
+HS osc mode
+</font></td></tr>
+<tr><td>POSCMOD = OFF</td><td><font size="2">
+Primary osc disabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='CLKO Output Signal Active on the OSCO Pin' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>OSCIOFNC</th><th>CLKO Output Signal Active on the OSCO Pin</th></tr><tr><td>OSCIOFNC = OFF</td><td><font size="2">
+Disabled
+</font></td></tr>
+<tr><td>OSCIOFNC = ON</td><td><font size="2">
+Enabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Peripheral Clock Divisor' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FPBDIV</th><th>Peripheral Clock Divisor</th></tr><tr><td>FPBDIV = DIV_1</td><td><font size="2">
+Pb_Clk is Sys_Clk/1
+</font></td></tr>
+<tr><td>FPBDIV = DIV_2</td><td><font size="2">
+Pb_Clk is Sys_Clk/2
+</font></td></tr>
+<tr><td>FPBDIV = DIV_4</td><td><font size="2">
+Pb_Clk is Sys_Clk/4
+</font></td></tr>
+<tr><td>FPBDIV = DIV_8</td><td><font size="2">
+Pb_Clk is Sys_Clk/8
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Clock Switching and Monitor Selection' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FCKSM</th><th>Clock Switching and Monitor Selection</th></tr><tr><td>FCKSM = CSECME</td><td><font size="2">
+Clock Switch Enable, FSCM Enabled
+</font></td></tr>
+<tr><td>FCKSM = CSECMD</td><td><font size="2">
+Clock Switch Enable, FSCM Disabled
+</font></td></tr>
+<tr><td>FCKSM = CSDCMD</td><td><font size="2">
+Clock Switch Disable, FSCM Disabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Watchdog Timer Postscaler' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>WDTPS</th><th>Watchdog Timer Postscaler</th></tr><tr><td>WDTPS = PS1</td><td><font size="2">
+1:1
+</font></td></tr>
+<tr><td>WDTPS = PS2</td><td><font size="2">
+1:2
+</font></td></tr>
+<tr><td>WDTPS = PS4</td><td><font size="2">
+1:4
+</font></td></tr>
+<tr><td>WDTPS = PS8</td><td><font size="2">
+1:8
+</font></td></tr>
+<tr><td>WDTPS = PS16</td><td><font size="2">
+1:16
+</font></td></tr>
+<tr><td>WDTPS = PS32</td><td><font size="2">
+1:32
+</font></td></tr>
+<tr><td>WDTPS = PS64</td><td><font size="2">
+1:64
+</font></td></tr>
+<tr><td>WDTPS = PS128</td><td><font size="2">
+1:128
+</font></td></tr>
+<tr><td>WDTPS = PS256</td><td><font size="2">
+1:256
+</font></td></tr>
+<tr><td>WDTPS = PS512</td><td><font size="2">
+1:512
+</font></td></tr>
+<tr><td>WDTPS = PS1024</td><td><font size="2">
+1:1024
+</font></td></tr>
+<tr><td>WDTPS = PS2048</td><td><font size="2">
+1:2048
+</font></td></tr>
+<tr><td>WDTPS = PS4096</td><td><font size="2">
+1:4096
+</font></td></tr>
+<tr><td>WDTPS = PS8192</td><td><font size="2">
+1:8192
+</font></td></tr>
+<tr><td>WDTPS = PS16384</td><td><font size="2">
+1:16384
+</font></td></tr>
+<tr><td>WDTPS = PS32768</td><td><font size="2">
+1:32768
+</font></td></tr>
+<tr><td>WDTPS = PS65536</td><td><font size="2">
+1:65536
+</font></td></tr>
+<tr><td>WDTPS = PS131072</td><td><font size="2">
+1:131072
+</font></td></tr>
+<tr><td>WDTPS = PS262144</td><td><font size="2">
+1:262144
+</font></td></tr>
+<tr><td>WDTPS = PS524288</td><td><font size="2">
+1:524288
+</font></td></tr>
+<tr><td>WDTPS = PS1048576</td><td><font size="2">
+1:1048576
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Watchdog Timer Window Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>WINDIS</th><th>Watchdog Timer Window Enable</th></tr><tr><td>WINDIS = ON</td><td><font size="2">
+Watchdog Timer is in Window Mode
+</font></td></tr>
+<tr><td>WINDIS = OFF</td><td><font size="2">
+Watchdog Timer is in Non-Window Mode
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Watchdog Timer Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FWDTEN</th><th>Watchdog Timer Enable</th></tr><tr><td>FWDTEN = OFF</td><td><font size="2">
+WDT Disabled (SWDTEN Bit Controls)
+</font></td></tr>
+<tr><td>FWDTEN = ON</td><td><font size="2">
+WDT Enabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Watchdog Timer Window Size' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>FWDTWINSZ</th><th>Watchdog Timer Window Size</th></tr><tr><td>FWDTWINSZ = WINSZ_75</td><td><font size="2">
+Window Size is 75%
+</font></td></tr>
+<tr><td>FWDTWINSZ = WINSZ_50</td><td><font size="2">
+Window Size is 50%
+</font></td></tr>
+<tr><td>FWDTWINSZ = WINSZ_37</td><td><font size="2">
+Window Size is 37.5%
+</font></td></tr>
+<tr><td>FWDTWINSZ = WINSZ_25</td><td><font size="2">
+Window Size is 25%
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Background Debugger Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>DEBUG</th><th>Background Debugger Enable</th></tr><tr><td>DEBUG = ON</td><td><font size="2">
+Debugger is Enabled
+</font></td></tr>
+<tr><td>DEBUG = OFF</td><td><font size="2">
+Debugger is Disabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='JTAG Enable' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>JTAGEN</th><th>JTAG Enable</th></tr><tr><td>JTAGEN = ON</td><td><font size="2">
+JTAG Port Enabled
+</font></td></tr>
+<tr><td>JTAGEN = OFF</td><td><font size="2">
+JTAG Disabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='ICE/ICD Comm Channel Select' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>ICESEL</th><th>ICE/ICD Comm Channel Select</th></tr><tr><td>ICESEL = ICS_PGx1</td><td><font size="2">
+Communicate on PGEC1/PGED1
+</font></td></tr>
+<tr><td>ICESEL = ICS_PGx2</td><td><font size="2">
+Communicate on PGEC2/PGED2
+</font></td></tr>
+<tr><td>ICESEL = ICS_PGx3</td><td><font size="2">
+Communicate on PGEC3/PGED3
+</font></td></tr>
+<tr><td>ICESEL = ICS_PGx4</td><td><font size="2">
+Communicate on PGEC4/PGED4
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Program Flash Write Protect' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>PWP</th><th>Program Flash Write Protect</th></tr><tr><td>PWP = OFF</td><td><font size="2">
+Disable
+</font></td></tr>
+<tr><td>PWP = PWP1K</td><td><font size="2">
+First 1K
+</font></td></tr>
+<tr><td>PWP = PWP2K</td><td><font size="2">
+First 2K
+</font></td></tr>
+<tr><td>PWP = PWP3K</td><td><font size="2">
+First 3K
+</font></td></tr>
+<tr><td>PWP = PWP4K</td><td><font size="2">
+First 4K
+</font></td></tr>
+<tr><td>PWP = PWP5K</td><td><font size="2">
+First 5K
+</font></td></tr>
+<tr><td>PWP = PWP6K</td><td><font size="2">
+First 6K
+</font></td></tr>
+<tr><td>PWP = PWP7K</td><td><font size="2">
+First 7K
+</font></td></tr>
+<tr><td>PWP = PWP8K</td><td><font size="2">
+First 8K
+</font></td></tr>
+<tr><td>PWP = PWP9K</td><td><font size="2">
+First 9K
+</font></td></tr>
+<tr><td>PWP = PWP10K</td><td><font size="2">
+First 10K
+</font></td></tr>
+<tr><td>PWP = PWP11K</td><td><font size="2">
+First 11K
+</font></td></tr>
+<tr><td>PWP = PWP12K</td><td><font size="2">
+First 12K
+</font></td></tr>
+<tr><td>PWP = PWP13K</td><td><font size="2">
+First 13K
+</font></td></tr>
+<tr><td>PWP = PWP14K</td><td><font size="2">
+First 14K
+</font></td></tr>
+<tr><td>PWP = PWP15K</td><td><font size="2">
+First 15K
+</font></td></tr>
+<tr><td>PWP = PWP16K</td><td><font size="2">
+First 16K
+</font></td></tr>
+<tr><td>PWP = PWP17K</td><td><font size="2">
+First 17K
+</font></td></tr>
+<tr><td>PWP = PWP18K</td><td><font size="2">
+First 18K
+</font></td></tr>
+<tr><td>PWP = PWP19K</td><td><font size="2">
+First 19K
+</font></td></tr>
+<tr><td>PWP = PWP20K</td><td><font size="2">
+First 20K
+</font></td></tr>
+<tr><td>PWP = PWP21K</td><td><font size="2">
+First 21K
+</font></td></tr>
+<tr><td>PWP = PWP22K</td><td><font size="2">
+First 22K
+</font></td></tr>
+<tr><td>PWP = PWP23K</td><td><font size="2">
+First 23K
+</font></td></tr>
+<tr><td>PWP = PWP24K</td><td><font size="2">
+First 24K
+</font></td></tr>
+<tr><td>PWP = PWP25K</td><td><font size="2">
+First 25K
+</font></td></tr>
+<tr><td>PWP = PWP26K</td><td><font size="2">
+First 26K
+</font></td></tr>
+<tr><td>PWP = PWP27K</td><td><font size="2">
+First 27K
+</font></td></tr>
+<tr><td>PWP = PWP28K</td><td><font size="2">
+First 28K
+</font></td></tr>
+<tr><td>PWP = PWP29K</td><td><font size="2">
+First 29K
+</font></td></tr>
+<tr><td>PWP = PWP30K</td><td><font size="2">
+First 30K
+</font></td></tr>
+<tr><td>PWP = PWP31K</td><td><font size="2">
+First 31K
+</font></td></tr>
+<tr><td>PWP = PWP32K</td><td><font size="2">
+First 32K
+</font></td></tr>
+<tr><td>PWP = PWP33K</td><td><font size="2">
+First 33K
+</font></td></tr>
+<tr><td>PWP = PWP34K</td><td><font size="2">
+First 34K
+</font></td></tr>
+<tr><td>PWP = PWP35K</td><td><font size="2">
+First 35K
+</font></td></tr>
+<tr><td>PWP = PWP36K</td><td><font size="2">
+First 36K
+</font></td></tr>
+<tr><td>PWP = PWP37K</td><td><font size="2">
+First 37K
+</font></td></tr>
+<tr><td>PWP = PWP38K</td><td><font size="2">
+First 38K
+</font></td></tr>
+<tr><td>PWP = PWP39K</td><td><font size="2">
+First 39K
+</font></td></tr>
+<tr><td>PWP = PWP40K</td><td><font size="2">
+First 40K
+</font></td></tr>
+<tr><td>PWP = PWP41K</td><td><font size="2">
+First 41K
+</font></td></tr>
+<tr><td>PWP = PWP42K</td><td><font size="2">
+First 42K
+</font></td></tr>
+<tr><td>PWP = PWP43K</td><td><font size="2">
+First 43K
+</font></td></tr>
+<tr><td>PWP = PWP44K</td><td><font size="2">
+First 44K
+</font></td></tr>
+<tr><td>PWP = PWP45K</td><td><font size="2">
+First 45K
+</font></td></tr>
+<tr><td>PWP = PWP46K</td><td><font size="2">
+First 46K
+</font></td></tr>
+<tr><td>PWP = PWP47K</td><td><font size="2">
+First 47K
+</font></td></tr>
+<tr><td>PWP = PWP48K</td><td><font size="2">
+First 48K
+</font></td></tr>
+<tr><td>PWP = PWP49K</td><td><font size="2">
+First 49K
+</font></td></tr>
+<tr><td>PWP = PWP50K</td><td><font size="2">
+First 50K
+</font></td></tr>
+<tr><td>PWP = PWP51K</td><td><font size="2">
+First 51K
+</font></td></tr>
+<tr><td>PWP = PWP52K</td><td><font size="2">
+First 52K
+</font></td></tr>
+<tr><td>PWP = PWP53K</td><td><font size="2">
+First 53K
+</font></td></tr>
+<tr><td>PWP = PWP54K</td><td><font size="2">
+First 54K
+</font></td></tr>
+<tr><td>PWP = PWP55K</td><td><font size="2">
+First 55K
+</font></td></tr>
+<tr><td>PWP = PWP56K</td><td><font size="2">
+First 56K
+</font></td></tr>
+<tr><td>PWP = PWP57K</td><td><font size="2">
+First 57K
+</font></td></tr>
+<tr><td>PWP = PWP58K</td><td><font size="2">
+First 58K
+</font></td></tr>
+<tr><td>PWP = PWP59K</td><td><font size="2">
+First 59K
+</font></td></tr>
+<tr><td>PWP = PWP60K</td><td><font size="2">
+First 60K
+</font></td></tr>
+<tr><td>PWP = PWP61K</td><td><font size="2">
+First 61K
+</font></td></tr>
+<tr><td>PWP = PWP62K</td><td><font size="2">
+First 62K
+</font></td></tr>
+<tr><td>PWP = PWP63K</td><td><font size="2">
+First 63K
+</font></td></tr>
+<tr><td>PWP = PWP64K</td><td><font size="2">
+First 64K
+</font></td></tr>
+<tr><td>PWP = PWP65K</td><td><font size="2">
+First 65K
+</font></td></tr>
+<tr><td>PWP = PWP66K</td><td><font size="2">
+First 66K
+</font></td></tr>
+<tr><td>PWP = PWP67K</td><td><font size="2">
+First 67K
+</font></td></tr>
+<tr><td>PWP = PWP68K</td><td><font size="2">
+First 68K
+</font></td></tr>
+<tr><td>PWP = PWP69K</td><td><font size="2">
+First 69K
+</font></td></tr>
+<tr><td>PWP = PWP70K</td><td><font size="2">
+First 70K
+</font></td></tr>
+<tr><td>PWP = PWP71K</td><td><font size="2">
+First 71K
+</font></td></tr>
+<tr><td>PWP = PWP72K</td><td><font size="2">
+First 72K
+</font></td></tr>
+<tr><td>PWP = PWP73K</td><td><font size="2">
+First 73K
+</font></td></tr>
+<tr><td>PWP = PWP74K</td><td><font size="2">
+First 74K
+</font></td></tr>
+<tr><td>PWP = PWP75K</td><td><font size="2">
+First 75K
+</font></td></tr>
+<tr><td>PWP = PWP76K</td><td><font size="2">
+First 76K
+</font></td></tr>
+<tr><td>PWP = PWP77K</td><td><font size="2">
+First 77K
+</font></td></tr>
+<tr><td>PWP = PWP78K</td><td><font size="2">
+First 78K
+</font></td></tr>
+<tr><td>PWP = PWP79K</td><td><font size="2">
+First 79K
+</font></td></tr>
+<tr><td>PWP = PWP80K</td><td><font size="2">
+First 80K
+</font></td></tr>
+<tr><td>PWP = PWP81K</td><td><font size="2">
+First 81K
+</font></td></tr>
+<tr><td>PWP = PWP82K</td><td><font size="2">
+First 82K
+</font></td></tr>
+<tr><td>PWP = PWP83K</td><td><font size="2">
+First 83K
+</font></td></tr>
+<tr><td>PWP = PWP84K</td><td><font size="2">
+First 84K
+</font></td></tr>
+<tr><td>PWP = PWP85K</td><td><font size="2">
+First 85K
+</font></td></tr>
+<tr><td>PWP = PWP86K</td><td><font size="2">
+First 86K
+</font></td></tr>
+<tr><td>PWP = PWP87K</td><td><font size="2">
+First 87K
+</font></td></tr>
+<tr><td>PWP = PWP88K</td><td><font size="2">
+First 88K
+</font></td></tr>
+<tr><td>PWP = PWP89K</td><td><font size="2">
+First 89K
+</font></td></tr>
+<tr><td>PWP = PWP90K</td><td><font size="2">
+First 90K
+</font></td></tr>
+<tr><td>PWP = PWP91K</td><td><font size="2">
+First 91K
+</font></td></tr>
+<tr><td>PWP = PWP92K</td><td><font size="2">
+First 92K
+</font></td></tr>
+<tr><td>PWP = PWP93K</td><td><font size="2">
+First 93K
+</font></td></tr>
+<tr><td>PWP = PWP94K</td><td><font size="2">
+First 94K
+</font></td></tr>
+<tr><td>PWP = PWP95K</td><td><font size="2">
+First 95K
+</font></td></tr>
+<tr><td>PWP = PWP96K</td><td><font size="2">
+First 96K
+</font></td></tr>
+<tr><td>PWP = PWP97K</td><td><font size="2">
+First 97K
+</font></td></tr>
+<tr><td>PWP = PWP98K</td><td><font size="2">
+First 98K
+</font></td></tr>
+<tr><td>PWP = PWP99K</td><td><font size="2">
+First 99K
+</font></td></tr>
+<tr><td>PWP = PWP100K</td><td><font size="2">
+First 100K
+</font></td></tr>
+<tr><td>PWP = PWP101K</td><td><font size="2">
+First 101K
+</font></td></tr>
+<tr><td>PWP = PWP102K</td><td><font size="2">
+First 102K
+</font></td></tr>
+<tr><td>PWP = PWP103K</td><td><font size="2">
+First 103K
+</font></td></tr>
+<tr><td>PWP = PWP104K</td><td><font size="2">
+First 104K
+</font></td></tr>
+<tr><td>PWP = PWP105K</td><td><font size="2">
+First 105K
+</font></td></tr>
+<tr><td>PWP = PWP106K</td><td><font size="2">
+First 106K
+</font></td></tr>
+<tr><td>PWP = PWP107K</td><td><font size="2">
+First 107K
+</font></td></tr>
+<tr><td>PWP = PWP108K</td><td><font size="2">
+First 108K
+</font></td></tr>
+<tr><td>PWP = PWP109K</td><td><font size="2">
+First 109K
+</font></td></tr>
+<tr><td>PWP = PWP110K</td><td><font size="2">
+First 110K
+</font></td></tr>
+<tr><td>PWP = PWP111K</td><td><font size="2">
+First 111K
+</font></td></tr>
+<tr><td>PWP = PWP112K</td><td><font size="2">
+First 112K
+</font></td></tr>
+<tr><td>PWP = PWP113K</td><td><font size="2">
+First 113K
+</font></td></tr>
+<tr><td>PWP = PWP114K</td><td><font size="2">
+First 114K
+</font></td></tr>
+<tr><td>PWP = PWP115K</td><td><font size="2">
+First 115K
+</font></td></tr>
+<tr><td>PWP = PWP116K</td><td><font size="2">
+First 116K
+</font></td></tr>
+<tr><td>PWP = PWP117K</td><td><font size="2">
+First 117K
+</font></td></tr>
+<tr><td>PWP = PWP118K</td><td><font size="2">
+First 118K
+</font></td></tr>
+<tr><td>PWP = PWP119K</td><td><font size="2">
+First 119K
+</font></td></tr>
+<tr><td>PWP = PWP120K</td><td><font size="2">
+First 120K
+</font></td></tr>
+<tr><td>PWP = PWP121K</td><td><font size="2">
+First 121K
+</font></td></tr>
+<tr><td>PWP = PWP122K</td><td><font size="2">
+First 122K
+</font></td></tr>
+<tr><td>PWP = PWP123K</td><td><font size="2">
+First 123K
+</font></td></tr>
+<tr><td>PWP = PWP124K</td><td><font size="2">
+First 124K
+</font></td></tr>
+<tr><td>PWP = PWP125K</td><td><font size="2">
+First 125K
+</font></td></tr>
+<tr><td>PWP = PWP126K</td><td><font size="2">
+First 126K
+</font></td></tr>
+<tr><td>PWP = PWP127K</td><td><font size="2">
+First 127K
+</font></td></tr>
+<tr><td>PWP = PWP128K</td><td><font size="2">
+First 128K
+</font></td></tr>
+<tr><td>PWP = PWP129K</td><td><font size="2">
+First 129K
+</font></td></tr>
+<tr><td>PWP = PWP130K</td><td><font size="2">
+First 130K
+</font></td></tr>
+<tr><td>PWP = PWP131K</td><td><font size="2">
+First 131K
+</font></td></tr>
+<tr><td>PWP = PWP132K</td><td><font size="2">
+First 132K
+</font></td></tr>
+<tr><td>PWP = PWP133K</td><td><font size="2">
+First 133K
+</font></td></tr>
+<tr><td>PWP = PWP134K</td><td><font size="2">
+First 134K
+</font></td></tr>
+<tr><td>PWP = PWP135K</td><td><font size="2">
+First 135K
+</font></td></tr>
+<tr><td>PWP = PWP136K</td><td><font size="2">
+First 136K
+</font></td></tr>
+<tr><td>PWP = PWP137K</td><td><font size="2">
+First 137K
+</font></td></tr>
+<tr><td>PWP = PWP138K</td><td><font size="2">
+First 138K
+</font></td></tr>
+<tr><td>PWP = PWP139K</td><td><font size="2">
+First 139K
+</font></td></tr>
+<tr><td>PWP = PWP140K</td><td><font size="2">
+First 140K
+</font></td></tr>
+<tr><td>PWP = PWP141K</td><td><font size="2">
+First 141K
+</font></td></tr>
+<tr><td>PWP = PWP142K</td><td><font size="2">
+First 142K
+</font></td></tr>
+<tr><td>PWP = PWP143K</td><td><font size="2">
+First 143K
+</font></td></tr>
+<tr><td>PWP = PWP144K</td><td><font size="2">
+First 144K
+</font></td></tr>
+<tr><td>PWP = PWP145K</td><td><font size="2">
+First 145K
+</font></td></tr>
+<tr><td>PWP = PWP146K</td><td><font size="2">
+First 146K
+</font></td></tr>
+<tr><td>PWP = PWP147K</td><td><font size="2">
+First 147K
+</font></td></tr>
+<tr><td>PWP = PWP148K</td><td><font size="2">
+First 148K
+</font></td></tr>
+<tr><td>PWP = PWP149K</td><td><font size="2">
+First 149K
+</font></td></tr>
+<tr><td>PWP = PWP150K</td><td><font size="2">
+First 150K
+</font></td></tr>
+<tr><td>PWP = PWP151K</td><td><font size="2">
+First 151K
+</font></td></tr>
+<tr><td>PWP = PWP152K</td><td><font size="2">
+First 152K
+</font></td></tr>
+<tr><td>PWP = PWP153K</td><td><font size="2">
+First 153K
+</font></td></tr>
+<tr><td>PWP = PWP154K</td><td><font size="2">
+First 154K
+</font></td></tr>
+<tr><td>PWP = PWP155K</td><td><font size="2">
+First 155K
+</font></td></tr>
+<tr><td>PWP = PWP156K</td><td><font size="2">
+First 156K
+</font></td></tr>
+<tr><td>PWP = PWP157K</td><td><font size="2">
+First 157K
+</font></td></tr>
+<tr><td>PWP = PWP158K</td><td><font size="2">
+First 158K
+</font></td></tr>
+<tr><td>PWP = PWP159K</td><td><font size="2">
+First 159K
+</font></td></tr>
+<tr><td>PWP = PWP160K</td><td><font size="2">
+First 160K
+</font></td></tr>
+<tr><td>PWP = PWP161K</td><td><font size="2">
+First 161K
+</font></td></tr>
+<tr><td>PWP = PWP162K</td><td><font size="2">
+First 162K
+</font></td></tr>
+<tr><td>PWP = PWP163K</td><td><font size="2">
+First 163K
+</font></td></tr>
+<tr><td>PWP = PWP164K</td><td><font size="2">
+First 164K
+</font></td></tr>
+<tr><td>PWP = PWP165K</td><td><font size="2">
+First 165K
+</font></td></tr>
+<tr><td>PWP = PWP166K</td><td><font size="2">
+First 166K
+</font></td></tr>
+<tr><td>PWP = PWP167K</td><td><font size="2">
+First 167K
+</font></td></tr>
+<tr><td>PWP = PWP168K</td><td><font size="2">
+First 168K
+</font></td></tr>
+<tr><td>PWP = PWP169K</td><td><font size="2">
+First 169K
+</font></td></tr>
+<tr><td>PWP = PWP170K</td><td><font size="2">
+First 170K
+</font></td></tr>
+<tr><td>PWP = PWP171K</td><td><font size="2">
+First 171K
+</font></td></tr>
+<tr><td>PWP = PWP172K</td><td><font size="2">
+First 172K
+</font></td></tr>
+<tr><td>PWP = PWP173K</td><td><font size="2">
+First 173K
+</font></td></tr>
+<tr><td>PWP = PWP174K</td><td><font size="2">
+First 174K
+</font></td></tr>
+<tr><td>PWP = PWP175K</td><td><font size="2">
+First 175K
+</font></td></tr>
+<tr><td>PWP = PWP176K</td><td><font size="2">
+First 176K
+</font></td></tr>
+<tr><td>PWP = PWP177K</td><td><font size="2">
+First 177K
+</font></td></tr>
+<tr><td>PWP = PWP178K</td><td><font size="2">
+First 178K
+</font></td></tr>
+<tr><td>PWP = PWP179K</td><td><font size="2">
+First 179K
+</font></td></tr>
+<tr><td>PWP = PWP180K</td><td><font size="2">
+First 180K
+</font></td></tr>
+<tr><td>PWP = PWP181K</td><td><font size="2">
+First 181K
+</font></td></tr>
+<tr><td>PWP = PWP182K</td><td><font size="2">
+First 182K
+</font></td></tr>
+<tr><td>PWP = PWP183K</td><td><font size="2">
+First 183K
+</font></td></tr>
+<tr><td>PWP = PWP184K</td><td><font size="2">
+First 184K
+</font></td></tr>
+<tr><td>PWP = PWP185K</td><td><font size="2">
+First 185K
+</font></td></tr>
+<tr><td>PWP = PWP186K</td><td><font size="2">
+First 186K
+</font></td></tr>
+<tr><td>PWP = PWP187K</td><td><font size="2">
+First 187K
+</font></td></tr>
+<tr><td>PWP = PWP188K</td><td><font size="2">
+First 188K
+</font></td></tr>
+<tr><td>PWP = PWP189K</td><td><font size="2">
+First 189K
+</font></td></tr>
+<tr><td>PWP = PWP190K</td><td><font size="2">
+First 190K
+</font></td></tr>
+<tr><td>PWP = PWP191K</td><td><font size="2">
+First 191K
+</font></td></tr>
+<tr><td>PWP = PWP192K</td><td><font size="2">
+First 192K
+</font></td></tr>
+<tr><td>PWP = PWP193K</td><td><font size="2">
+First 193K
+</font></td></tr>
+<tr><td>PWP = PWP194K</td><td><font size="2">
+First 194K
+</font></td></tr>
+<tr><td>PWP = PWP195K</td><td><font size="2">
+First 195K
+</font></td></tr>
+<tr><td>PWP = PWP196K</td><td><font size="2">
+First 196K
+</font></td></tr>
+<tr><td>PWP = PWP197K</td><td><font size="2">
+First 197K
+</font></td></tr>
+<tr><td>PWP = PWP198K</td><td><font size="2">
+First 198K
+</font></td></tr>
+<tr><td>PWP = PWP199K</td><td><font size="2">
+First 199K
+</font></td></tr>
+<tr><td>PWP = PWP200K</td><td><font size="2">
+First 200K
+</font></td></tr>
+<tr><td>PWP = PWP201K</td><td><font size="2">
+First 201K
+</font></td></tr>
+<tr><td>PWP = PWP202K</td><td><font size="2">
+First 202K
+</font></td></tr>
+<tr><td>PWP = PWP203K</td><td><font size="2">
+First 203K
+</font></td></tr>
+<tr><td>PWP = PWP204K</td><td><font size="2">
+First 204K
+</font></td></tr>
+<tr><td>PWP = PWP205K</td><td><font size="2">
+First 205K
+</font></td></tr>
+<tr><td>PWP = PWP206K</td><td><font size="2">
+First 206K
+</font></td></tr>
+<tr><td>PWP = PWP207K</td><td><font size="2">
+First 207K
+</font></td></tr>
+<tr><td>PWP = PWP208K</td><td><font size="2">
+First 208K
+</font></td></tr>
+<tr><td>PWP = PWP209K</td><td><font size="2">
+First 209K
+</font></td></tr>
+<tr><td>PWP = PWP210K</td><td><font size="2">
+First 210K
+</font></td></tr>
+<tr><td>PWP = PWP211K</td><td><font size="2">
+First 211K
+</font></td></tr>
+<tr><td>PWP = PWP212K</td><td><font size="2">
+First 212K
+</font></td></tr>
+<tr><td>PWP = PWP213K</td><td><font size="2">
+First 213K
+</font></td></tr>
+<tr><td>PWP = PWP214K</td><td><font size="2">
+First 214K
+</font></td></tr>
+<tr><td>PWP = PWP215K</td><td><font size="2">
+First 215K
+</font></td></tr>
+<tr><td>PWP = PWP216K</td><td><font size="2">
+First 216K
+</font></td></tr>
+<tr><td>PWP = PWP217K</td><td><font size="2">
+First 217K
+</font></td></tr>
+<tr><td>PWP = PWP218K</td><td><font size="2">
+First 218K
+</font></td></tr>
+<tr><td>PWP = PWP219K</td><td><font size="2">
+First 219K
+</font></td></tr>
+<tr><td>PWP = PWP220K</td><td><font size="2">
+First 220K
+</font></td></tr>
+<tr><td>PWP = PWP221K</td><td><font size="2">
+First 221K
+</font></td></tr>
+<tr><td>PWP = PWP222K</td><td><font size="2">
+First 222K
+</font></td></tr>
+<tr><td>PWP = PWP223K</td><td><font size="2">
+First 223K
+</font></td></tr>
+<tr><td>PWP = PWP224K</td><td><font size="2">
+First 224K
+</font></td></tr>
+<tr><td>PWP = PWP225K</td><td><font size="2">
+First 225K
+</font></td></tr>
+<tr><td>PWP = PWP226K</td><td><font size="2">
+First 226K
+</font></td></tr>
+<tr><td>PWP = PWP227K</td><td><font size="2">
+First 227K
+</font></td></tr>
+<tr><td>PWP = PWP228K</td><td><font size="2">
+First 228K
+</font></td></tr>
+<tr><td>PWP = PWP229K</td><td><font size="2">
+First 229K
+</font></td></tr>
+<tr><td>PWP = PWP230K</td><td><font size="2">
+First 230K
+</font></td></tr>
+<tr><td>PWP = PWP231K</td><td><font size="2">
+First 231K
+</font></td></tr>
+<tr><td>PWP = PWP232K</td><td><font size="2">
+First 232K
+</font></td></tr>
+<tr><td>PWP = PWP233K</td><td><font size="2">
+First 233K
+</font></td></tr>
+<tr><td>PWP = PWP234K</td><td><font size="2">
+First 234K
+</font></td></tr>
+<tr><td>PWP = PWP235K</td><td><font size="2">
+First 235K
+</font></td></tr>
+<tr><td>PWP = PWP236K</td><td><font size="2">
+First 236K
+</font></td></tr>
+<tr><td>PWP = PWP237K</td><td><font size="2">
+First 237K
+</font></td></tr>
+<tr><td>PWP = PWP238K</td><td><font size="2">
+First 238K
+</font></td></tr>
+<tr><td>PWP = PWP239K</td><td><font size="2">
+First 239K
+</font></td></tr>
+<tr><td>PWP = PWP240K</td><td><font size="2">
+First 240K
+</font></td></tr>
+<tr><td>PWP = PWP241K</td><td><font size="2">
+First 241K
+</font></td></tr>
+<tr><td>PWP = PWP242K</td><td><font size="2">
+First 242K
+</font></td></tr>
+<tr><td>PWP = PWP243K</td><td><font size="2">
+First 243K
+</font></td></tr>
+<tr><td>PWP = PWP244K</td><td><font size="2">
+First 244K
+</font></td></tr>
+<tr><td>PWP = PWP245K</td><td><font size="2">
+First 245K
+</font></td></tr>
+<tr><td>PWP = PWP246K</td><td><font size="2">
+First 246K
+</font></td></tr>
+<tr><td>PWP = PWP247K</td><td><font size="2">
+First 247K
+</font></td></tr>
+<tr><td>PWP = PWP248K</td><td><font size="2">
+First 248K
+</font></td></tr>
+<tr><td>PWP = PWP249K</td><td><font size="2">
+First 249K
+</font></td></tr>
+<tr><td>PWP = PWP250K</td><td><font size="2">
+First 250K
+</font></td></tr>
+<tr><td>PWP = PWP251K</td><td><font size="2">
+First 251K
+</font></td></tr>
+<tr><td>PWP = PWP252K</td><td><font size="2">
+First 252K
+</font></td></tr>
+<tr><td>PWP = PWP253K</td><td><font size="2">
+First 253K
+</font></td></tr>
+<tr><td>PWP = PWP254K</td><td><font size="2">
+First 254K
+</font></td></tr>
+<tr><td>PWP = PWP255K</td><td><font size="2">
+First 255K
+</font></td></tr>
+<tr><td>PWP = PWP256K</td><td><font size="2">
+First 256K
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Boot Flash Write Protect bit' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>BWP</th><th>Boot Flash Write Protect bit</th></tr><tr><td>BWP = ON</td><td><font size="2">
+Protection Enabled
+</font></td></tr>
+<tr><td>BWP = OFF</td><td><font size="2">
+Protection Disabled
+</font></td></tr>
+</table>
+
+<table frame=box rules=cols summary='Code Protect' style='margin:10px;' cellpadding=3><tr style="border: 2px solid;"><th>CP</th><th>Code Protect</th></tr><tr><td>CP = ON</td><td><font size="2">
+Protection Enabled
+</font></td></tr>
+<tr><td>CP = OFF</td><td><font size="2">
+Protection Disabled
+</font></td></tr>
+</table>
+
+<p>[ <a href="../XC32MasterIndex.htm">Documentation Index</a> | <a href="../PIC32ConfigSet.html">Device index</a> ]</p>
+</body>
+</html>
+
