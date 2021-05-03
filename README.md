@@ -78,21 +78,21 @@ Other notes and features:
 
 Built-in libraries:
 
-<stdlib.h>      // extra: unsigned long BIT(unsigned char n)
-<stdio.h>       // extra: void run(const char *filename)
-<stdint.h>
-<stdbool.h>
-<stdarg.h>
-<string.h>
-<math.h>
-<limits.h>
-<ctype.h>
-<time.h>
-<assert.h>      // can be used also to assert the existence of library functions, eg. assert(printf())
-<conio.h>       // console functions
-<fatfs.h>		    // wrapper functions for most of the FatFs library
-<graphics.h>    // hardware-independent higher-level graphical primitives
-<platform.h>	  // support library for specific hardware platform implementations
+<stdlib.h>      // extra: unsigned long BIT(unsigned char n)<br>
+<stdio.h>       // extra: void run(const char *filename)<br>
+<stdint.h><br>
+<stdbool.h><br>
+<stdarg.h><br>
+<string.h><br>
+<math.h><br>
+<limits.h><br>
+<ctype.h><br>
+<time.h><br>
+<assert.h>      // can be used also to assert the existence of library functions, eg. assert(printf())<br>
+<conio.h>       // console functions<br>
+<fatfs.h>		    // wrapper functions for most of the FatFs library<br>
+<graphics.h>    // hardware-independent higher-level graphical primitives<br>
+<platform.h>	  // support library for specific hardware platform implementations<br>
 
 Known issues and limitations:
 
