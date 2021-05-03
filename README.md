@@ -1,6 +1,6 @@
 # C.impl
 
-C.impl is a small portable C interpreter integrated with a line text editor.
+C.impl is a small portable C interpreter integrated with a line text editor, originally developed for the ELLO 1A computer.
 
 The aim of this code is to achieve a close C90 specification functional implementation
 of an interpreter for the C language with minimum required system resources and without
