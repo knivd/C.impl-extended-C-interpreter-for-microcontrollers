@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="RIDE" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/RIDE" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wshadow" />
+					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Wcast-align" />
+					<Add option="-Wundef" />
+					<Add option="-Wfloat-equal" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-declarations" />
+					<Add option="-Wmissing-include-dirs" />
+					<Add option="-Wswitch-enum" />
+					<Add option="-Wswitch-default" />
+					<Add option="-Wzero-as-null-pointer-constant" />
+					<Add option="-Wmain" />
+					<Add option="-pedantic-errors" />
+					<Add option="-pedantic" />
+					<Add option="-Wfatal-errors" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-std=c++98" />
+					<Add option="-fPIC" />
+					<Add option="-Og" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/RIDE" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DCIMPL" />
+			<Add option="-DMEMORY_SIZE_KB=2048" />
+		</Compiler>
+		<Unit filename="../../../Cimpl/cimpl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/cimpl.h" />
+		<Unit filename="../../../Cimpl/libs/l_conio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_conio.h" />
+		<Unit filename="../../../Cimpl/libs/l_fatfs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_fatfs.h" />
+		<Unit filename="../../../Cimpl/libs/l_graph.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_graph.h" />
+		<Unit filename="../../../Cimpl/libs/l_math.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_math.h" />
+		<Unit filename="../../../Cimpl/libs/l_misc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_misc.h" />
+		<Unit filename="../../../Cimpl/libs/l_stdio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_stdio.h" />
+		<Unit filename="../../../Cimpl/libs/l_stdlib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_stdlib.h" />
+		<Unit filename="../../../Cimpl/libs/l_string.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/libs/l_string.h" />
+		<Unit filename="../../../Cimpl/opr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../Cimpl/opr.h" />
+		<Unit filename="../../../FatFs/source/diskio.h" />
+		<Unit filename="../../../FatFs/source/ff.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../FatFs/source/ff.h" />
+		<Unit filename="../../../FatFs/source/ffconf.h" />
+		<Unit filename="../../../FatFs/source/ffsystem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../FatFs/source/ffunicode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../RIDE/fos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../RIDE/fos.h" />
+		<Unit filename="../../../RIDE/graphics.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../RIDE/graphics.h" />
+		<Unit filename="../../../RIDE/kbdcodes.h" />
+		<Unit filename="../../../RIDE/ride.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../RIDE/ride.h" />
+		<Unit filename="../../../config.h" />
+		<Unit filename="../../../main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../main.h" />
+		<Unit filename="../../../xmem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../../xmem.h" />
+		<Unit filename="../diskio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../l_platfm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../l_platfm.h" />
+		<Unit filename="../platform.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../platform.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

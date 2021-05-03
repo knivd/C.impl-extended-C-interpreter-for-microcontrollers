@@ -1,0 +1,1524 @@
+# depslib dependency file v1.0
+1594370684 source:k:\work\cimpl\cimpl\cimpl.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	<conio.h>
+	"../xmem.h"
+	"cimpl.h"
+	"opr.h"
+	"libs/l_stdlib.h"
+	"libs/l_stdio.h"
+	"libs/l_string.h"
+	"libs/l_math.h"
+	"libs/l_misc.h"
+	"libs/l_fatfs.h"
+	"../platform/pic32mz/l_platform.h"
+	"../platform/windows/l_platform.h"
+
+1594403170 k:\work\cimpl\xmem.h
+	<stdlib.h>
+
+1594569580 k:\work\cimpl\cimpl\cimpl.h
+	<stdint.h>
+	<limits.h>
+	<setjmp.h>
+
+1593806080 k:\work\cimpl\cimpl\opr.h
+	"cimpl.h"
+
+1593978302 k:\work\cimpl\cimpl\libs\l_stdlib.h
+	"../cimpl.h"
+
+1594401792 k:\work\cimpl\cimpl\libs\l_stdio.h
+	"../cimpl.h"
+	"../../fatfs/source/ff.h"
+
+1571051634 k:\work\cimpl\fatfs\source\ff.h
+	"ffconf.h"
+	<windows.h>
+	<stdint.h>
+
+1594387934 k:\work\cimpl\fatfs\source\ffconf.h
+
+1590694054 k:\work\cimpl\cimpl\libs\l_string.h
+	"../cimpl.h"
+
+1594045858 k:\work\cimpl\cimpl\libs\l_math.h
+	"../cimpl.h"
+
+1593082988 k:\work\cimpl\cimpl\libs\l_misc.h
+	"../cimpl.h"
+
+1594045888 source:k:\work\cimpl\cimpl\libs\l_math.c
+	<stdlib.h>
+	<math.h>
+	"l_math.h"
+
+1594546200 source:k:\work\cimpl\cimpl\libs\l_misc.c
+	<limits.h>
+	<stdarg.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"l_misc.h"
+
+1594401792 source:k:\work\cimpl\cimpl\libs\l_stdio.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	"../../xmem.h"
+	"l_stdio.h"
+	"../../fatfs/source/ff.h"
+
+1593978276 source:k:\work\cimpl\cimpl\libs\l_stdlib.c
+	<stdlib.h>
+	"../../xmem.h"
+	"l_stdlib.h"
+
+1593370932 source:k:\work\cimpl\cimpl\libs\l_string.c
+	<string.h>
+	"l_string.h"
+
+1592673673 source:k:\work\cimpl\fatfs\source\ff.c
+	"ff.h"
+	"diskio.h"
+	<stdarg.h>
+
+1593078411 k:\work\cimpl\fatfs\source\diskio.h
+	"ff.h"
+
+1594403012 source:k:\work\cimpl\fatfs\source\ffsystem.c
+	"ff.h"
+	"..\..\xmem.h"
+
+1571051634 source:k:\work\cimpl\fatfs\source\ffunicode.c
+	"ff.h"
+
+1592564532 source:k:\work\cimpl\main.c
+	<stdlib.h>
+	<stdio.h>
+	"xmem.h"
+	"cimpl/cimpl.h"
+	"ride/ride.h"
+	"platform/windows/platform.h"
+
+1594579796 k:\work\cimpl\ride\ride.h
+	<stdint.h>
+
+1594036772 k:\work\cimpl\platform\windows\platform.h
+	<stdio.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+
+1592674896 source:k:\work\cimpl\platform\windows\platform.c
+	"platform.h"
+	"../../xmem.h"
+
+1594410860 source:k:\work\cimpl\ride\fos.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"../xmem.h"
+	"fos.h"
+
+1593962182 k:\work\cimpl\ride\fos.h
+	"../platform/pic32mz/platform.h"
+	"../platform/windows/platform.h"
+
+1594572262 source:k:\work\cimpl\ride\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"../xmem.h"
+	"ride.h"
+	"fos.h"
+	<conio.h>
+	<time.h>
+	"../cimpl/cimpl.h"
+
+1594309041 source:k:\work\cimpl\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+	<stdlib.h>
+
+1594038748 source:k:\work\cimpl\cimpl\opr.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	"opr.h"
+
+1592825501 source:k:\work\cimpl\platform\windows\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"platform.h"
+
+1592824594 source:k:\work\cimpl\platform\windows\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../cimpl/cimpl.h"
+	"../../ride/ride.h"
+	"platform.h"
+
+1594540503 k:\work\cimpl\platform\pic32mz\platform.h
+	<time.h>
+	<stdio.h>
+	<xc.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+	"../../xmem.h"
+	"plibs/plib.h"
+
+1592214168 k:\work\cimpl\platform\pic32mz\plibs\plib.h
+	<xc.h>
+	<errno.h>
+	"mz_libs/include/plib_mz.h"
+
+1586397668 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\plib_mz.h
+	<xc.h>
+	"peripheral_mz/adc12.h"
+	"peripheral_mz/cmp.h"
+	"peripheral_mz/cvref.h"
+	"peripheral_mz/dma.h"
+	"peripheral_mz/i2c.h"
+	"peripheral_mz/incap.h"
+	"peripheral_mz/int.h"
+	"peripheral_mz/lock.h"
+	"peripheral_mz/nvm.h"
+	"peripheral_mz/osc.h"
+	"peripheral_mz/outcompare.h"
+	"peripheral_mz/pcache.h"
+	"peripheral_mz/pmp.h"
+	"peripheral_mz/ports.h"
+	"peripheral_mz/pps.h"
+	"peripheral_mz/power.h"
+	"peripheral_mz/reset.h"
+	"peripheral_mz/spi.h"
+	"peripheral_mz/system.h"
+	"peripheral_mz/timer.h"
+	"peripheral_mz/rtcc.h"
+	"peripheral_mz/uart.h"
+	"peripheral_mz/wdt.h"
+	"peripheral_mz/can.h"
+
+1479544074 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\adc12.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1586425620 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\int.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	<stdint.h>
+	<sys/attribs.h>
+
+1479324942 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324958 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cvref.h
+	<xc.h>
+
+1479324968 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\dma.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324978 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\i2c.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479324988 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\incap.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480585950 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\lock.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1592227335 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\nvm.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+	"../peripheral_mz/int.h"
+
+1479324948 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\common.h
+	<assert.h>
+	<stdint.h>
+	<string.h>
+	<sys/kmem.h>
+
+1480660654 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\osc.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+
+1479325058 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\outcompare.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325094 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pcache.h
+	<xc.h>
+
+1479325102 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479521852 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\ports.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325126 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pps.h
+	<xc.h>
+
+1479454570 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\power.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1480024998 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\reset.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1479325148 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\spi.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1480640856 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\system.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+	"../peripheral_mz/lock.h"
+	"../peripheral_mz/pcache.h"
+
+1479544816 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\timer.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1558022824 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\rtcc.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480665816 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\uart.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479454770 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\wdt.h
+	<xc.h>
+
+1586410532 k:\work\cimpl\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\can.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1594110546 k:\work\cimpl\platform\pic32mz\l_platform.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
+
+1593775662 k:\work\cimpl\platform\windows\l_platform.h
+	"../../cimpl/cimpl.h"
+
+1593775662 source:k:\work\cimpl\platform\windows\l_platform.c
+	<string.h>
+	<time.h>
+	<conio.h>
+	"l_platform.h"
+	"platform.h"
+	"../../xmem.h"
+
+1594400706 k:\work\cimpl\cimpl\libs\l_fatfs.h
+	"../cimpl.h"
+
+1594477604 source:k:\work\cimpl\cimpl\libs\l_fatfs.c
+	<stdlib.h>
+	"../../fatfs/source/ff.h"
+	"l_fatfs.h"
+	"l_stdio.h"
+
+1592673673 source:k:\work\silentsentinel\payload\firmware\cover\fatfs\source\ff.c
+	"ff.h"
+	"diskio.h"
+	<stdarg.h>
+
+1571051634 k:\work\silentsentinel\payload\firmware\cover\fatfs\source\ff.h
+	"ffconf.h"
+	<windows.h>
+	<stdint.h>
+
+1594387934 k:\work\silentsentinel\payload\firmware\cover\fatfs\source\ffconf.h
+
+1593078411 k:\work\silentsentinel\payload\firmware\cover\fatfs\source\diskio.h
+	"ff.h"
+
+1594403012 source:k:\work\silentsentinel\payload\firmware\cover\fatfs\source\ffsystem.c
+	"ff.h"
+	"..\..\xmem.h"
+
+1594403170 k:\work\silentsentinel\payload\firmware\cover\xmem.h
+	<stdlib.h>
+
+1571051634 source:k:\work\silentsentinel\payload\firmware\cover\fatfs\source\ffunicode.c
+	"ff.h"
+
+1592674896 source:k:\work\silentsentinel\payload\firmware\cover\platform\windows\platform.c
+	"platform.h"
+	"../../xmem.h"
+
+1594036772 k:\work\silentsentinel\payload\firmware\cover\platform\windows\platform.h
+	<stdio.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+
+1596109286 k:\work\silentsentinel\payload\firmware\cover\ride\ride.h
+	<stdint.h>
+
+1594309041 source:k:\work\silentsentinel\payload\firmware\cover\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+	<stdlib.h>
+
+1595092254 source:k:\work\silentsentinel\payload\firmware\cover\platform\windows\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"platform.h"
+
+1596108520 source:k:\work\silentsentinel\payload\firmware\cover\platform\windows\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../ride/ride.h"
+	"platform.h"
+
+1595071622 source:k:\work\silentsentinel\payload\firmware\cover\ride\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"../xmem.h"
+	"fos.h"
+
+1593962182 k:\work\silentsentinel\payload\firmware\cover\ride\fos.h
+	"../platform/pic32mz/platform.h"
+	"../platform/windows/platform.h"
+
+1594540503 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\platform.h
+	<time.h>
+	<stdio.h>
+	<xc.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+	"../../xmem.h"
+	"plibs/plib.h"
+
+1592214168 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\plib.h
+	<xc.h>
+	<errno.h>
+	"mz_libs/include/plib_mz.h"
+
+1586397668 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\plib_mz.h
+	<xc.h>
+	"peripheral_mz/adc12.h"
+	"peripheral_mz/cmp.h"
+	"peripheral_mz/cvref.h"
+	"peripheral_mz/dma.h"
+	"peripheral_mz/i2c.h"
+	"peripheral_mz/incap.h"
+	"peripheral_mz/int.h"
+	"peripheral_mz/lock.h"
+	"peripheral_mz/nvm.h"
+	"peripheral_mz/osc.h"
+	"peripheral_mz/outcompare.h"
+	"peripheral_mz/pcache.h"
+	"peripheral_mz/pmp.h"
+	"peripheral_mz/ports.h"
+	"peripheral_mz/pps.h"
+	"peripheral_mz/power.h"
+	"peripheral_mz/reset.h"
+	"peripheral_mz/spi.h"
+	"peripheral_mz/system.h"
+	"peripheral_mz/timer.h"
+	"peripheral_mz/rtcc.h"
+	"peripheral_mz/uart.h"
+	"peripheral_mz/wdt.h"
+	"peripheral_mz/can.h"
+
+1479544074 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\adc12.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1586425620 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\int.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	<stdint.h>
+	<sys/attribs.h>
+
+1479324942 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324958 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cvref.h
+	<xc.h>
+
+1479324968 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\dma.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324978 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\i2c.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479324988 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\incap.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480585950 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\lock.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1592227335 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\nvm.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+	"../peripheral_mz/int.h"
+
+1479324948 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\common.h
+	<assert.h>
+	<stdint.h>
+	<string.h>
+	<sys/kmem.h>
+
+1480660654 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\osc.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+
+1479325058 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\outcompare.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325094 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pcache.h
+	<xc.h>
+
+1479325102 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479521852 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\ports.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325126 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pps.h
+	<xc.h>
+
+1479454570 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\power.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1480024998 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\reset.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1479325148 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\spi.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1480640856 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\system.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+	"../peripheral_mz/lock.h"
+	"../peripheral_mz/pcache.h"
+
+1479544816 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\timer.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1558022824 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\rtcc.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480665816 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\uart.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479454770 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\wdt.h
+	<xc.h>
+
+1586410532 k:\work\silentsentinel\payload\firmware\cover\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\can.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1596109602 source:k:\work\silentsentinel\payload\firmware\cover\ride\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"../xmem.h"
+	"ride.h"
+	"fos.h"
+	<conio.h>
+	<time.h>
+
+1592673673 source:k:\work\ride\fatfs\source\ff.c
+	"ff.h"
+	"diskio.h"
+	<stdarg.h>
+
+1571051634 k:\work\ride\fatfs\source\ff.h
+	"ffconf.h"
+	<windows.h>
+	<stdint.h>
+
+1594387934 k:\work\ride\fatfs\source\ffconf.h
+
+1593078411 k:\work\ride\fatfs\source\diskio.h
+	"ff.h"
+
+1594403012 source:k:\work\ride\fatfs\source\ffsystem.c
+	"ff.h"
+	"..\..\xmem.h"
+
+1594403170 k:\work\ride\xmem.h
+	<stdlib.h>
+
+1596109692 source:k:\work\ride\fatfs\source\ffunicode.c
+	"ff.h"
+
+1595092254 source:k:\work\ride\platform\windows\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"platform.h"
+
+1594036772 k:\work\ride\platform\windows\platform.h
+	<stdio.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+
+1596109286 k:\work\ride\ride\ride.h
+	<stdint.h>
+
+1596108520 source:k:\work\ride\platform\windows\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../ride/ride.h"
+	"platform.h"
+
+1592674896 source:k:\work\ride\platform\windows\platform.c
+	"platform.h"
+	"../../xmem.h"
+
+1595071622 source:k:\work\ride\ride\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"../xmem.h"
+	"fos.h"
+
+1593962182 k:\work\ride\ride\fos.h
+	"../platform/pic32mz/platform.h"
+	"../platform/windows/platform.h"
+
+1596111287 k:\work\ride\platform\pic32mz\platform.h
+	<time.h>
+	<stdio.h>
+	<xc.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+	"../../xmem.h"
+	"plibs/plib.h"
+
+1592214168 k:\work\ride\platform\pic32mz\plibs\plib.h
+	<xc.h>
+	<errno.h>
+	"mz_libs/include/plib_mz.h"
+
+1586397668 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\plib_mz.h
+	<xc.h>
+	"peripheral_mz/adc12.h"
+	"peripheral_mz/cmp.h"
+	"peripheral_mz/cvref.h"
+	"peripheral_mz/dma.h"
+	"peripheral_mz/i2c.h"
+	"peripheral_mz/incap.h"
+	"peripheral_mz/int.h"
+	"peripheral_mz/lock.h"
+	"peripheral_mz/nvm.h"
+	"peripheral_mz/osc.h"
+	"peripheral_mz/outcompare.h"
+	"peripheral_mz/pcache.h"
+	"peripheral_mz/pmp.h"
+	"peripheral_mz/ports.h"
+	"peripheral_mz/pps.h"
+	"peripheral_mz/power.h"
+	"peripheral_mz/reset.h"
+	"peripheral_mz/spi.h"
+	"peripheral_mz/system.h"
+	"peripheral_mz/timer.h"
+	"peripheral_mz/rtcc.h"
+	"peripheral_mz/uart.h"
+	"peripheral_mz/wdt.h"
+	"peripheral_mz/can.h"
+
+1479544074 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\adc12.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1586425620 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\int.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	<stdint.h>
+	<sys/attribs.h>
+
+1479324942 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324958 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cvref.h
+	<xc.h>
+
+1479324968 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\dma.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324978 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\i2c.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479324988 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\incap.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480585950 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\lock.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1592227335 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\nvm.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+	"../peripheral_mz/int.h"
+
+1479324948 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\common.h
+	<assert.h>
+	<stdint.h>
+	<string.h>
+	<sys/kmem.h>
+
+1480660654 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\osc.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+
+1479325058 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\outcompare.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325094 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pcache.h
+	<xc.h>
+
+1479325102 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479521852 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\ports.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325126 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pps.h
+	<xc.h>
+
+1479454570 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\power.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1480024998 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\reset.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1479325148 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\spi.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1480640856 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\system.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+	"../peripheral_mz/lock.h"
+	"../peripheral_mz/pcache.h"
+
+1479544816 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\timer.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1558022824 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\rtcc.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480665816 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\uart.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479454770 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\wdt.h
+	<xc.h>
+
+1586410532 k:\work\ride\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\can.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1596110148 source:k:\work\ride\ride\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"../xmem.h"
+	"ride.h"
+	"fos.h"
+	<conio.h>
+	<time.h>
+
+1594309041 source:k:\work\ride\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+	<stdlib.h>
+
+1592670073 source:k:\work\ride (c.impl)\fatfs\source\ff.c
+	"ff.h"
+	"diskio.h"
+	<stdio.h>
+	<stdarg.h>
+
+1571048034 k:\work\ride (c.impl)\fatfs\source\ff.h
+	"ffconf.h"
+	<windows.h>
+	<stdint.h>
+
+1594384334 k:\work\ride (c.impl)\fatfs\source\ffconf.h
+
+1593074811 k:\work\ride (c.impl)\fatfs\source\diskio.h
+	"ff.h"
+
+1596110960 source:k:\work\ride (c.impl)\fatfs\source\ffsystem.c
+	"ff.h"
+	"../../xmem.h"
+
+1594403170 k:\work\ride (c.impl)\ride\xmem.h
+	<stdlib.h>
+
+1596106092 source:k:\work\ride (c.impl)\fatfs\source\ffunicode.c
+	"ff.h"
+
+1608804730 source:k:\work\ride (c.impl)\ride\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"../xmem.h"
+	"fos.h"
+
+1608814651 k:\work\ride (c.impl)\ride\fos.h
+	"ride.h"
+	"../FatFs/source/ff.h"
+
+1599116101 k:\work\ride (c.impl)\platform\pic32mz\platform.h
+	<time.h>
+	<stdio.h>
+	<xc.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/xmem.h"
+	"../../ride/ride.h"
+	"plibs/plib.h"
+
+1604403708 k:\work\ride (c.impl)\ride\ride.h
+	<stdint.h>
+
+1592214168 k:\work\ride (c.impl)\platform\pic32mz\plibs\plib.h
+	<xc.h>
+	<errno.h>
+	"mz_libs/include/plib_mz.h"
+
+1586397668 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\plib_mz.h
+	<xc.h>
+	"peripheral_mz/adc12.h"
+	"peripheral_mz/cmp.h"
+	"peripheral_mz/cvref.h"
+	"peripheral_mz/dma.h"
+	"peripheral_mz/i2c.h"
+	"peripheral_mz/incap.h"
+	"peripheral_mz/int.h"
+	"peripheral_mz/lock.h"
+	"peripheral_mz/nvm.h"
+	"peripheral_mz/osc.h"
+	"peripheral_mz/outcompare.h"
+	"peripheral_mz/pcache.h"
+	"peripheral_mz/pmp.h"
+	"peripheral_mz/ports.h"
+	"peripheral_mz/pps.h"
+	"peripheral_mz/power.h"
+	"peripheral_mz/reset.h"
+	"peripheral_mz/spi.h"
+	"peripheral_mz/system.h"
+	"peripheral_mz/timer.h"
+	"peripheral_mz/rtcc.h"
+	"peripheral_mz/uart.h"
+	"peripheral_mz/wdt.h"
+	"peripheral_mz/can.h"
+
+1479544074 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\adc12.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1586425620 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\int.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	<stdint.h>
+	<sys/attribs.h>
+
+1479324942 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324958 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\cvref.h
+	<xc.h>
+
+1479324968 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\dma.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324978 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\i2c.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479324988 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\incap.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480585950 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\lock.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1592227335 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\nvm.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+	"../peripheral_mz/int.h"
+
+1479324948 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\common.h
+	<assert.h>
+	<stdint.h>
+	<string.h>
+	<sys/kmem.h>
+
+1480660654 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\osc.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+
+1479325058 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\outcompare.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325094 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pcache.h
+	<xc.h>
+
+1479325102 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479521852 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\ports.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325126 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\pps.h
+	<xc.h>
+
+1479454570 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\power.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1480024998 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\reset.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1479325148 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\spi.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1480640856 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\system.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+	"../peripheral_mz/lock.h"
+	"../peripheral_mz/pcache.h"
+
+1479544816 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\timer.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1558022824 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\rtcc.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480665816 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\uart.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1479454770 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\wdt.h
+	<xc.h>
+
+1586410532 k:\work\ride (c.impl)\platform\pic32mz\plibs\mz_libs\include\peripheral_mz\can.h
+	<xc.h>
+	<GenericTypeDefs.h>
+	"../peripheral_mz/int.h"
+
+1608814923 k:\work\ride (c.impl)\platform\windows\platform.h
+	<stdio.h>
+	"../../fatfs/source/ff.h"
+	"../../ride.h"
+
+1594309041 source:k:\work\ride (c.impl)\ride\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+	<stdlib.h>
+
+1608756478 source:k:\work\ride (c.impl)\platform\windows\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"platform.h"
+
+1608814947 source:k:\work\ride (c.impl)\platform\windows\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../ride.h"
+	"platform.h"
+
+1608756488 source:k:\work\ride (c.impl)\platform\windows\platform.c
+	"platform.h"
+	"../../xmem.h"
+
+1608814587 source:k:\work\ride (c.impl)\cimpl\cimpl.c
+	"cimpl.h"
+	"opr.h"
+	"../xmem.h"
+	"libs/l_stdlib.h"
+	"libs/l_stdio.h"
+	"libs/l_string.h"
+	"libs/l_math.h"
+	"libs/l_misc.h"
+	"libs/l_fatfs.h"
+
+1608806990 k:\work\ride (c.impl)\cimpl\cimpl.h
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+
+1596015100 k:\work\ride (c.impl)\cimpl\ifl.h
+	"cimpl.h"
+
+1608740970 k:\work\ride (c.impl)\cimpl\opr.h
+	"cimpl.h"
+
+1608806670 source:k:\work\ride (c.impl)\cimpl\opr.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	"opr.h"
+	"cimpl.h"
+
+1608813870 source:k:\work\ride (c.impl)\ride\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"../xmem.h"
+	"ride.h"
+	"fos.h"
+	"../cimpl/cimpl.h"
+	<conio.h>
+	<time.h>
+
+1608802804 k:\work\ride (c.impl)\xmem.h
+	<stdlib.h>
+
+1594649900 k:\work\ride (c.impl)\cimpl\libs\l_stdlib.h
+	"../cimpl.h"
+
+1594802872 k:\work\ride (c.impl)\cimpl\libs\l_stdio.h
+	"../cimpl.h"
+	"../../fatfs/source/ff.h"
+
+1590690454 k:\work\ride (c.impl)\cimpl\libs\l_string.h
+	"../cimpl.h"
+
+1594042258 k:\work\ride (c.impl)\cimpl\libs\l_math.h
+	"../cimpl.h"
+
+1594800866 k:\work\ride (c.impl)\cimpl\libs\l_misc.h
+	"../cimpl.h"
+
+1594801426 k:\work\ride (c.impl)\cimpl\libs\l_fatfs.h
+	"../cimpl.h"
+
+1608743216 source:k:\work\ride (c.impl)\cimpl\libs\l_fatfs.c
+	<stdlib.h>
+	"../../fatfs/source/ff.h"
+	"l_fatfs.h"
+	"l_stdio.h"
+
+1608742868 source:k:\work\ride (c.impl)\cimpl\libs\l_math.c
+	<stdlib.h>
+	<math.h>
+	"l_math.h"
+
+1608743996 source:k:\work\ride (c.impl)\cimpl\libs\l_misc.c
+	<limits.h>
+	<stdarg.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"l_misc.h"
+
+1608743596 source:k:\work\ride (c.impl)\cimpl\libs\l_stdio.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	"../../xmem.h"
+	"l_stdio.h"
+	"../../fatfs/source/ff.h"
+
+1608743372 source:k:\work\ride (c.impl)\cimpl\libs\l_stdlib.c
+	<stdlib.h>
+	"../../xmem.h"
+	"l_stdlib.h"
+
+1608743056 source:k:\work\ride (c.impl)\cimpl\libs\l_string.c
+	<string.h>
+	"l_string.h"
+
+1594305441 source:k:\work\ride (c.impl)\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+	<stdlib.h>
+
+1604403708 k:\work\ride (c.impl)\ride.h
+	<stdint.h>
+
+1608814929 source:k:\work\ride (c.impl)\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"xmem.h"
+	"fos.h"
+
+1608814941 k:\work\ride (c.impl)\fos.h
+	"ride.h"
+	"FatFs/source/ff.h"
+
+1608814954 source:k:\work\ride (c.impl)\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"xmem.h"
+	"ride.h"
+	"fos.h"
+	"cimpl/cimpl.h"
+	<conio.h>
+	<time.h>
+
+1619340820 source:k:\work\ride_c.impl\cimpl\cimpl.c
+	"cimpl.h"
+	"opr.h"
+	"../xmem.h"
+	"../config.h"
+	"../RIDE/ride.h"
+	"libs/l_stdlib.h"
+	"libs/l_stdio.h"
+	"libs/l_string.h"
+	"libs/l_math.h"
+	"libs/l_misc.h"
+	"libs/l_conio.h"
+	"libs/l_fatfs.h"
+	"libs/l_graph.h"
+
+1618909080 k:\work\ride_c.impl\cimpl\cimpl.h
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<conio.h>
+
+1618069382 k:\work\ride_c.impl\cimpl\opr.h
+	"cimpl.h"
+
+1617287840 k:\work\ride_c.impl\xmem.h
+	<stdlib.h>
+
+1614858392 k:\work\ride_c.impl\cimpl\libs\l_stdlib.h
+	"../cimpl.h"
+
+1614858380 k:\work\ride_c.impl\cimpl\libs\l_stdio.h
+	"../cimpl.h"
+	"../../fatfs/source/ff.h"
+
+1619856128 k:\work\ride_c.impl\fatfs\source\ff.h
+	"ffconf.h"
+	<windows.h>
+	<float.h>
+	<stdint.h>
+
+1617882476 k:\work\ride_c.impl\fatfs\source\ffconf.h
+
+1614858401 k:\work\ride_c.impl\cimpl\libs\l_string.h
+	"../cimpl.h"
+
+1614858352 k:\work\ride_c.impl\cimpl\libs\l_math.h
+	"../cimpl.h"
+
+1618949628 k:\work\ride_c.impl\cimpl\libs\l_misc.h
+	"../cimpl.h"
+
+1618950114 k:\work\ride_c.impl\cimpl\libs\l_fatfs.h
+	"../cimpl.h"
+
+1618949162 source:k:\work\ride_c.impl\cimpl\libs\l_fatfs.c
+	<stdlib.h>
+	"../../fatfs/source/ff.h"
+	"l_fatfs.h"
+	"l_stdio.h"
+
+1618859030 source:k:\work\ride_c.impl\cimpl\libs\l_math.c
+	<stdlib.h>
+	<math.h>
+	"l_math.h"
+
+1618949810 source:k:\work\ride_c.impl\cimpl\libs\l_misc.c
+	<limits.h>
+	<stdarg.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	"l_misc.h"
+
+1619340248 source:k:\work\ride_c.impl\cimpl\libs\l_stdio.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	"../../xmem.h"
+	"../../config.h"
+	"l_stdio.h"
+	"../../ride/ride.h"
+	"../../fatfs/source/ff.h"
+
+1618857908 source:k:\work\ride_c.impl\cimpl\libs\l_stdlib.c
+	<stdlib.h>
+	"l_stdlib.h"
+	"../../xmem.h"
+	"../../RIDE/ride.h"
+
+1618859640 source:k:\work\ride_c.impl\cimpl\libs\l_string.c
+	<string.h>
+	"l_string.h"
+
+1618837402 source:k:\work\ride_c.impl\cimpl\opr.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	"opr.h"
+	"cimpl.h"
+	"../xmem.h"
+
+1619856228 source:k:\work\ride_c.impl\fatfs\source\ff.c
+	<string.h>
+	"ff.h"
+	"diskio.h"
+	<stdarg.h>
+	<math.h>
+
+1609585479 k:\work\ride_c.impl\fatfs\source\diskio.h
+	"ff.h"
+
+1609585479 source:k:\work\ride_c.impl\fatfs\source\ffsystem.c
+	"ff.h"
+	"../../xmem.h"
+
+1609585479 source:k:\work\ride_c.impl\fatfs\source\ffunicode.c
+	"ff.h"
+
+1608814929 source:k:\work\ride_c.impl\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"xmem.h"
+	"fos.h"
+
+1608814941 k:\work\ride_c.impl\fos.h
+	"ride.h"
+	"FatFs/source/ff.h"
+
+1604403708 k:\work\ride_c.impl\ride.h
+	<stdint.h>
+
+1608814954 source:k:\work\ride_c.impl\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	"xmem.h"
+	"ride.h"
+	"fos.h"
+	"cimpl/cimpl.h"
+	<conio.h>
+	<time.h>
+
+1617287840 source:k:\work\ride_c.impl\xmem.c
+	<stdio.h>
+	<string.h>
+	<stdint.h>
+	"xmem.h"
+
+1608756478 source:k:\work\ride_c.impl\platform\windows\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"platform.h"
+
+1608983232 k:\work\ride_c.impl\platform\windows\platform.h
+	<stdio.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+
+1608979966 source:k:\work\ride_c.impl\platform\windows\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../ride/ride.h"
+	"platform.h"
+
+1608756488 source:k:\work\ride_c.impl\platform\windows\platform.c
+	"platform.h"
+	"../../xmem.h"
+
+1619272840 k:\work\ride_c.impl\ride\ride.h
+	<stdint.h>
+	"../xmem.h"
+	"graphics.h"
+	"kbdcodes.h"
+
+1615403591 k:\work\ride_c.impl\platform.h
+	"platform/generic/platform.h"
+	"platform/generic/l_platfm.h"
+
+1619259920 source:k:\work\ride_c.impl\ride\fos.c
+	<conio.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<limits.h>
+	"../xmem.h"
+	"fos.h"
+	"ride.h"
+
+1617444498 k:\work\ride_c.impl\ride\fos.h
+	"ride.h"
+	"../config.h"
+	"../FatFs/source/ff.h"
+
+1618828444 source:k:\work\ride_c.impl\ride\ride.c
+	<stdlib.h>
+	<stdio.h>
+	<stdint.h>
+	<string.h>
+	<limits.h>
+	<setjmp.h>
+	<ctype.h>
+	<time.h>
+	"ride.h"
+	"fos.h"
+	<conio.h>
+	<time.h>
+
+1617449719 k:\work\ride_c.impl\ride\graphics.h
+	<stdint.h>
+
+1618490034 k:\work\ride_c.impl\platform\generic\platform.h
+	<stdio.h>
+	<time.h>
+	"../../fatfs/source/ff.h"
+	"../../ride/ride.h"
+
+1617444872 source:k:\work\ride_c.impl\platform\generic\diskio.c
+	<time.h>
+	<string.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../fatfs/source/diskio.h"
+	"../../ride/fos.h"
+	"platform.h"
+
+1615922930 source:k:\work\ride_c.impl\platform\generic\main.c
+	<stdlib.h>
+	<stdio.h>
+	"../../xmem.h"
+	"../../ride/ride.h"
+	"platform.h"
+
+1618648368 source:k:\work\ride_c.impl\platform\generic\platform.c
+	"platform.h"
+	"../../xmem.h"
+	"../../ride/fos.h"
+	"../../RIDE/ride.h"
+
+1614858322 k:\work\ride_c.impl\cimpl\libs\l_conio.h
+	"../cimpl.h"
+	"l_stdio.h"
+
+1616020523 k:\work\ride_c.impl\cimpl\libs\l_graph.h
+	"../cimpl.h"
+
+1618858156 source:k:\work\ride_c.impl\cimpl\libs\l_conio.c
+	<conio.h>
+	"l_conio.h"
+
+1613821721 k:\work\ride_c.impl\ride\resource.h
+	"graphics.h"
+
+1619945797 k:\work\ride_c.impl\platform\ello1a\platform.h
+	<xc.h>
+	<plib.h>
+	<string.h>
+	<stdint.h>
+	<stdio.h>
+	<time.h>
+	<limits.h>
+	"../../xmem.h"
+	"disksd.h"
+	"../../fatfs/source/ff.h"
+	"../../fatfs/source/diskio.h"
+
+1617267048 k:\work\ride_c.impl\platform\ello1a\disksd.h
+	"../../fatfs/source/ff.h"
+	"../../fatfs/source/diskio.h"
+
+1614534464 k:\work\ride_c.impl\platform\ello1a\l_platform.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
+
+1614538792 k:\work\ride_c.impl\platform\generic\l_platform.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
+
+1614538948 source:k:\work\ride_c.impl\platform\generic\l_platform.c
+	<string.h>
+	"l_platform.h"
+	"platform.h"
+
+1616181576 k:\work\ride_c.impl\platform\generic\l_platfm.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
+
+1618857950 source:k:\work\ride_c.impl\platform\generic\l_platfm.c
+	<string.h>
+	"l_platfm.h"
+	"platform.h"
+
+1620043509 k:\work\ride_c.impl\config.h
+	"platform/generic/platform.h"
+	"platform/generic/l_platfm.h"
+	"platform/ello1a/platform.h"
+	"platform/ello1a/l_platfm.h"
+	<stdint.h>
+
+1619257815 k:\work\ride_c.impl\ride\kbdcodes.h
+	"ride.h"
+
+1618658609 k:\work\ride_c.impl\platform\ello1a\l_platfm.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
+
+1619275628 source:k:\work\ride_c.impl\main.c
+	"main.h"
+
+1617449914 k:\work\ride_c.impl\main.h
+	"config.h"
+	"ride/ride.h"
+	"ride/fos.h"
+
+1617887133 source:k:\work\ride_c.impl\ride\graphics.c
+	<math.h>
+	"../xmem.h"
+	"graphics.h"
+	"../config.h"
+
+1618860130 source:k:\work\ride_c.impl\cimpl\libs\l_graph.c
+	"l_graph.h"
+	"../../config.h"
+	"../../ride/graphics.h"
+	"../../ride/kbdcodes.h"
+
