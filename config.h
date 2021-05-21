@@ -4,7 +4,9 @@
 /* 0: Generic - no hardware platform */
 /* 1: ELLO 1A (PIC32MX270B) */
 /* 2: Rittle Board (PIC32MZ2048EFH064) */
-#define PLATFORM	1
+#ifndef PLATFORM
+#define PLATFORM	0
+#endif
 
 #define SW_VERSION	"113"
 #define AUTHOR      "KnivD"
