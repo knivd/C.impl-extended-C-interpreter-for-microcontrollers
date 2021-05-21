@@ -5,7 +5,7 @@
 /* 1: ELLO 1A (PIC32MX270B) */
 /* 2: Rittle Board (PIC32MZ2048EFH064) */
 #ifndef PLATFORM
-#define PLATFORM	0
+#define PLATFORM    0
 #endif
 
 #define SW_VERSION  "113"
