@@ -103,8 +103,8 @@ void help(void) {
     help_line("        ._  Exit");
     #endif
 
-    #ifdef VM_H
-    help_line(".= [file]  Run mem or file  .B file  Compile VM asm to file");
+    #ifdef COMPILER
+    help_line(".= [file]  Run mem or file  .B file  Compile to p-code exec");
     #else
     help_line(".= [file]  Run source in memory or from file               ");
     #endif
@@ -144,7 +144,6 @@ void RIDE_release_memory(void) {
     #endif
     x_free((byte **) &find_str);
     x_free((byte **) &repl_str);
-	x_defrag();
     curline = 1;
 	memset(buffer, 0, sizeof(buffer));  /* clear the edit buffer */
 }
@@ -308,18 +307,18 @@ int getchx(void) {
     }
     if(ch == KEY_ESC || ch == 0 || ch == MULPS2) {  /* Escape sequences passed through the standard byte-long getch() */
         char r = 20;
-        while(r-- && kbhit() <= 0) mSec(1);
+        while(r-- && kbhit() <= 0) mSec(MSK_WAIT_MS);
         if(ch != KEY_ESC) {     /* PS/2 scan codes are two bytes and start with code 0 or MULPS2 */
 			if(ch == 0) ch = KEY_ESC;
             ch = (ch << 8) + (unsigned char) getch();
         }
-        else if(kbhit() > 0) {  /* multibyte escape codes (> 2 bytes) */
+        else if(kbhit() > 0) {  /* multi-byte escape codes (> 2 bytes) */
             int c;
             do {
                 c = (unsigned char) getch();
                 if(c) ch = (ch << 8) + c;
                 r = 5;
-                while(r-- && kbhit() <= 0) mSec(1);
+                while(r-- && kbhit() <= 0) mSec(MSK_WAIT_MS);
             } while(c && kbhit() > 0);
         }
     }
@@ -655,12 +654,9 @@ unsigned long run_file(char *fn) {
 
 		while(kbhit() > 0) getchx();    /* clear the keyboard buffer */
 
-        /* TODO: run (*code) with an external interpreter. This is the only place with a reference outside of RIDE */
+        /* run (*code) with an external interpreter. This is the only place with a reference outside of RIDE */
         /* the interpreter must clear (*file_to_run) after execution, or have it loaded it with a new file to run */
-
 		printf("\r\n");
-
-        //###vm_run(code);
 
         #if defined(CIMPL)
         	result = Cimpl(code ? (char *) code : TEXT);
@@ -1131,6 +1127,9 @@ void execute_cmd_line(char *buf) {
             break;  /* no more commands are executed in this line since the file name was to the end of it */
         }
 
+		/* hidden: display the allocated memory blocks */
+        else if(*b == '%' && *(b+1) == '%') { b += 2; x_list_alloc(); }
+
         /* execute command script file */
         else if(*b == 'E' || *b == 'e') {
             b++;
@@ -1179,7 +1178,8 @@ void execute_cmd_line(char *buf) {
         }
 
 		/* compile and create an executable binary file */
-		#ifdef VM_H
+        // ### TODO: compiler?
+		#ifdef COMPILER
         else if(*b == 'B' || *b == 'b') {
             b++;
 			while(*b == ' ') b++;
@@ -1193,7 +1193,8 @@ void execute_cmd_line(char *buf) {
             if(fr == FR_OK) {
                 printf("\r\n>>> Compiling to file `%s` ... \r\n", (filename ? filename : ""));
 
-				// ### TODO: compiler?
+
+
 
             }
             f_close(&File);
@@ -1252,6 +1253,7 @@ void execute_cmd_line(char *buf) {
 }
 
 
+#ifdef CIMPL
 /* interpret a single help string up to a comma or end */
 char *interpret_help(char *help_str, char *str) {
 	char *c = help_str;
@@ -1280,6 +1282,7 @@ char *interpret_help(char *help_str, char *str) {
 	}
 	return c;
 }
+#endif
 
 
 /* main RIDE function */
@@ -1387,7 +1390,7 @@ void RIDE(void) {
 					c += 6;
 					printf("\r\n>>> Resetting... ");
 					mSec(500);
-					reset();
+					resetPlatform();
 				}
 
 				else if(!strncmp(c, "/date", 5)) {	/* ./date command */
@@ -1398,14 +1401,14 @@ void RIDE(void) {
 					int m = (dt / 100) % 100;
 					int d = dt % 100;
 					if(m >= 1 && m <= 12 && d >= 1 && d <= 31) {
-						struct tm *tt = localtime((const time_t *) &sUTime);
+						struct tm *tt = localtime((const time_t *) &ss_time);
                         struct tm ttt;
                         memcpy(&ttt, tt, sizeof(struct tm));
 						ttt.tm_year = 100 + y;
 						ttt.tm_mon = m - 1;
 						ttt.tm_mday = d;
                         ttt.tm_isdst = 0;
-                        sUTime = mktime(&ttt);
+                        ss_time = mktime(&ttt);
                         enable_flags |= FLAG_RTC_UPDATE;
 					}
 					else what();
@@ -1419,14 +1422,14 @@ void RIDE(void) {
 					int m = (dt / 100) % 100;
 					int s = dt % 100;
 					if(h <= 23 && m <= 59 && s <= 59) {
-						struct tm *tt = localtime((const time_t *) &sUTime);
+						struct tm *tt = localtime((const time_t *) &ss_time);
                         struct tm ttt;
                         memcpy(&ttt, tt, sizeof(struct tm));
 						ttt.tm_hour = h;
 						ttt.tm_min = m;
 						ttt.tm_sec = s;
                         ttt.tm_isdst = 0;
-                        sUTime = mktime(&ttt);
+                        ss_time = mktime(&ttt);
                         enable_flags |= FLAG_RTC_UPDATE;
 					}
 					else what();

@@ -40,7 +40,6 @@ static void errmem(void) {
 FRESULT fcopy(char *src, char *dst) {
 	TCHAR *rwbuf = NULL, *swbuf = NULL, *dwbuf = NULL;
     FIL *ffs = NULL, *ffd = NULL;
-    x_defrag();
 	x_malloc((byte **) &swbuf, FOS_BUF + 1);
 	x_malloc((byte **) &dwbuf, FOS_BUF + 1);
     x_malloc((byte **) &ffs, sizeof(FIL));

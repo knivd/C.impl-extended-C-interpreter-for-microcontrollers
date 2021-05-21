@@ -87,6 +87,10 @@ typedef struct {
 ride_settings_t settings;       /* stored settings */
 unsigned char passw_mode;       /* flag for password mode in edit_line(); not displaying characters */
 
+#ifndef MSK_WAIT_MS
+#define MSK_WAIT_MS     15      /* give this many milliseconds time for the next key in escape sequences */
+#endif
+
 /* basic keyboard codes */
 #define KEY_BREAK   '\003'  /* Ctrl-C used for terminating execution */
 #define KEY_ENT     '\r'
