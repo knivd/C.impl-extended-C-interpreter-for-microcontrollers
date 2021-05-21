@@ -1,31 +1,28 @@
 # Project: RIDE
-# Makefile created by Dev-C++ 5.11
+# Makefile created by Embarcadero Dev-C++ 6.3
 
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = ../_devcpp/obj/diskio.o ../_devcpp/obj/platform.o ../_devcpp/obj/ff.o ../_devcpp/obj/ffsystem.o ../_devcpp/obj/ffunicode.o ../_devcpp/obj/cimpl.o ../_devcpp/obj/opr.o ../_devcpp/obj/l_stdio.o ../_devcpp/obj/l_math.o ../_devcpp/obj/l_string.o ../_devcpp/obj/l_fatfs.o ../_devcpp/obj/l_stdlib.o ../_devcpp/obj/l_misc.o ../_devcpp/obj/xmem.o ../_devcpp/obj/fos.o ../_devcpp/obj/ride.o ../_devcpp/obj/l_conio.o ../_devcpp/obj/l_platfm.o ../_devcpp/obj/l_graph.o ../_devcpp/obj/graphics.o ../_devcpp/obj/main.o
-LINKOBJ  = ../_devcpp/obj/diskio.o ../_devcpp/obj/platform.o ../_devcpp/obj/ff.o ../_devcpp/obj/ffsystem.o ../_devcpp/obj/ffunicode.o ../_devcpp/obj/cimpl.o ../_devcpp/obj/opr.o ../_devcpp/obj/l_stdio.o ../_devcpp/obj/l_math.o ../_devcpp/obj/l_string.o ../_devcpp/obj/l_fatfs.o ../_devcpp/obj/l_stdlib.o ../_devcpp/obj/l_misc.o ../_devcpp/obj/xmem.o ../_devcpp/obj/fos.o ../_devcpp/obj/ride.o ../_devcpp/obj/l_conio.o ../_devcpp/obj/l_platfm.o ../_devcpp/obj/l_graph.o ../_devcpp/obj/graphics.o ../_devcpp/obj/main.o
-LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -pg -g3
-INCS     = -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
-CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+OBJ      = ../_devcpp/obj/platform.o ../_devcpp/obj/ff.o ../_devcpp/obj/ffsystem.o ../_devcpp/obj/ffunicode.o ../_devcpp/obj/cimpl.o ../_devcpp/obj/opr.o ../_devcpp/obj/l_stdio.o ../_devcpp/obj/l_math.o ../_devcpp/obj/l_string.o ../_devcpp/obj/l_fatfs.o ../_devcpp/obj/l_stdlib.o ../_devcpp/obj/l_misc.o ../_devcpp/obj/xmem.o ../_devcpp/obj/fos.o ../_devcpp/obj/ride.o ../_devcpp/obj/l_conio.o ../_devcpp/obj/l_platfm.o ../_devcpp/obj/l_graph.o ../_devcpp/obj/graphics.o ../_devcpp/obj/main.o ../_devcpp/obj/diskio.o
+LINKOBJ  = ../_devcpp/obj/platform.o ../_devcpp/obj/ff.o ../_devcpp/obj/ffsystem.o ../_devcpp/obj/ffunicode.o ../_devcpp/obj/cimpl.o ../_devcpp/obj/opr.o ../_devcpp/obj/l_stdio.o ../_devcpp/obj/l_math.o ../_devcpp/obj/l_string.o ../_devcpp/obj/l_fatfs.o ../_devcpp/obj/l_stdlib.o ../_devcpp/obj/l_misc.o ../_devcpp/obj/xmem.o ../_devcpp/obj/fos.o ../_devcpp/obj/ride.o ../_devcpp/obj/l_conio.o ../_devcpp/obj/l_platfm.o ../_devcpp/obj/l_graph.o ../_devcpp/obj/graphics.o ../_devcpp/obj/main.o ../_devcpp/obj/diskio.o
+LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -pg -g3
+INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
 BIN      = bin/RIDE.exe
-CXXFLAGS = $(CXXINCS) -ansi -fno-asm -m32 -std=c99 -Wall -Wextra -pedantic -Wfatal-errors -pg -g3 -fverbose-asm -pipe
-CFLAGS   = $(INCS) -ansi -fno-asm -m32 -std=c99 -Wall -Wextra -pedantic -Wfatal-errors -pg -g3 -fverbose-asm -pipe -DMEMORY_SIZE_KB=2048 -DRESERVED_SIZE_KB=0 -DCIMPL
-RM       = rm.exe -f
+CXXFLAGS = $(CXXINCS) -ansi -fno-asm -m32 -std=c99 -Wall -Wextra -Wfatal-errors -pg -g3
+CFLAGS   = $(INCS) -ansi -fno-asm -m32 -std=c99 -Wall -Wextra -Wfatal-errors -pg -g3 -DMEMORY_SIZE_KB=16 -DCIMPL
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
 
 .PHONY: all all-before all-after clean clean-custom
 
 all: all-before $(BIN) all-after
 
 clean: clean-custom
-	${RM} $(OBJ) $(BIN)
+	${DEL} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
-
-../_devcpp/obj/diskio.o: ../diskio.c
-	$(CC) -c ../diskio.c -o ../_devcpp/obj/diskio.o $(CFLAGS)
 
 ../_devcpp/obj/platform.o: ../platform.c
 	$(CC) -c ../platform.c -o ../_devcpp/obj/platform.o $(CFLAGS)
@@ -86,3 +83,6 @@ $(BIN): $(OBJ)
 
 ../_devcpp/obj/main.o: ../../../main.c
 	$(CC) -c ../../../main.c -o ../_devcpp/obj/main.o $(CFLAGS)
+
+../_devcpp/obj/diskio.o: ../diskio.c
+	$(CC) -c ../diskio.c -o ../_devcpp/obj/diskio.o $(CFLAGS)
