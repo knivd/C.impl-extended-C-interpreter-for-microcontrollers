@@ -1,9 +1,8 @@
 #include "main.h"
 
-
 // main entry point
 int main(void) {
-    
+
     /* initialise default settings */
     settings.stored_password = 0;
     settings.kbd_layout = LAYOUT_UK;
@@ -12,10 +11,10 @@ int main(void) {
     settings.page_height = PAGE_HEIGHT;
     settings.tab_width = TAB_WIDTH;
     settings.checksum = hash((const char *) (&settings + sizeof(settings.checksum)), (sizeof(settings) - sizeof(settings.checksum)));
-    
+
 	initPlatform();
     beep();
-    
+
     int ch;
     FRESULT fr = FR_OK;
 
@@ -23,23 +22,24 @@ int main(void) {
         posX = posY = 0;
         enable_flags |= FLAG_NO_ECHO;
         fontScale = 3;
-        drawRect(0, 0, (Hres - 1), 
-                    fontScale * (font->header.height + font->header.blankT + font->header.blankB) - 2, 
+        drawRect(0, 0, (Hres - 1),
+                    fontScale * (font->header.height + font->header.blankT + font->header.blankB) - 2,
                     COL_GREY25);
         fontFcol = COL_SOLID;
         fontBcol = COL_TRANSP;
-        posX = (Hres - 7 * fontScale * (font->header.width + font->header.blankL + font->header.blankR)) / 2 - 4;
+        posX = (Hres - (6 + strlen(PLATFORM_NAME) * fontScale *
+                            (font->header.width + font->header.blankL + font->header.blankR))) / 2;
     }
 	else {
         printf("\r");
         for(ch = 0; ch < 100; ch++) printf("\n");
     }
     printf("%s\r\n", PLATFORM_NAME);
-    
+
     if(enable_flags & FLAG_VIDEO) {
         fontScale = 1; posX += 4;
         fontFcol = COL_SOLID;
-        fontBcol = COL_NONE; 
+        fontBcol = COL_NONE;
 	}
 
     mSec(1000);
@@ -53,22 +53,30 @@ int main(void) {
     }
 
     if(enable_flags & FLAG_VIDEO) {
-        posX = (Hres - (22 + strlen(SW_VERSION)) * fontScale * 
-                    (font->header.width + font->header.blankL + font->header.blankR)) / 2;
+        posX = (Hres - (17 + strlen(AUTHOR) + strlen(SW_VERSION)) * fontScale *
+                            (font->header.width + font->header.blankL + font->header.blankR)) / 2;
     }
-    printf("R%s (C) %c%c%c %s, KnivD\r", SW_VERSION, 
-                                        __DATE__[strlen(__DATE__) - 11], 
-										__DATE__[strlen(__DATE__) - 10], 
-										__DATE__[strlen(__DATE__) - 9], 
-										&__DATE__[strlen(__DATE__) - 4]);
+    printf("R%s (C) %c%c%c %s, %s\r", SW_VERSION,
+                                        __DATE__[strlen(__DATE__) - 11],
+										__DATE__[strlen(__DATE__) - 10],
+										__DATE__[strlen(__DATE__) - 9],
+										&__DATE__[strlen(__DATE__) - 4],
+                                        AUTHOR);
 
     if((enable_flags & FLAG_VIDEO) == 0 || (enable_flags & FLAG_USB)) printf("\n");
     if(enable_flags & FLAG_USB) printf("[usb]");
-    if(enable_flags & FLAG_SERIAL) printf("[ser]"); 
+    if(enable_flags & FLAG_SERIAL) printf("[ser]");
     if(enable_flags & FLAG_PS2) printf("[kbd]");
     if(enable_flags & FLAG_VIDEO) printf("[vid]");
     if(enable_flags & FLAG_RTC) printf("[rtc]");
     printf("\r\n\n");
+
+    #if IFS_DRV_KB > 0
+        fr = FR_OK;
+        f_chdrive("IFS:");
+        fr = f_mount(&FatFs, "IFS:", 1);
+        if(fr == FR_NO_FILESYSTEM) execute_cmd_fos("init IFS:");
+    #endif
 
 	/* read the stored settings */
     fr = FR_OK;
@@ -100,13 +108,6 @@ int main(void) {
         printf("\r\n");
     //}
     printf("\n");
-    
-    #if IFS_DRV_KB > 0
-        fr = FR_OK;
-        f_chdrive("IFS:");
-        fr = f_mount(&FatFs, "IFS:", 1);
-        if(fr == FR_NO_FILESYSTEM) execute_cmd_fos("init IFS:");
-    #endif
 
     char autorun = 1;   /* auto-run flag */
     mSec(1000);
@@ -173,7 +174,7 @@ int main(void) {
 		f_mount(&FatFs, PWD_FILE, 1);
 		f_chdir(PWD_FILE);
 	}
-    
+
     while(1) RIDE();
     return 0;
 }

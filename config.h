@@ -1,10 +1,13 @@
 #ifndef ARCH_H
 
-#define SW_VERSION	"112d"
-
 /* platform type */
-/* 0:generic, 1:ELLO 1A */
-#define PLATFORM	0
+/* 0: Generic - no hardware platform */
+/* 1: ELLO 1A (PIC32MX270B) */
+/* 2: Rittle Board (PIC32MZ2048EFH064) */
+#define PLATFORM	1
+
+#define SW_VERSION	"113"
+#define AUTHOR      "KnivD"
 
 /* these must be the actual platform headers */
 
@@ -20,6 +23,13 @@
 	#include "platform/ello1a/platform.h"
 	#include "platform/ello1a/l_platfm.h"
 
+/* Rittle Board */
+/* NOTE: work in progress */
+#elif PLATFORM == 2
+	#define PLATFORM_NAME	"Rittle Board"
+	#include "platform/rittle/platform.h"
+	#include "platform/rittle/l_platfm.h"
+
 #else
 	#error "#define PLATFORM is missing or invalid"
 #endif
@@ -27,7 +37,7 @@
 #include <stdint.h>
 
 #ifndef BIT
-#define BIT(b) (1ul << (b))
+#define BIT(b) (1ull << (b))
 #endif
 
 #define FLAG_VIDEO      BIT(0)      // video output is enabled
@@ -39,7 +49,7 @@
 #define FLAG_USB_PRES   BIT(6)      // USB connectivity is possible
 #define FLAG_USB        BIT(7)      // USB console is configured and active
 #define FLAG_RTC        BIT(8)      // RTC detected
-#define FLAG_RTC_UPDATE BIT(9)      // request to update the RTC with the value from sUTime
+#define FLAG_RTC_UPDATE BIT(9)      // request to update the RTC with the value from (ss_time)
 
 uint16_t enable_flags;              // see the FLAG_xxx definitions
 

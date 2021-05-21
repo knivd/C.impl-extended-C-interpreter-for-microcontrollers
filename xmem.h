@@ -31,7 +31,7 @@ size_t x_meminit(void);
 	block is already allocated and needs changing its size. If unsuccessful, the function will
 	return NULL but the original block will not be affected
 */
-void *x_malloc(byte **v, size_t sz);
+void *x_malloc(byte **var, size_t sz);
 
 /* free allocated block */
 /*
@@ -39,16 +39,10 @@ void *x_malloc(byte **v, size_t sz);
     will update the variable with NULL
 	return 0 if successful, or -1 for error
 */
-int x_free(byte **v);
-
-/* reclaim allocated memory block to another variable; return 0 if successful, or -1 for error */
-int x_reclaim(byte **v_new, byte **v_old);
+int x_free(byte **var);
 
 /* return the actual size of an allocated block */
 size_t x_blksize(byte *v);
-
-/* defragment the memory by combining unused blocks */
-void x_defrag(void);
 
 /* return the size of the largest continuous currently available block */
 size_t x_avail(void);
