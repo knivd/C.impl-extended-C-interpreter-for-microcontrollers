@@ -2656,7 +2656,7 @@ static void get_fileinfo (
 	while (si < 11) {		/* Get SFN from SFN entry */
 		wc = dp->dir[si++];			/* Get a char */
 		if (wc == ' ') continue;	/* Skip padding spaces */
-		if (wc == RDDEM) wc = DDEM;	/* Restore replaced DDEM character */
+		if (wc == RDDEM) wc = (TCHAR) DDEM;	/* Restore replaced DDEM character */
 		if (si == 9 && di < FF_SFN_BUF) fno->altname[di++] = '.';	/* Insert a . if extension is exist */
 #if FF_LFN_UNICODE >= 1	/* Unicode output */
 		if (dbc_1st((BYTE)wc) && si != 8 && si != 11 && dbc_2nd(dp->dir[si])) {	/* Make a DBC if needed */
@@ -2693,7 +2693,7 @@ static void get_fileinfo (
 	while (si < 11) {		/* Copy name body and extension */
 		c = (TCHAR)dp->dir[si++];
 		if (c == ' ') continue;		/* Skip padding spaces */
-		if (c == RDDEM) c = DDEM;	/* Restore replaced DDEM character */
+		if (c == RDDEM) c = (TCHAR) DDEM;	/* Restore replaced DDEM character */
 		if (si == 9) fno->fname[di++] = '.';/* Insert a . if extension is exist */
 		fno->fname[di++] = c;
 	}
