@@ -18,7 +18,7 @@ FIL *hFIL[MAX_FILES];   /* file handlers */
 #endif
 
 extern const sys_const_t stdio_const_table[];
-extern const sys_func_t stdio_func_table[];
+extern const  sys_func_t stdio_func_table[];
 
 void stdio_init(void);
 void sf_printf(void);

@@ -38,7 +38,7 @@ const sys_func_t math_func_table[] = {
     { sf_floor,    "floor",    5,  "d,d", NULL },
     { sf_fmod,     "fmod",     4,  "d,d,d", NULL },
     { sf_fabs,     "fabs",     4,  "d,d", NULL },
-    
+
 #ifndef __XC32__
     { sf_trunc,    "trunc",    5,  "d,d", NULL },
     { sf_round,    "round",    5,  "d,d", NULL },
@@ -46,7 +46,7 @@ const sys_func_t math_func_table[] = {
     { sf_fmin,     "fmin",     4,  "d,d,d", NULL },
     { sf_fmax,     "fmax",     4,  "d,d,d", NULL },
 #endif
-    
+
     {NULL, NULL, 0, NULL, NULL}
 };
 

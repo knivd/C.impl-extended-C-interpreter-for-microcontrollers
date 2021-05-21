@@ -11,7 +11,7 @@
 /* system function handlers take parameters from *prog and return result in acc[accN] */
 
 const sys_const_t graphics_const_table[] = {
-    
+
     /* fonts */
     /* note: the actual values are loaded in the graph_init() function */
     { { { .i = 0 }, (FT_CONST | DT_VOID), 1, {0} },  SYS_FONT_NAME, SYS_FONT_NAME_LEN },
@@ -37,7 +37,7 @@ const sys_const_t graphics_const_table[] = {
     { { { .i = -18 }, (FT_CONST | DT_INT), 0, {0} },    "COL_SPL25", 9 },   /* special pattern left 25% */
     { { { .i = -19 }, (FT_CONST | DT_INT), 0, {0} },    "COL_SPR33", 9 },   /* special pattern right 33% */
     { { { .i = -20 }, (FT_CONST | DT_INT), 0, {0} },    "COL_SPR25", 9 },   /* special pattern right 25% */
-    
+
     /* putRect() operation constants */
     { { { .i = 0 },   (FT_CONST | DT_INT), 0, {0} },    "OPR_COPY", 8 },    /* "copy" operation for putRect() */
     { { { .i = 1 },   (FT_CONST | DT_INT), 0, {0} },    "OPR_OR", 6 },      /* "OR" operation for putRect() */
@@ -255,7 +255,7 @@ void sf_floodFill(void) {
     get_param(&d2, DT_INT, 0);  /* y */
     get_comma();
     get_param(&d3, DT_INT, 0);  /* colour */
-    floodFill(d1.val.i, d2.val.i, d3.val.i);   
+    floodFill(d1.val.i, d2.val.i, d3.val.i);
 }
 
 

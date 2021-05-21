@@ -39,7 +39,7 @@ const sys_const_t limits_const_table[] = {
     { { { .i = LONG_MIN },     (FT_CONST | DT_LONG), 0, {0} },                  "LONG_MIN",     8 },
     { { { .i = LONG_MAX },     (FT_CONST | DT_LONG), 0, {0} },                  "LONG_MAX",     8 },
     { { { .i = ULONG_MAX },    (FT_CONST | FT_UNSIGNED | DT_LONG), 0, {0} },    "ULONG_MAX",    9 },
-    
+
     #if DISABLE_LONG_LONG == 0 && defined(LLONG_MIN)
     { { { .i = LLONG_MIN },    (FT_CONST | DT_LLONG), 0, {0} },                 "LLONG_MIN",    9 },
     { { { .i = LLONG_MAX },    (FT_CONST | DT_LLONG), 0, {0} },                 "LLONG_MAX",    9 },
@@ -48,7 +48,7 @@ const sys_const_t limits_const_table[] = {
     { { { .i = LONG_MIN },     (FT_CONST | DT_LLONG), 0, {0} },                 "LLONG_MIN",    9 },
     { { { .i = LONG_MAX },     (FT_CONST | DT_LLONG), 0, {0} },                 "LLONG_MAX",    9 },
     { { { .i = ULONG_MAX },    (FT_CONST | FT_UNSIGNED | DT_LLONG), 0, {0} },   "ULLONG_MAX",   10 },
-    #endif    
+    #endif
 
     { { {0}, 0, 0, {0} }, NULL, 0 }	/* must be final in this array */
 };
@@ -72,7 +72,7 @@ const sys_const_t stdint_const_table[] = {
     { { { .i = INT32_MIN },     (FT_CONST | DT_LONG), 0, {0} },                 "INT32_MIN",    9 },
     { { { .i = INT32_MAX },     (FT_CONST | DT_LONG), 0, {0} },                 "INT32_MAX",    9 },
     { { { .i = UINT32_MAX },    (FT_CONST | FT_UNSIGNED | DT_LONG), 0, {0} },   "UINT32_MAX",   10 },
-    
+
     #if DISABLE_LONG_LONG == 0
     { { { .i = INT64_MIN },     (FT_CONST | DT_LLONG), 0, {0} },                "INT64_MIN",    9 },
     { { { .i = INT64_MAX },     (FT_CONST | DT_LLONG), 0, {0} },                "INT64_MAX",    9 },
@@ -141,7 +141,7 @@ void sf_va_arg(void) {
 	ival(accN) = (uintptr_t) prog;			/* update the ellipsis pointer */
 	var_set(v, &acc[accN], 0);
 	accN--;		/* back to the original accN index */
-	prog = pt;	
+	prog = pt;
 }
 
 

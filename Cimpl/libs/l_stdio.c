@@ -225,7 +225,7 @@ void ff_core(void *buf, uint8_t ftype) {
 				prog++;
                 if(t == 'n') ival(accN) = counter;
                 else {
-                    get_value(1);   /* get the next supplied parameter */					
+                    get_value(1);   /* get the next supplied parameter */
                     memset(&mt, 0, sizeof(data_t));
                 }
                 if(strchr("fFeEaAgG", t)) { /* FP numbers */
@@ -299,7 +299,7 @@ void ff_core(void *buf, uint8_t ftype) {
                     convert(&acc[accN], &mt);
                     if(ftype == PRINTF_TYPE) counter += printf(tmpbuf, PRINTF_CAST ival(accN));
                     else if(ftype == SCANF_TYPE) counter += scanf(tmpbuf, &ival(accN));
-                    else if(ftype == SPRINTF_TYPE) counter += sprintf(((char *) buf + counter), tmpbuf, 
+                    else if(ftype == SPRINTF_TYPE) counter += sprintf(((char *) buf + counter), tmpbuf,
                                                                             PRINTF_CAST ival(accN));
                     else if(ftype == SSCANF_TYPE) counter += sscanf(((char *) buf + counter), tmpbuf, &ival(accN));
                     #if DISABLE_FILE == 0
@@ -491,7 +491,7 @@ void sf_fread(void) {
     acc[accN].ind = 0;
     acc[accN].type = DT_SIZE_T;
     ival(accN) = 0;
-    ival(accN) = f_read((FIL *) (uintptr_t) d4.val.i, (void *) (uintptr_t) d1.val.i, 
+    ival(accN) = f_read((FIL *) (uintptr_t) d4.val.i, (void *) (uintptr_t) d1.val.i,
                                 (d2.val.i * d3.val.i), (UINT *) &ival(accN));
 }
 
@@ -507,7 +507,7 @@ void sf_fwrite(void) {
     acc[accN].ind = 0;
     acc[accN].type = DT_SIZE_T;
     ival(accN) = 0;
-    ival(accN) = f_write((FIL *) (uintptr_t) d4.val.i, (const void *) (uintptr_t) d1.val.i, 
+    ival(accN) = f_write((FIL *) (uintptr_t) d4.val.i, (const void *) (uintptr_t) d1.val.i,
                                 (d2.val.i * d3.val.i), (UINT *) &ival(accN));
 }
 
@@ -584,7 +584,7 @@ void sf_fopen(void) {
     FRESULT fr = FR_OK;
     if(t < MAX_FILES && !hFIL[t]) {
         x_malloc((byte **) &hFIL[t], sizeof(FIL));
-        if(hFIL[t]) fr = f_open(hFIL[t], (const char *) (uintptr_t) d1.val.i, 
+        if(hFIL[t]) fr = f_open(hFIL[t], (const char *) (uintptr_t) d1.val.i,
                                     get_fopen_mode((const char *) (uintptr_t) d2.val.i));
         if(fr != FR_OK) {
             f_close(hFIL[t]);
@@ -604,7 +604,7 @@ void sf_freopen(void) {
     acc[accN].ind = 1;
     acc[accN].type = DT_FILE;
     f_close((FIL *) (uintptr_t) d3.val.i);
-    FRESULT fr = f_open((FIL *) (uintptr_t) d3.val.i, (const char *) (uintptr_t) d1.val.i, 
+    FRESULT fr = f_open((FIL *) (uintptr_t) d3.val.i, (const char *) (uintptr_t) d1.val.i,
                             get_fopen_mode((const char *) (uintptr_t) d2.val.i));
     if(fr != FR_OK) {
         f_close((FIL *) (uintptr_t) d3.val.i);

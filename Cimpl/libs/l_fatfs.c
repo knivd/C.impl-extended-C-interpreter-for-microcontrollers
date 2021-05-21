@@ -63,8 +63,8 @@ void sf_f_open(void) {
 	get_param(&d3, (FT_UNSIGNED | DT_CHAR), 0);	/* BYTE mode */
     acc[accN].ind = 0;
     acc[accN].type = DT_ENUM;
-    ival(accN) = (uint_t) f_open((FIL *) (uintptr_t) d1.val.i, 
-										(const TCHAR *) (uintptr_t) d2.val.i, 
+    ival(accN) = (uint_t) f_open((FIL *) (uintptr_t) d1.val.i,
+										(const TCHAR *) (uintptr_t) d2.val.i,
 										(BYTE) d3.val.i);
 }
 
@@ -87,8 +87,8 @@ void sf_f_read(void) {
 	get_param(&d4, (FT_UNSIGNED | DT_INT), 1);	/* UINT* br */
     acc[accN].ind = 0;
     acc[accN].type = DT_ENUM;
-    ival(accN) = (uint_t) f_read((FIL *) (uintptr_t) d1.val.i, 
-									   	(void *) (uintptr_t) d2.val.i, 
+    ival(accN) = (uint_t) f_read((FIL *) (uintptr_t) d1.val.i,
+									   	(void *) (uintptr_t) d2.val.i,
 									   	(UINT) d3.val.i,
 									   	(UINT *) (uintptr_t) d4.val.i);
 }
@@ -104,8 +104,8 @@ void sf_f_write(void) {
 	get_param(&d4, (FT_UNSIGNED | DT_INT), 1);	/* UINT* bw */
     acc[accN].ind = 0;
     acc[accN].type = DT_ENUM;
-    ival(accN) = (uint_t) f_write((FIL *) (uintptr_t) d1.val.i, 
-									   	(void *) (uintptr_t) d2.val.i, 
+    ival(accN) = (uint_t) f_write((FIL *) (uintptr_t) d1.val.i,
+									   	(void *) (uintptr_t) d2.val.i,
 									   	(UINT) d3.val.i,
 									   	(UINT *) (uintptr_t) d4.val.i);
 }
@@ -146,8 +146,8 @@ void sf_f_expand(void) {
 	get_param(&d3, (FT_UNSIGNED | DT_CHAR), 0);	/* BYTE opt */
     acc[accN].ind = 0;
     acc[accN].type = DT_ENUM;
-    ival(accN) = (uint_t) f_expand((FIL *) (uintptr_t) d1.val.i, 
-									   	(FSIZE_t) d2.val.i, 
+    ival(accN) = (uint_t) f_expand((FIL *) (uintptr_t) d1.val.i,
+									   	(FSIZE_t) d2.val.i,
 									   	(BYTE) d3.val.i);
 }
 
@@ -160,8 +160,8 @@ void sf_f_gets(void) {
 	get_param(&d3, DT_VOID, 1);					/* FIL* fp */
     acc[accN].ind = 1;
     acc[accN].type = DT_CHAR;
-    ival(accN) = (uintptr_t) f_gets((TCHAR *) (uintptr_t) d1.val.i, 
-									   		(int_t) d2.val.i, 
+    ival(accN) = (uintptr_t) f_gets((TCHAR *) (uintptr_t) d1.val.i,
+									   		(int_t) d2.val.i,
 									   		(FIL *) (uintptr_t) d3.val.i);
 }
 
@@ -172,7 +172,7 @@ void sf_f_putc(void) {
 	get_param(&d2, DT_VOID, 1);					/* FIL* fp */
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
-    ival(accN) = (int_t) f_putc((TCHAR) d1.val.i, 
+    ival(accN) = (int_t) f_putc((TCHAR) d1.val.i,
 							   			(FIL *) (uintptr_t) d2.val.i);
 }
 
@@ -183,7 +183,7 @@ void sf_f_puts(void) {
 	get_param(&d2, DT_VOID, 1);					/* FIL* fp */
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
-    ival(accN) = (int_t) f_puts((TCHAR *) (uintptr_t) d1.val.i, 
+    ival(accN) = (int_t) f_puts((TCHAR *) (uintptr_t) d1.val.i,
 							   			(FIL *) (uintptr_t) d2.val.i);
 }
 
