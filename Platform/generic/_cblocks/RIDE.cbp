@@ -52,9 +52,9 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
+			<Add option="-std=c99" />
 			<Add option="-DCIMPL" />
-			<Add option="-DMEMORY_SIZE_KB=2048" />
+			<Add option="-DMEMORY_SIZE_KB=10" />
 		</Compiler>
 		<Unit filename="../../../Cimpl/cimpl.c">
 			<Option compilerVar="CC" />

@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveTarget name="Release" />
-	<File name="..\..\..\FatFs\source\ff.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="136795" topLine="3650" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\Cimpl\libs\l_conio.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="12" topLine="0" />
-		</Cursor>
-	</File>
+	<ActiveTarget name="Debug" />
 	<File name="..\..\..\RIDE\fos.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="308" topLine="5" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\Cimpl\opr.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\main.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8409" topLine="337" />
+			<Cursor1 position="0" topLine="57" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\Cimpl\libs\l_stdio.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\FatFs\source\ff.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4127" topLine="90" />
+			<Cursor1 position="136795" topLine="3650" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\Cimpl\cimpl.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\RIDE\graphics.c" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10324" topLine="202" />
+			<Cursor1 position="6756" topLine="231" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\RIDE\kbdcodes.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\l_platfm.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="265" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="..\..\..\RIDE\ride.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -45,44 +35,44 @@
 			<Collapse line="29" />
 		</Folding>
 	</File>
+	<File name="..\..\..\Cimpl\libs\l_stdlib.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6343" topLine="219" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\xmem.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1456" topLine="26" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\Cimpl\cimpl.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10324" topLine="202" />
+		</Cursor>
+	</File>
 	<File name="..\..\..\main.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="146" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\RIDE\graphics.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\RIDE\graphics.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="17193" topLine="499" />
+			<Cursor1 position="2642" topLine="43" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\Cimpl\cimpl.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\RIDE\kbdcodes.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="743" topLine="0" />
+			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\xmem.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\config.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="615" topLine="11" />
+			<Cursor1 position="113" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\..\..\config.h" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\Cimpl\opr.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="114" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\RIDE\ride.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="12200" topLine="303" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\Cimpl\libs\l_string.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7057" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\..\..\RIDE\graphics.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3791" topLine="63" />
+			<Cursor1 position="8409" topLine="337" />
 		</Cursor>
 	</File>
 	<File name="..\..\..\Cimpl\libs\l_stdio.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -90,10 +80,34 @@
 			<Cursor1 position="562" topLine="14" />
 		</Cursor>
 	</File>
-	<File name="..\l_platfm.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\..\..\Cimpl\libs\l_string.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="265" topLine="0" />
+			<Cursor1 position="7057" topLine="0" />
 		</Cursor>
 	</File>
-	<EditorTabsLayout layout="07c83b60608fe6ee0000339500000002=*0;RIDE:..\..\..\config.h@layout2|name=dummy;caption=;state=2098174;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=716;besth=472;minw=716;minh=472;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=07c83b60608fe6ee0000339500000002;caption=;state=2098172;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=300;besth=300;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(5,0,0)=302|" />
+	<File name="..\..\..\xmem.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6340" topLine="180" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\Cimpl\cimpl.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="743" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\RIDE\ride.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="23675" topLine="625" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\Cimpl\libs\l_conio.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\Cimpl\libs\l_stdio.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4127" topLine="90" />
+		</Cursor>
+	</File>
 </CodeBlocks_layout_file>
