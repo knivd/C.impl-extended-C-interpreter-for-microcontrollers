@@ -219,7 +219,6 @@ int Cimpl(const char *source) {
         return err_code;  /* here the execution terminates with an error */
     }
     if(!source || *source == ETX) return 0;
-	x_defrag();     /* initially optimise the memory */
 	if(enable_flags & FLAG_VIDEO) {
         enable_flags &= ~FLAG_NO_SCROLL;    /* unlock screen scrolling */
 	}
@@ -485,7 +484,7 @@ void wait_break(void) {
     int k = kbhit();
     if(k) {
         if(k == 1) {    /* compatibility with bool kbhit() makes #pragma BREAK 1 work differently (pause/break) */
-            k = getchx(); 
+            k = getchx();
             while(kbhit() > 0) getchx();
         }
         if(k == settings.brk_code) error(TERMINATED);
@@ -1281,7 +1280,7 @@ void *get_token(void) {
 			if(v->parent == var_parent && idlen == v->nlen && !strncmp(id, v->name, v->nlen)) {
 				if(v->block == block && v->depth == exec_depth) { vv = v; break; }	/* found the exact match */
 				if(!vv) vv = v;
-				else if((v->block == NULL) || 
+				else if((v->block == NULL) ||
 						(v->block >= vv->block && v->depth >= vv->depth)) vv = v;	/* ok but keep searching for better */
 			}
 			v = v->next;
@@ -1366,7 +1365,7 @@ void _get_value(tcode_t topr, void *vpre) {
 				var_t *vtmp = vprec;
 				if(k->t != STRUCT_DOT && k->t != STRUCT_ARROW) {
 					indexed_attr = indexed;
-					var_t *vpp = var_parent; var_parent = NULL; 
+					var_t *vpp = var_parent; var_parent = NULL;
 					uint8_t *pap = parent_addr; parent_addr = NULL;
 					uint8_t ixt = indexed;
 					incN(); _get_value(token, NULL);	/* get the following parameter */
@@ -1462,9 +1461,9 @@ void skip_block(void) {
 			}
 			else if(*prog == '{') { prog++; k++; }
 			else if(*prog == '\"' || *prog == '\'') { 	/* skipping over string constants */
-				indexed = acc[accN].ind = 0; 
+				indexed = acc[accN].ind = 0;
 				incN(); get_token(); accN--;
-			}	
+			}
 			else skip_spaces(1);	/* skip this character */
 		}
 		if(*prog != '}') error(CL_BRACE_EXPECTED);
@@ -1479,9 +1478,9 @@ void skip_block(void) {
 			}
 			else if(*prog == '(') { prog++; k++; }
 			else if(*prog == '\"' || *prog == '\'') { 	/* skipping over string constants */
-				indexed = acc[accN].ind = 0; 
+				indexed = acc[accN].ind = 0;
 				incN(); get_token(); accN--;
-			}	
+			}
 			else skip_spaces(1);	/* skip this character */
 		}
 	}
@@ -1584,7 +1583,7 @@ void execute_block(var_t *parent) {
 	execute_timers();
 	skip_spaces(0);
 	if(*prog == ';') { token = SEMICOLON; prog++; return; }
-	if(*prog == '}') { 
+	if(*prog == '}') {
 		if(exec_depth) { token = UNKNOWN; return; }
 		else error(UNEXPECTED_TOKEN);
 	}
