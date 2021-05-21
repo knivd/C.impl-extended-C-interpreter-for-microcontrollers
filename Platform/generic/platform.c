@@ -9,11 +9,11 @@ void initPlatform(void) {
 	SysMemSize = x_meminit();
     f_mount(&FatFs, "IFS:", 0);
 	enable_flags |= FLAG_RTC;
-	time(&sUTime);
+	time(&ss_time);
 }
 
 
-void reset(void) {
+void resetPlatform(void) {
 	printf("Not supported\r\n\n");
 }
 

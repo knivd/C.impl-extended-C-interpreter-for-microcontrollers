@@ -15,13 +15,14 @@ extern "C" {
 
 /* always required platform definitions (even if the system has no capability to handle certain functionalities) */
 
-time_t sUTime;	/* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
+time_t ss_time;	/* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
+FATFS FatFs;    /* work area for FatFs */
 
 /* cold initialisation of the hardware platform */
 void initPlatform(void);
 
-/* reset the platform */
-void reset(void);
+/* warm initialisation of the hardware platform */
+void resetPlatform(void);
 
 /* delay in milliseconds */
 void mSec(clock_t ms);
