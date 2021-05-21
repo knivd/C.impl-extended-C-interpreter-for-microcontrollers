@@ -8,7 +8,7 @@
 #define PLATFORM	0
 #endif
 
-#define SW_VERSION	"113"
+#define SW_VERSION  "113"
 #define AUTHOR      "KnivD"
 
 /* these must be the actual platform headers */
