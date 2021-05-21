@@ -9,7 +9,7 @@
 #include "../../ride/ride.h"
 
 const sys_const_t platform_const_table[] = {
-    
+
     { { { .i = (uintptr_t) BASEA }, (FT_UNSIGNED | DT_INT), 1, {0} },	"BASEA", 5 },
     { { { .i = (uintptr_t) BASEB }, (FT_UNSIGNED | DT_INT), 1, {0} },	"BASEB", 5 },
     { { { .i = (uintptr_t) BASEC }, (FT_UNSIGNED | DT_INT), 1, {0} },	"BASEC", 5 },
@@ -69,7 +69,7 @@ const sys_func_t platform_func_table[] = {
     { sf_reset,         "reset",        5,  "v,v", NULL },
     { sf_delay_ms,      "delay_ms",     8,  "v,ul", NULL },
     { sf_set_timer,     "set_timer",    9,  ":void set_timer(unsigned long, void (*f)(void)", NULL },
-    
+
     /* communications */
     { sf_spiOpen,       "spiOpen",      7,  "i,i,i,i,i", NULL },
     { sf_spiClose,      "spiClose",     8,  "i", NULL },
@@ -91,7 +91,7 @@ const sys_func_t platform_func_table[] = {
     /* sound */
     { sf_beep,          "beep",         4,  "v,v", NULL },
     { sf_sound,         "sound",        5,  "v,i,i", NULL },
-    
+
     /* video */
     { sf_initVideo,     "initVideo",    9,  "v,i", NULL },
     { sf_getVmode,      "getVmode",     8,  "i,v", NULL },
@@ -100,7 +100,7 @@ const sys_func_t platform_func_table[] = {
     { sf_clearScreen,   "clearScreen",  11, "v,i", NULL },
     { sf_setPixel,      "setPixel",     8,  "v,i,i,i", NULL },
     { sf_getPixel,      "getPixel",     8,  "i,i,i", NULL },
-    
+
     {NULL, NULL, 0, NULL, NULL}
 };
 

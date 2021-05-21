@@ -3,7 +3,8 @@
 #include "../../config.h"
 #include "../../RIDE/kbdcodes.h"
 #include "../../RIDE/graphics.h"
-#include "../../RIDE/ride.h"   /* for the settings{} structure */
+#include "../../RIDE/ride.h"    /* for the settings{} structure */
+#include "../../RIDE/fos.h"     /* for the File structure */
 
 #include "m-stack/usb/usb_config.h"
 #include "m-stack/usb/usb.h"
@@ -26,7 +27,7 @@ void initPlatform(void) {
     mJTAGPortEnable(DEBUG_JTAGPORT_OFF);
 	DisableWDT();
     srand(PORTA + PORTB);
-    
+
     uSec(10000);    // allow some time to the oscillator to stabilise
     TRISA = TRISB = 0xFFFFFFFF;
     ANSELA = ANSELB = 0;
@@ -37,34 +38,34 @@ void initPlatform(void) {
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
     INTEnableSystemMultiVectoredInt();  // allow vectored interrupts
     INTEnableInterrupts();
-    msClock = msCountdown = 0;
-    
+    ms_clock = ms_timer = 0;
+
     // check for RTC
     I2C_PULLUP |= (SCL | SDA);  // enable the internal pull-up resistor on the I2C lines
     I2C_LAT |= (SCL | SDA);
     I2C_TRIS &= ~(SCL | SDA);
     struct tm tt;
     if(!i2cGetTime(&tt)) {
-        tt.tm_year = 121;
+        tt.tm_year = 121;		// 2021
         tt.tm_mon = 0;          // January
         tt.tm_mday = 1;
         tt.tm_hour = tt.tm_min = tt.tm_sec = 0;
         tt.tm_isdst = 0;
     }
-    sUTime = mktime(&tt);
-    
+    ss_time = mktime(&tt);
+
     // setup Timer 4 as a one-millisecond timer to maintain the system timers
     PR4 = 1000 * (_PB_FREQ / 2 / 1000000) - 1;  // 1 ms
     T4CON = 0x8010;         // T4 on, pre-scaler 1:2
     mT4SetIntPriority(5);  	// set priority
     mT4ClearIntFlag();      // clear the interrupt flag
     mT4IntEnable(1);       	// enable interrupt
-    
+
     // initialise the SD card interface
     currentSD = 0;
     CS_HIGH();
     CNPUASET = BIT(1);      // enable the internal pull-up resistor on the SD card CS# line
-    
+
     // initialise the PS/2 keyboard
     LATBSET = (BIT(5) | BIT(7));    // initialise the lines as output for a short time
     TRISBCLR = (BIT(5) | BIT(7));
@@ -72,7 +73,7 @@ void initPlatform(void) {
     kbdFlags = DEFAULT_KBD_FLAGS;
     mSec(500);
     initKeyboard();
-    
+
     // check for serial console and initialise it if found
     if((enable_flags & FLAG_PS2) == 0) {
         CNPUBCLR = BIT(5); CNPDBSET = BIT(5);   // set pull-down on the RX pin
@@ -94,22 +95,22 @@ void initPlatform(void) {
             INTEnable(INT_U2RX, INT_ENABLED);
         }
     }
-   
+
     // initialise the system font (must be done before the video!)
     fontScale = 1;
     fontFcol = 0xFFFFFF;
     fontBcol = 0;
     font = (font_t *) &sysFont0508;
-    
+
     // initialise the managed memory (dynamic allocation blocks)
-    SysMem = MEMORY; 
+    SysMem = MEMORY;
     SysMemSize = x_meminit();
-    
+
     // initialise the video generator (uses Timer3, OC3, SPI2, SS2)
     // the video initialisation function will grab the needed RAM
     initVideo(DEFAULT_VMODE);
 	clearScreen(0);
-    
+
     // initialise USB
     #ifdef MULTI_CLASS_DEVICE
 	cdc_set_interface_list(cdc_interfaces, sizeof(cdc_interfaces));
@@ -184,9 +185,25 @@ void __attribute__ ((nomips16)) _general_exception_handler(void)	{
 }
 
 
-void __attribute__ ((nomips16)) reset(void) {
+void uSec(unsigned long us) {
+    unsigned long i = ((((unsigned long) (us) * 1000) - 600) / (2000000000 / _XTAL_FREQ));
+    WriteCoreTimer(0);
+    while(ReadCoreTimer() < i);
+}
+
+
+void mSec(unsigned long ms) {
+    ms_timer = ms;
+    while(ms_timer);
+}
+
+
+void resetPlatform(void) {
     SoftReset();
 }
+
+
+void empty(void) {}
 
 
 /*
@@ -196,7 +213,7 @@ note that (bytes) need to be a multiple of:
 - BYTE_ROW_SIZE (and aligned that way) if you intend to write rows
 - sizeof(int) if you intend to write words
 */
-#define ALLOCATE(name, align, bytes) unsigned char name[(bytes)] __attribute__ ((aligned(align), space(prog), section(".ifs"))) = { [0 ... (bytes)-1] = 0xFF }
+#define ALLOCATE(name, align, bytes) const unsigned char name[(bytes)] __attribute__ ((aligned(align), space(prog), section(".ifs"))) = { [0 ... (bytes)-1] = 0xFF }
 
 #if IFS_DRV_KB > 0
 ALLOCATE(ifs_data, BYTE_PAGE_SIZE, (IFS_DRV_KB * 1024ul));
@@ -224,7 +241,7 @@ void doUSB(void) {
         #endif
         if(usb_is_configured()) {
             enable_flags |= FLAG_USB;
-            
+
             // send data to host
             if(usb_in_endpoint_busy(2) == 0 && !usb_in_endpoint_halted(2)) {
                 if(usbTx_in != usbTx_out) {
@@ -259,7 +276,7 @@ void doUSB(void) {
                 }
             }
             usb_arm_out_endpoint(2);
-                    
+
 		}
         else enable_flags &= ~FLAG_USB;
 	}
@@ -369,16 +386,16 @@ int8_t app_send_break_callback(uint8_t interface, uint16_t duration) {
 
 // interrupt handler for the 1 ms timer
 void __ISR(_TIMER_4_VECTOR, IPL5AUTO) T4Interrupt(void) {
-    msClock++;
-    if(msClock % 1000 == 0) {
-        sUTime++;
+    ms_clock++;
+    if(ms_clock % 1000 == 0) {
+        ss_time++;
         if(enable_flags & FLAG_RTC_UPDATE) {
             enable_flags &= ~FLAG_RTC_UPDATE;
-            struct tm *tt = localtime((const time_t *) &sUTime);
+            struct tm *tt = localtime((const time_t *) &ss_time);
             i2cSetTime(tt);
         }
     }
-    if(msCountdown) (msCountdown)--;
+    if(ms_timer) (ms_timer)--;
     if(msKbdTimer) msKbdTimer--;
     if(msK && (--msK == 0)) addKey();
     doUSB();
@@ -387,15 +404,15 @@ void __ISR(_TIMER_4_VECTOR, IPL5AUTO) T4Interrupt(void) {
 
 
 clock_t clock(void) {
-    return (clock_t) msClock;
+    return (clock_t) ms_clock;
 }
 
 
 time_t time(time_t *t) {
     struct tm tt;
-    if(i2cGetTime(&tt)) sUTime = mktime(&tt);
-    if(t) *t = (time_t) sUTime;
-    return (time_t) sUTime;
+    if(i2cGetTime(&tt)) ss_time = mktime(&tt);
+    if(t) *t = (time_t) ss_time;
+    return (time_t) ss_time;
 }
 
 
@@ -486,12 +503,12 @@ void initKeyboard(void) {
     // initialise variables and set the LEDs
     PS2State = PS2START;
     keyDown = EOF;
-    //kbdFlags &= ~FLAG_SCROLLLOCK;  
+    //kbdFlags &= ~FLAG_SCROLLLOCK;
     //kbdFlags &= ~FLAG_NUMLOCK;
-    //kbdFlags &= ~FLAG_CAPSLOCK;  
+    //kbdFlags &= ~FLAG_CAPSLOCK;
     setKbdLEDs(kbdFlags);
     if((enable_flags & FLAG_PS2) == 0) ConfigINT3(EXT_INT_DISABLE);
-}    
+}
 
 
 // PS/2 keyboard interrupt handler
@@ -648,7 +665,7 @@ void __ISR(_EXTERNAL_3_VECTOR, IPL2AUTO) INT3Interrupt(void) {
                                     default:   c = 0; break;
                                 }
                             }
-                            
+
                         }
                         else {
                             if(Code == 0x83) { c = KEY_F7; goto SkipIn; }       // special case - F7
@@ -678,7 +695,7 @@ void __ISR(_EXTERNAL_3_VECTOR, IPL2AUTO) INT3Interrupt(void) {
                                 else if(c >= 'A' && c <= 'Z') c += 32;
                             }
                             if(Dead && c) { // dead keys
-                                switch(Dead) {  
+                                switch(Dead) {
                                     case 1: {   // /-accent
                                         if(c == 'a') c = '\x86';
                                         if(c == 'e') c = '\x82';
@@ -723,11 +740,11 @@ void __ISR(_EXTERNAL_3_VECTOR, IPL2AUTO) INT3Interrupt(void) {
                             }
                         }
                         if(!c) goto SkipOut;
-                        
+
                         SkipIn:
                         if(Ctrl) c &= 0x1F; // control characters
     				    keyDown = c;
-                        
+
                         SkipOut:
 	                	KeyUpCode = KeyE0 = false;
 	                }
@@ -755,8 +772,8 @@ __attribute__ ((used)) int kbhit(void) {
 __attribute__ ((used)) char getch(void) {
     if(getch_ch == 0) {
         getch_ch = _mon_getc(1);
-        is_big = (getch_ch & 0xFFFFFF00); 
-    }    
+        is_big = (getch_ch & 0xFFFFFF00);
+    }
     while(getch_ch && (getch_ch & 0xFF000000) == 0) getch_ch <<= 8;
     int r = getch_ch >> 24; getch_ch <<= 8;
     return (r & 0xFF);
@@ -842,10 +859,9 @@ void initVideo(uint8_t mode) {
     VidMemSize = 0;
     Hres = Vres = 1;
     x_free((byte **) &VidMem); VidMem = NULL;
-    x_defrag();
     SysMemSize = x_avail();
     enable_flags &= ~FLAG_VIDEO;
-   
+
     /* set the video mode parameters */
     VpageAddr = 0;
     Vmode = mode;
@@ -854,7 +870,7 @@ void initVideo(uint8_t mode) {
     VC[2] = VideoParams[mode][VGA_VRES];
     VC[3] = VideoParams[mode][VGA_VFRPORCH_LN];
     Hwords32 = (VideoParams[mode][VGA_HRES] + 31) / 32;
-    
+
     // detect presence of a monitor
     CNPUASET = (1 << 4); TRISASET = (1 << 4);           // enable the internal pull-up
     if(PORTA & BIT(4)) { CNPUACLR = (1 << 4); return; } // no monitor detected
@@ -867,7 +883,7 @@ void initVideo(uint8_t mode) {
     enable_flags |= FLAG_VIDEO;
     Hres = VideoParams[mode][VGA_HRES];
     Vres = VideoParams[mode][VGA_VRES];
-   
+
     // setup SPI2 as the video generator.  The output of this module is a stream of bits which are the pixels in a horizontal scan line
     PPSOutput(3, RPA4, SDO2);   // A4 is the video out for VGA
     PPSInput(4, SS2, RPA3);     // A3 is the framing input
@@ -904,7 +920,7 @@ void __ISR(_TIMER_3_VECTOR, IPL7AUTO) T3Interrupt(void) {
             SPI2BUF = 0;
             VPtr = (uint32_t *) &VidMem[VpageAddr];
         }
-        else if(VState == SV_POSTEQ) P_VERT_SET_HI; 
+        else if(VState == SV_POSTEQ) P_VERT_SET_HI;
         else if(VState == SV_SYNC) P_VERT_SET_LO;
     }
     if(VState == SV_LINE) {     // shift out video data
@@ -997,7 +1013,7 @@ __attribute__ ((used)) void _mon_putc(char ch) {
             uint16_t bitp = (1000000 / SERIAL_BAUDRATE);
             char i = 8, b = ch;
             if(enable_flags & FLAG_VIDEO) { // synchronise with VSYNC in order to avoid garbled serial output
-                while(VState == SV_PREEQ); 
+                while(VState == SV_PREEQ);
             }
             INTEnable(INT_U2RX, INT_DISABLED);
             mT4IntEnable(0);    // disable the millisecond timer
@@ -1099,7 +1115,7 @@ unsigned int NVMProgramMX1(unsigned char *address, unsigned char *data, unsigned
 
 	if((size & 3) || ((uintptr_t) pagebuff & 3)) return 1;          // 1. make sure that the size and pagebuff are word aligned
 	if(size == 0) return 0;     // nothing to program
-    
+
     pageStartAddr = (uintptr_t) address & (~(BYTE_PAGE_SIZE - 1));  // 2. calculate Page Start address
 	numBefore = (uintptr_t) address & (BYTE_PAGE_SIZE - 1);         // 3. calculate the number of bytes that need to be copied from Flash.
     memcpy(pagebuff, (unsigned char *) pageStartAddr, numBefore);   // 4. make a copy of original data, if necessary
@@ -1255,7 +1271,7 @@ int i2cGetTime(struct tm *t) {
     t->tm_mon = BCD2BIN(v - 1);
     t->tm_year = (BCD2BIN(i2cRecv(1)) % 100) + (c * 100);
     enable_flags |= FLAG_RTC;
-    
+
     i2cGetTimeFail:
     i2cStop();
     return !!(enable_flags & FLAG_RTC);
@@ -1272,7 +1288,7 @@ int i2cSetTime(struct tm *t) {
     if(i2cSend(I2C_DS3231 | 1)) goto i2cSetTimeFail;
     uint8_t ctl = i2cRecv(1);   // read the control register
     i2cStop();
-    
+
     if(ctl & BIT(7)) {  // make sure bit 7 is always 0 in order to enable the oscillator running on Vbat
         i2cStart();
         if(i2cSend(I2C_DS3231)) goto i2cSetTimeFail;
@@ -1280,7 +1296,7 @@ int i2cSetTime(struct tm *t) {
         if(i2cSend(ctl & ~BIT(7))) goto i2cSetTimeFail;
         i2cStop();
     }
-    
+
     i2cStart();
     if(i2cSend(I2C_DS3231)) goto i2cSetTimeFail;
     if(i2cSend(0x00)) goto i2cSetTimeFail;  // register address
@@ -1293,7 +1309,7 @@ int i2cSetTime(struct tm *t) {
     if(i2cSend(BIN2BCD(t->tm_year % 100))) goto i2cSetTimeFail;
     i2cStop();
     enable_flags |= FLAG_RTC;
-    
+
     i2cSetTimeFail:
     i2cStop();
     return !!(enable_flags & FLAG_RTC);
@@ -1315,7 +1331,7 @@ void sound(int freq, int vol) {
     else {
         CloseTimer2();
         CloseOC2();
-        PPSOutput(2, RPB8, NULL); 
+        PPSOutput(2, RPB8, NULL);
     }
     SCL1; SDAin;
     while(SDAget == 0) {
@@ -1333,3 +1349,137 @@ void beep(void) {
     mSec(100);
     sound(0, 0);
 }
+
+
+// BIOS functions ===============================================================================
+
+__attribute__ ((address(0xA0000000))) const void * const ELLO[] = {
+
+            // memory
+/* 0 */     (void *) &SysMem,
+/* 1 */     (void *) &SysMemSize,
+/* 2 */     (void *) &VidMem,
+/* 3 */     (void *) &VidMemSize,
+/* 4 */     (void *) x_meminit,
+/* 5 */     (void *) x_malloc,
+/* 6 */     (void *) x_free,
+/* 7 */     (void *) x_blksize,
+/* 8 */     (void *) x_avail,
+/* 9 */     (void *) x_total,
+/* 10 */    (void *) empty,         // x_defrag() in case it appears again
+/* 11 */    (void *) empty,         // x_reclaim() in case it appears again
+
+            // timing
+/* 12 */    (void *) &ms_clock,
+/* 13 */    (void *) &ss_time,
+/* 14 */    (void *) uSec,
+/* 15 */    (void *) mSec,
+
+            // console
+/* 16 */    (void *) _mon_getc,
+/* 17 */    (void *) _mon_putc,
+/* 18 */    (void *) _mon_puts,
+
+            // video
+/* 19 */    (void *) &Hres,
+/* 20 */    (void *) &Vres,
+/* 21 */    (void *) &Vmode,
+/* 22 */    (void *) initVideo,
+/* 23 */    (void *) clearScreen,
+/* 24 */    (void *) scrollUp,
+/* 25 */    (void *) setPixel,
+/* 26 */    (void *) getPixel,
+
+            // keyboard
+/* 27 */    (void *) &kbdFlags,
+/* 28 */    (void *) kbhit,
+/* 29 */    (void *) getch,
+
+            // sound
+/* 30 */    (void *) sound,
+/* 31 */    (void *) beep,
+
+            // SPI
+/* 32 */    (void *) openSPI,
+/* 33 */    (void *) xchgSPI,
+
+            // I2C
+/* 34 */    (void *) i2cInit,
+/* 35 */    (void *) i2cStart,
+/* 36 */    (void *) i2cRepStart,
+/* 37 */    (void *) i2cStop,
+/* 38 */    (void *) i2cSend,
+/* 39 */    (void *) i2cRecv,
+
+            // graphics
+/* 40 */    (void *) &sysFont0508,
+/* 41 */    (void *) &font,
+/* 42 */    (void *) &fontScale,
+/* 43 */    (void *) &fontFcol,
+/* 44 */    (void *) &fontBcol,
+/* 45 */    (void *) &posX,
+/* 46 */    (void *) &posY,
+/* 47 */    (void *) drawChar,
+/* 48 */    (void *) drawLine,
+/* 49 */    (void *) drawFrame,
+/* 50 */    (void *) drawRect,
+/* 51 */    (void *) drawTriangle,
+/* 52 */    (void *) drawCircle,
+/* 53 */    (void *) drawEllipse,
+/* 54 */    (void *) drawSector,
+/* 55 */    (void *) drawShape,
+/* 56 */    (void *) floodFill,
+/* 57 */    (void *) getRect,
+/* 58 */    (void *) putRect,
+
+            // RIDE and FOS
+/* 59 */    (void *) &buffer,
+/* 60 */    (void *) &settings,
+/* 61 */    (void *) &passw_mode,
+/* 62 */    (void *) &FatFs,
+/* 63 */    (void *) &File,
+/* 64 */    (void *) &file_to_run,
+/* 65 */    (void *) run_file,
+/* 66 */    (void *) getchx,
+/* 67 */    (void *) edit_line,
+/* 68 */    (void *) execute_cmd_fos,
+
+            // FatFs
+/* 69 */    (void *) f_open,
+/* 70 */    (void *) f_close,
+/* 71 */    (void *) f_read,
+/* 72 */    (void *) f_write,
+/* 73 */    (void *) f_lseek,
+/* 74 */    (void *) f_truncate,
+/* 75 */    (void *) f_sync,
+/* 76 */    (void *) f_opendir,
+/* 77 */    (void *) f_closedir,
+/* 78 */    (void *) f_readdir,
+/* 79 */    (void *) f_findfirst,
+/* 80 */    (void *) f_findnext,
+/* 81 */    (void *) f_mkdir,
+/* 82 */    (void *) f_unlink,
+/* 83 */    (void *) f_rename,
+/* 84 */    (void *) f_stat,
+/* 85 */    (void *) f_chmod,
+/* 86 */    (void *) f_utime,
+/* 87 */    (void *) f_chdir,
+/* 88 */    (void *) f_chdrive,
+/* 89 */    (void *) f_getcwd,
+/* 90 */    (void *) f_getfree,
+/* 91 */    (void *) f_getlabel,
+/* 92 */    (void *) f_setlabel,
+/* 93 */    (void *) empty,         // f_forward,
+/* 94 */    (void *) f_expand,
+/* 95 */    (void *) f_mount,
+/* 96 */    (void *) f_mkfs,
+/* 97 */    (void *) empty,         // f_fdisk,
+/* 98 */    (void *) empty,         // f_setcp,
+/* 99 */    (void *) f_putc,
+/* 100 */   (void *) f_puts,
+/* 101 */   (void *) f_printf,
+/* 102 */   (void *) f_gets,
+/* 103 */   (void *) get_fattime,
+
+            (void *) NULL   // must be last in this array
+};

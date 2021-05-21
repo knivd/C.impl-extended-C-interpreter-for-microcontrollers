@@ -16,12 +16,12 @@
 #include "../../xmem.h"
 #include "platform.h"
 
-byte *drvIFS = ifs_data;    /* internal flash disk data entry point for the IFS: drive */
-byte *drvRAM = NULL;        /* internal RAM disk data entry point for the RAM: drive */
+byte *drvIFS = (byte *) ifs_data;   /* internal flash disk data entry point for the IFS: drive */
+byte *drvRAM = NULL;                /* internal RAM disk data entry point for the RAM: drive */
 
 
 DWORD get_fattime (void) {
-	struct tm *t = localtime((const time_t *) &sUTime);
+	struct tm *t = localtime((const time_t *) &ss_time);
 	return ((DWORD) (t->tm_year - 80) << 25)
          | ((DWORD) (t->tm_mon + 1) << 21)
          | ((DWORD) t->tm_mday << 16)
@@ -90,7 +90,9 @@ DSTATUS disk_initialize (
 			return stat;
 
 		case DEV_IFS:
-            /* nothing is needed here */
+			#if IFS_DRV_KB > 0
+				drvIFS = (byte *) ifs_data;
+			#endif
 			return stat;
 
 		case DEV_RAM:
@@ -133,7 +135,7 @@ DRESULT disk_read (
 
 		case DEV_IFS:
 			#if IFS_DRV_KB > 0
-                if(sector < ((IFS_DRV_KB * 1024ul) / BYTE_ROW_SIZE)) 
+                if(sector < ((IFS_DRV_KB * 1024ul) / BYTE_ROW_SIZE))
                     memcpy(buff, (drvIFS + (sector * BYTE_ROW_SIZE)), (count * BYTE_ROW_SIZE));
                 else res = RES_PARERR;
             #else
@@ -196,7 +198,7 @@ DRESULT disk_write (
                         #endif
                         NVMProgramMX1((byte *) (drvIFS + (sector * ss)), (byte *) buff, (count * ss), pagebuff);
                         x_free((byte **) &pagebuff);
-                    } 
+                    }
                     else res = RES_ERROR;
                 }
                 else res = RES_PARERR;

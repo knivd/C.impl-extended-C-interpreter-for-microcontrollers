@@ -30,30 +30,28 @@ extern "C" {
 #define _XTAL_FREQ      50000000ul  // oscillator frequency as defined in the configuration bits
 #define _PB_FREQ        50000000ul  // peripheral bus frequency as defined in the configuration bits
 
-#define IFS_DRV_KB      67          // IFS drive size in kB (this can be 0 if IFS drive is not required)
+#define IFS_DRV_KB      68          // IFS drive size in kB (this can be 0 if IFS drive is not required)
 #define RAM_DRV_KB      0           // RAM drive size in kB (this can be 0 if RAM drive is not required)
 
 #define SERIAL_BAUDRATE 38400       // serial console baudrate; protocol 8N1
 #define SERIAL_TX       LATBbits.LATB7      // serial console Tx line (Rx is fixed at RB5)
 #define SERIAL_TX_TRIS  TRISBbits.TRISB7
 
-extern unsigned char ifs_data[];    // the C: drive area
+extern const unsigned char ifs_data[]; // the C: drive area
 
 
 // SYSTEM DEFINITIONS ===========================================================================
 
-#define DEFAULT_KBD_FLAGS   0           // Scroll / Num / Caps flags
-
 void __attribute__((nomips16)) _general_exception_handler(void);
 void __attribute__ ((nomips16)) reset(void);
 void initPlatform(void);
-
-#define CON_BUFFER_SIZE 160 // size of the input console buffer
-#define MSK_WAIT_MS     10  // give this many milliseconds time for the next key in escape sequences
+void resetPlatform(void);
+void empty(void);
 
 unsigned char *SysMem;      // system memory
 unsigned long SysMemSize;   // size in bytes of the allocated system memory
 
+extern const void * const ELLO[];
 
 // VIDEO GENERATOR AND HARDWARE-DEPENDENT BASIC VIDEO FUNCTIONS =================================
 
@@ -77,6 +75,13 @@ __attribute__ ((used)) void _mon_puts(const char *s);
 
 
 // PS/2 KEYBOARD ================================================================================
+
+#define CON_BUFFER_SIZE     160 // size of the input console buffer
+#define DEFAULT_KBD_FLAGS   0   // Scroll / Num / Caps flags
+
+#ifndef MSK_WAIT_MS
+#define MSK_WAIT_MS     	15  // give this many milliseconds time for the next key in escape sequences
+#endif
 
 volatile uint8_t kbdFlags;      // keyboard LED flags: [.0] ScrollLock; [.1] NumLock; [.2] CapsLock
 volatile int16_t keyDown;       // -1 or key code of a pressed key
@@ -102,14 +107,13 @@ void doUSB(void);
 
 // TIMING =======================================================================================
 
-volatile unsigned long msCountdown; /* internal countdown timer used by mSec() */
-volatile unsigned long msClock;     /* counter of the milliseconds since the last system initialisation */
-volatile unsigned long sUTime;      /* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
+volatile unsigned long ms_timer;    /* internal countdown timer used by mSec() */
+volatile unsigned long ms_clock;    /* counter of the milliseconds since the last system initialisation */
+volatile unsigned long ss_time;     /* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
 
 // delays for microseconds and milliseconds
-#define uSec(us) { unsigned int i = ((((unsigned int) (us) * 1000) - 600) / (2000000000 / _XTAL_FREQ)); \
-                   WriteCoreTimer(0); while(ReadCoreTimer() < i); }
-#define mSec(ms) { msCountdown = ms; while(msCountdown); }
+void uSec(unsigned long us);
+void mSec(unsigned long ms);
 
 clock_t clock(void);
 time_t time(time_t *t);
