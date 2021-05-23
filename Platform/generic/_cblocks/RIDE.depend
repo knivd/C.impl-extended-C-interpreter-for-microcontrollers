@@ -1218,7 +1218,7 @@
 	"../cimpl.h"
 	"../../fatfs/source/ff.h"
 
-1621452130 k:\work\ride_c.impl\fatfs\source\ff.h
+1621592985 k:\work\ride_c.impl\fatfs\source\ff.h
 	"ffconf.h"
 	<windows.h>
 	<float.h>
@@ -1392,7 +1392,7 @@
 	"../config.h"
 	"../FatFs/source/ff.h"
 
-1621453027 source:k:\work\ride_c.impl\ride\ride.c
+1621591173 source:k:\work\ride_c.impl\ride\ride.c
 	<stdlib.h>
 	<stdio.h>
 	<stdint.h>
@@ -1490,11 +1490,13 @@
 	"l_platfm.h"
 	"platform.h"
 
-1621584452 k:\work\ride_c.impl\config.h
+1621601299 k:\work\ride_c.impl\config.h
 	"platform/generic/platform.h"
 	"platform/generic/l_platfm.h"
 	"platform/ello1a/platform.h"
 	"platform/ello1a/l_platfm.h"
+	"platform/rittle/platform.h"
+	"platform/rittle/l_platfm.h"
 	<stdint.h>
 
 1621336894 k:\work\ride_c.impl\ride\kbdcodes.h
@@ -1504,7 +1506,7 @@
 	"platform.h"
 	"../../cimpl/cimpl.h"
 
-1621451907 source:k:\work\ride_c.impl\main.c
+1621591926 source:k:\work\ride_c.impl\main.c
 	"main.h"
 
 1617449914 k:\work\ride_c.impl\main.h
@@ -1512,7 +1514,7 @@
 	"ride/ride.h"
 	"ride/fos.h"
 
-1621336894 source:k:\work\ride_c.impl\ride\graphics.c
+1621587720 source:k:\work\ride_c.impl\ride\graphics.c
 	<math.h>
 	"../xmem.h"
 	"graphics.h"
@@ -1523,4 +1525,169 @@
 	"../../config.h"
 	"../../ride/graphics.h"
 	"../../ride/kbdcodes.h"
+
+1621601782 k:\work\ride_c.impl\platform\rittle\platform.h
+	<xc.h>
+	"plibs/plib.h"
+	<string.h>
+	<stdint.h>
+	<stdio.h>
+	<time.h>
+	<limits.h>
+	"../../xmem.h"
+	"disksd.h"
+	"../../fatfs/source/ff.h"
+	"../../fatfs/source/diskio.h"
+	"../../ride/ride.h"
+
+1592214168 k:\work\ride_c.impl\platform\rittle\plibs\plib.h
+	<xc.h>
+	<errno.h>
+	"mz_libs/include/plib_mz.h"
+
+1586397668 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\plib_mz.h
+	<xc.h>
+	"peripheral_mz/adc12.h"
+	"peripheral_mz/cmp.h"
+	"peripheral_mz/cvref.h"
+	"peripheral_mz/dma.h"
+	"peripheral_mz/i2c.h"
+	"peripheral_mz/incap.h"
+	"peripheral_mz/int.h"
+	"peripheral_mz/lock.h"
+	"peripheral_mz/nvm.h"
+	"peripheral_mz/osc.h"
+	"peripheral_mz/outcompare.h"
+	"peripheral_mz/pcache.h"
+	"peripheral_mz/pmp.h"
+	"peripheral_mz/ports.h"
+	"peripheral_mz/pps.h"
+	"peripheral_mz/power.h"
+	"peripheral_mz/reset.h"
+	"peripheral_mz/spi.h"
+	"peripheral_mz/system.h"
+	"peripheral_mz/timer.h"
+	"peripheral_mz/rtcc.h"
+	"peripheral_mz/uart.h"
+	"peripheral_mz/wdt.h"
+	"peripheral_mz/can.h"
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\adc12.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	"../peripheral_mz/int.h"
+
+1621345958 k:\work\ride_c.impl\platform\rittle\plibs\generictypedefs.h
+	<stddef.h>
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\int.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	<stdint.h>
+	<sys/attribs.h>
+
+1479324942 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\cmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479324958 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\cvref.h
+	<xc.h>
+
+1479324968 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\dma.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\i2c.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	"../peripheral_mz/int.h"
+
+1479324988 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\incap.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1480585950 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\lock.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1592227335 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\nvm.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+	"../peripheral_mz/int.h"
+
+1479324948 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\common.h
+	<assert.h>
+	<stdint.h>
+	<string.h>
+	<sys/kmem.h>
+
+1480660654 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\osc.h
+	<xc.h>
+	"../peripheral_mz/common.h"
+
+1479325058 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\outcompare.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325094 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\pcache.h
+	<xc.h>
+
+1479325102 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\pmp.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479521852 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\ports.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1479325126 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\pps.h
+	<xc.h>
+
+1479454570 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\power.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1480024998 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\reset.h
+	<xc.h>
+	"../peripheral_mz/lock.h"
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\spi.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	"../peripheral_mz/int.h"
+
+1480640856 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\system.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+	"../peripheral_mz/lock.h"
+	"../peripheral_mz/pcache.h"
+
+1479544816 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\timer.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1558022824 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\rtcc.h
+	<xc.h>
+	"../peripheral_mz/int.h"
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\uart.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	"../peripheral_mz/int.h"
+
+1479454770 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\wdt.h
+	<xc.h>
+
+1621345818 k:\work\ride_c.impl\platform\rittle\plibs\mz_libs\include\peripheral_mz\can.h
+	<xc.h>
+	"../../../GenericTypeDefs.h"
+	"../peripheral_mz/int.h"
+
+1621343615 k:\work\ride_c.impl\platform\rittle\disksd.h
+	"../../fatfs/source/ff.h"
+	"../../fatfs/source/diskio.h"
+
+1621336894 k:\work\ride_c.impl\platform\rittle\l_platfm.h
+	"platform.h"
+	"../../cimpl/cimpl.h"
 
