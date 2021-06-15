@@ -18,9 +18,9 @@ int main(void) {
     int ch;
     FRESULT fr = FR_OK;
 
+    enable_flags |= FLAG_NO_ECHO;
     if(enable_flags & FLAG_VIDEO) {
         posX = posY = 0;
-        enable_flags |= FLAG_NO_ECHO;
         fontScale = 3;
         drawRect(0, 0, (Hres - 1),
                     fontScale * (font->header.height + font->header.blankT + font->header.blankB) - 2,
@@ -96,7 +96,7 @@ int main(void) {
 
     if(enable_flags & FLAG_VIDEO) printf("Video  RAM: %5lu bytes\r\n", VidMemSize);
     printf("System RAM: %5lu bytes\r\n", SysMemSize);
-    //if(enable_flags & FLAG_PS2) {
+    if(enable_flags & FLAG_PS2) {
         printf("Kbd layout: ");
         switch(settings.kbd_layout) {
             case LAYOUT_US: printf("US"); break;
@@ -106,7 +106,7 @@ int main(void) {
             default: printf("unknown"); break;
         }
         printf("\r\n");
-    //}
+    }
     printf("\n");
 
     char autorun = 1;   /* auto-run flag */

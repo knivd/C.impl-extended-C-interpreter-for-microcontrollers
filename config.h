@@ -8,8 +8,7 @@
 #define PLATFORM    0
 #endif
 
-#define SW_VERSION  "113"
-#define AUTHOR      "KnivD"
+#define SW_VERSION  "114"
 
 /* these must be the actual platform headers */
 
@@ -26,14 +25,17 @@
 	#include "platform/ello1a/l_platfm.h"
 
 /* Rittle Board */
-/* NOTE: work in progress */
 #elif PLATFORM == 2
-	#define PLATFORM_NAME	"Rittle Board"
+    #define PLATFORM_NAME	"Rittle Board"
 	#include "platform/rittle/platform.h"
 	#include "platform/rittle/l_platfm.h"
 
 #else
-	#error "#define PLATFORM is missing or invalid"
+	#error "#define PLATFORM <platform_code> is missing or invalid"
+#endif
+
+#ifndef AUTHOR
+#define AUTHOR      "KnivD"
 #endif
 
 #include <stdint.h>
