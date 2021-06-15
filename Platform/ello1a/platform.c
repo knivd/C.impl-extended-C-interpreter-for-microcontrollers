@@ -124,7 +124,7 @@ void __ISR(_UART_2_VECTOR, IPL3AUTO) ConsoleRxHandler(void) {
     while(UARTReceivedDataIsAvailable(UART2)) {
         int e = UARTGetLineStatus(UART2) & (UART_PARITY_ERROR | UART_FRAMING_ERROR | UART_OVERRUN_ERROR);
         int c = UARTGetDataByte(UART2);
-        U1STACLR = e;
+        U2STACLR = e;
         if(!e) {
             keybuf = (keybuf << 8) + c;
             msK = MSK_WAIT_MS;
@@ -398,7 +398,7 @@ void __ISR(_TIMER_4_VECTOR, IPL5AUTO) T4Interrupt(void) {
     if(ms_timer) (ms_timer)--;
     if(msKbdTimer) msKbdTimer--;
     if(msK && (--msK == 0)) addKey();
-    doUSB();
+    if((ms_clock & 7) == 0) doUSB();
     mT4ClearIntFlag();  // clear the interrupt flag
 }
 
@@ -811,12 +811,7 @@ __attribute__ ((used)) int _mon_getc(int blocking) {
             else ch = keyDown;
         }
     } while(blocking && ch == EOF);
-    if(ch > EOF && ch < 0x100 && ch != settings.brk_code) {
-        if(enable_flags & FLAG_VIDEO) {
-            if((enable_flags & FLAG_NO_ECHO) == 0) printf("%c", ch);
-        }
-        else printf("%c", ch);
-    }
+    if(ch > EOF && ch < 0x100 && blocking && ch != settings.brk_code && (enable_flags & FLAG_NO_ECHO) == 0) printf("%c", ch);
     return ch;
 }
 
@@ -1348,6 +1343,111 @@ void beep(void) {
     sound(945, 1000);
     mSec(100);
     sound(0, 0);
+}
+
+
+// COM ==========================================================================================
+
+/* open UARTx port */
+/* opening with buffer size 0 will close the port */
+/* will return 0 if it has been successfully executed; 1 otherwise */
+int openCOM(unsigned char port, unsigned short buff_size, unsigned long bps,
+            UART_LINE_CONTROL_MODE f, UART_CONFIGURATION c) {
+    switch(port) {
+        default: return 2;  /* invalid port number */
+
+        case UART1:
+            INTEnable(INT_U1RX, INT_DISABLED);
+            UARTEnable(UART1, 0);
+            PORTResetPins(IOPORT_B, (BIT(2) | BIT(3)));
+            PPSUnLock;
+            PPSOutput(1, RPB3, NULL);
+            if(buff_size && bps) {
+                PORTSetPinsDigitalOut(IOPORT_B, BIT_3); /* RB3 is TX for COM1 */
+                PORTSetPinsDigitalIn(IOPORT_B, BIT_2);  /* RB2 is RX for COM1 */
+                CNPUBSET = (BIT_2 | BIT_3); /* set pull-ups */
+                UARTConfigure(UART1, c);
+                UARTSetLineControl(UART1, f);
+                UARTSetDataRate(UART1, _PB_FREQ, bps);
+                UARTSetFifoMode(UART1, UART_INTERRUPT_ON_RX_NOT_EMPTY);
+                UARTEnable(UART1, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_TX | UART_RX));
+                INTSetVectorPriority(INT_UART_1_VECTOR, INT_PRIORITY_LEVEL_1);
+                INTEnable(INT_U1RX, INT_ENABLED);
+                PPSInput(3, U1RX, RPB2);
+                PPSOutput(1, RPB3, U1TX);
+            }
+            PPSLock;
+            break;
+
+    }
+    com_buff_size[port] = buff_size;
+    com_rx_in[port] = com_rx_out[port] = 0;
+	x_free((byte **) &com_buff[port]);
+    x_malloc((byte **) &com_buff[port], buff_size);
+    return !!(buff_size && !com_buff[port]);
+}
+
+
+/* UART reception function */
+/* will return -1 if the buffer is empty */
+int UART_rx(unsigned char port) {
+    if(com_rx_out[port] == com_rx_in[port]) return -1;
+    uint8_t c = com_buff[port][com_rx_out[port]];
+    if(++com_rx_out[port] >= com_buff_size[port]) com_rx_out[port] = 0;
+    return (int) c;
+}
+
+
+/* UART reception function */
+/* will return -1 if the buffer is empty, otherwise the first character in the buffer but without removing it */
+int UART_peek(unsigned char port) {
+    if(com_rx_out[port] == com_rx_in[port]) return -1;
+    return (int) com_buff[port][com_rx_out[port]];
+}
+
+
+/* return the number of bytes in a UART buffer */
+int UART_buffer(unsigned char port) {
+    int cnt = com_rx_out[port] - com_rx_in[port];
+    if(cnt < 0) cnt += com_buff_size[port];
+    return cnt;
+}
+
+
+/* general UART RX function (INTERRUPT) */
+void UART_rxInt(unsigned char port) {
+	while(UARTReceivedDataIsAvailable(port)) {
+		UART_DATA c = UARTGetData(port);
+		int e = (UARTGetLineStatus(port) & (UART_OVERRUN_ERROR | UART_FRAMING_ERROR | UART_PARITY_ERROR));
+		if(!e && com_buff[port]) {
+			com_buff[port][com_rx_in[port]] = (byte) c.__data;
+			if(++com_rx_in[port] >= com_buff_size[port]) com_rx_in[port] = 0;
+            if(com_rx_in[port] == com_rx_out[port]) {
+                if(++com_rx_out[port] >= com_buff_size[port]) com_rx_out[port] = 0;   /* discard the oldest character in the buffer */
+            }
+            #if CONSOLE_ECHO > 0
+                if(CONSOLE_COM == port) _mon_putc(c.__data);
+            #endif
+		}
+	}
+}
+
+
+/* UART1 RX interrupt */
+void __ISR(_UART_1_VECTOR, IPL1AUTO) IntUart1Handler(void) {
+    UART_rxInt(UART1);
+    U1STA &= ~(UART_OVERRUN_ERROR | UART_FRAMING_ERROR | UART_PARITY_ERROR);
+	INTClearFlag(INT_U1RX);
+}
+
+
+/* send character to UART (COM) port */
+void UART_tx(unsigned char port, char data) {
+    while(!(UARTTransmitterIsReady(port))) continue;
+    UART_DATA ud;
+    ud.__data = (UINT16) data;
+    UARTSendData((port), ud);
+    while(!(UARTTransmissionHasCompleted(port))) continue;
 }
 
 

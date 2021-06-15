@@ -62,13 +62,12 @@ const sys_const_t platform_const_table[] = {
     { { {0}, 0, 0, {0} }, NULL, 0 }	/* must be final in this array */
 };
 
-
 const sys_func_t platform_func_table[] = {
 
 	/* system */
     { sf_reset,         "reset",        5,  "v,v", NULL },
     { sf_delay_ms,      "delay_ms",     8,  "v,ul", NULL },
-    { sf_set_timer,     "set_timer",    9,  ":void set_timer(unsigned long, void (*f)(void)", NULL },
+    { sf_set_timer,     "set_timer",    9,  ":void set_timer(unsigned long, void (*f)(void))", NULL },
 
     /* communications */
     { sf_spiOpen,       "spiOpen",      7,  "i,i,i,i,i", NULL },
@@ -81,6 +80,13 @@ const sys_func_t platform_func_table[] = {
     { sf_i2cStop,       "i2cStop",      7,  "v,v", NULL },
     { sf_i2cSend,       "i2cSend",      7,  "i,uc", NULL },
     { sf_i2cRecv,       "i2cRecv",      7,  "uc,i", NULL },
+	{ sf_comOpen,       "comOpen",      7,  "i,i,i,i,i,i", NULL },
+    { sf_comClose,      "comClose",     8,  "i", NULL },
+    { sf_comPeek,       "comPeek",      7,  "i,i", NULL },
+    { sf_comBuff,       "comBuff",      7,  "i,i", NULL },
+    { sf_comTx,         "comTx",        5,  "v,i,i,uc*", NULL },
+    { sf_comRx,         "comRx",        5,  "i,i,i,uc*", NULL },
+    { sf_comRxCall,     "comRxCall",    9,  ":void comRxCall(int, void (*f)(void))", NULL },
 
     /* keyboard */
     { sf_setKbdLayout,  "setKbdLayout", 12, "v,c", NULL },
@@ -104,6 +110,25 @@ const sys_func_t platform_func_table[] = {
     {NULL, NULL, 0, NULL, NULL}
 };
 
+data_t d5;	/* common data accumulators used in the library functions (additional to the already defined d1..d4) */
+func_t *comRxHandler[COM_PORTS] = { NULL };
+int comRxBytes[COM_PORTS] = { 0 };
+callback_t cb = { NULL, NULL };
+
+
+void pltfm_init(void) {
+	if(cb.call == NULL) {
+		cb.call = pltfm_call;
+		cb.next = callbacks;
+		callbacks = &cb;        /* add to the execution chain */
+	}
+}
+
+
+void pltfm_call(void) {
+	// nothing needed for now
+}
+
 
 void sf_reset(void) {
     SoftReset();
@@ -122,10 +147,13 @@ void sf_set_timer(void) {
     get_param(&d1, (FT_UNSIGNED | DT_LONG), 0); /* milliseconds */
     get_comma();
     func_t *f = get_token();
-	if(token != FUNCTION || !f) error(SYNTAX);
-    skip_spaces(0);
-    if(*prog != ')') error(CL_PAREN_EXPECTED);
-    prog++;
+	if(token != NUMBER) {
+		if(token != FUNCTION || !f) error(SYNTAX);
+		skip_spaces(0);
+		if(*prog != ')') error(CL_PAREN_EXPECTED);
+		prog++;
+	}
+	else f = (func_t *) (uintptr_t) acc[accN].val.i;
     unsigned char t;
     for(t = 0; t < MAX_TIMERS && timers[t].reload; t++);
     if(t >= MAX_TIMERS) error(INSUFFICIENT_RESOURCE);
@@ -140,6 +168,7 @@ void sf_spiOpen(void) {
     get_param(&d2, DT_INT, 0);  /* mode */
     get_comma();
     get_param(&d3, DT_INT, 0);  /* baudrate */
+	d1.val.i--; // internal port numbering starts from 0
     acc[accN].val.i = openSPI(d1.val.i, d2.val.i, 8, d3.val.i);
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
@@ -148,6 +177,7 @@ void sf_spiOpen(void) {
 
 void sf_spiClose(void) {
     get_param(&d1, DT_INT, 0);  /* channel */
+	d1.val.i--; // internal port numbering starts from 0
     acc[accN].val.i = openSPI(d1.val.i, 0, 0, 0);
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
@@ -158,6 +188,7 @@ void sf_spiByte(void) {
     get_param(&d1, DT_INT, 0);  /* channel */
     get_comma();
     get_param(&d2, (FT_UNSIGNED | DT_LONG), 0); /* data to send */
+	d1.val.i--; // internal port numbering starts from 0
     acc[accN].val.i = xchgSPI(d1.val.i, d2.val.i);
     acc[accN].ind = 0;
     acc[accN].type = (FT_UNSIGNED | DT_LONG);
@@ -170,8 +201,118 @@ void sf_spiBlock(void) {
     get_param(&d2, (FT_UNSIGNED | DT_CHAR), 1); /* buffer */
     get_comma();
     get_param(&d3, DT_SIZE_T, 0);   /* len */
+	d1.val.i--; // internal port numbering starts from 0
     unsigned char *p = (unsigned char *) (uintptr_t) d2.val.i;
     for( ; d3.val.i > 0; d3.val.i--, p++) *p = xchgSPI(d1.val.i, *p);
+}
+
+
+void sf_comOpen(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    get_comma();
+    get_param(&d2, DT_INT, 0);  /* mode */
+    get_comma();
+    get_param(&d3, DT_INT, 0);  /* protocol */
+    get_comma();
+    get_param(&d4, DT_INT, 0);  /* baudrate */
+    get_comma();
+    get_param(&d5, DT_INT, 0);  /* Rx buffer size */
+    d1.val.i--; // internal port numbering starts from 0
+    if(d1.val.i >= UART1 && d1.val.i < COM_PORTS) {
+        comRxHandler[(unsigned int) d1.val.i] = NULL;
+        comRxBytes[(unsigned int) d1.val.i] = 0;
+    }
+    acc[accN].val.i = openCOM(d1.val.i, d5.val.i, d4.val.i, d2.val.i, d3.val.i);
+    acc[accN].ind = 0;
+    acc[accN].type = DT_INT;
+}
+
+
+void sf_comClose(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    d1.val.i--; // internal port numbering starts from 0
+    if(d1.val.i >= 0 && d1.val.i < COM_PORTS) {
+        comRxHandler[(unsigned int) d1.val.i] = NULL;
+        comRxBytes[(unsigned int) d1.val.i] = 0;
+    }
+    acc[accN].val.i = openCOM(d1.val.i, 0, 0, 0, 0);
+    acc[accN].ind = 0;
+    acc[accN].type = DT_INT;
+}
+
+
+void sf_comPeek(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    d1.val.i--; // internal port numbering starts from 0
+    acc[accN].val.i = UART_peek(d1.val.i);
+    acc[accN].ind = 0;
+    acc[accN].type = DT_INT;
+}
+
+
+void sf_comBuff(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    d1.val.i--; // internal port numbering starts from 0
+    acc[accN].val.i = UART_buffer(d1.val.i);
+    acc[accN].ind = 0;
+    acc[accN].type = DT_INT;
+}
+
+
+void sf_comTx(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    get_comma();
+    get_param(&d2, DT_INT, 0);  /* bytes */
+    get_comma();
+    get_param(&d3, (FT_UNSIGNED | DT_CHAR), 0); /* buffer */
+    d1.val.i--; // internal port numbering starts from 0
+    if(d1.val.i >= 0 && d1.val.i < COM_PORTS) {
+        while(d2.val.i-- > 0) {
+            UART_tx(d1.val.i, *((unsigned char *) (uintptr_t) d3.val.i));
+            d3.val.i++;
+        }
+    }
+}
+
+
+void sf_comRx(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    get_comma();
+    get_param(&d2, DT_INT, 0);  /* bytes */
+    get_comma();
+    get_param(&d3, (FT_UNSIGNED | DT_CHAR), 0); /* buffer */
+    unsigned long c = 0;
+    d1.val.i--; // internal port numbering starts from 0
+    if(d1.val.i >= 0 && d1.val.i < COM_PORTS) {
+        while(d2.val.i-- > 0 && UART_peek(d1.val.i) >= 0) {
+            *((unsigned char *) (uintptr_t) d3.val.i++) = UART_rx(d1.val.i);
+            c++;
+        }
+    }
+    acc[accN].val.i = c;
+    acc[accN].ind = 0;
+    acc[accN].type = DT_INT;
+}
+
+
+void sf_comRxCall(void) {
+    get_param(&d1, DT_INT, 0);  /* channel */
+    get_comma();
+    get_param(&d2, DT_INT, 0);  /* number of bytes */
+    get_comma();
+    func_t *f = get_token();
+    if(token != NUMBER) {
+        if(token != FUNCTION || !f) error(SYNTAX);
+        skip_spaces(0);
+        if(*prog != ')') error(CL_PAREN_EXPECTED);
+        prog++;
+    }
+    else f = (func_t *) (uintptr_t) acc[accN].val.i;
+    d1.val.i--; // internal port numbering starts from 0
+    if(d1.val.i >= 0 && d1.val.i < COM_PORTS) {
+        comRxHandler[(unsigned int) d1.val.i] = f;
+        comRxBytes[(unsigned int) d1.val.i] = d2.val.i;
+    }
 }
 
 

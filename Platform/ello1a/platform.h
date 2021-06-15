@@ -30,7 +30,7 @@ extern "C" {
 #define _XTAL_FREQ      50000000ul  // oscillator frequency as defined in the configuration bits
 #define _PB_FREQ        50000000ul  // peripheral bus frequency as defined in the configuration bits
 
-#define IFS_DRV_KB      68          // IFS drive size in kB (this can be 0 if IFS drive is not required)
+#define IFS_DRV_KB      65          // IFS drive size in kB (this can be 0 if IFS drive is not required)
 #define RAM_DRV_KB      0           // RAM drive size in kB (this can be 0 if RAM drive is not required)
 
 #define SERIAL_BAUDRATE 38400       // serial console baudrate; protocol 8N1
@@ -123,16 +123,15 @@ time_t time(time_t *t);
 
 #define SYSTEM_SPI      SPI_CHANNEL1    /* openSPI() assumes only SPI1 in ELLO 1A */
 
-#define SD1_nCS_BIT     BIT(1)  /* RA1 is the CS# of SD1 card */
-#define SD2_nCS_BIT     BIT(0)  /* RA0 is used as CS# for an externally connected SD2 card */
+#define SD1_nCS_BIT     BIT(1)          /* RA1 is the CS# of SD1 card */
+#define SD2_nCS_BIT     BIT(0)          /* RA0 is used as CS# for an externally connected SD2 card */
 #define SD_nCS_LAT      LATA
 #define SD_nCS_TRIS     TRISA
 
+#define SD_CARD_CLK     10000000ul      /* desired SD card SPI clock in Hz */
+
 int openSPI(char channel, unsigned char spi_mode, unsigned char bits, unsigned long speed);
 unsigned long xchgSPI(char channel, unsigned long tx_data);
-
-/* SD card SPI clock in Hz */
-#define SD_CARD_CLK	10000000ul
 
 FATFS FatFs;    /* work area for FatFs */
 
@@ -164,6 +163,27 @@ unsigned int NVMProgramMX1(unsigned char *address, unsigned char *data, unsigned
 
 void sound(int freq, int vol);      /* frequency in Hz, sound volume between 0 and 1000 */
 void beep(void);                    /* default system beep */
+
+
+// COM ==========================================================================================
+
+#define COM_PORTS       1           /* total number of supported COM ports */
+
+int com_buff_size[COM_PORTS];
+volatile int com_rx_in[COM_PORTS];
+int com_rx_out[COM_PORTS];
+byte *com_buff[COM_PORTS];
+
+/* open UART port */
+/* opening with buffer size 0 will close the port */
+/* will return 0 if it has been successfully executed; 1 otherwise */
+int openCOM(unsigned char port, unsigned short buff_size, unsigned long bps,
+                UART_LINE_CONTROL_MODE f, UART_CONFIGURATION c);
+
+void UART_tx(unsigned char port, char data);
+int UART_rx(unsigned char port);
+int UART_peek(unsigned char port);      /* same as UART_rx() but does not remove the character from the buffer */
+int UART_buffer(unsigned char port);    /* return the number of bytes in a UART buffer */
 
 
 // I2C ==========================================================================================

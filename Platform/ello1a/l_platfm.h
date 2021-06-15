@@ -25,6 +25,9 @@ extern const sys_func_t platform_func_table[];
     "const char const *platform = \"ELLO 1A\";\r\n" \
     ETXSTR
 
+void pltfm_init(void);
+void pltfm_call(void);
+
 void sf_reset(void);        /* void reset(void) */
 void sf_delay_ms(void);     /* void delay_ms(unsigned long milliseconds) */
 void sf_set_timer(void);    /* void set_timer(unsigned long milliseconds, void (*intHandler)(void) */
@@ -33,6 +36,19 @@ void sf_spiOpen(void);      /* int spiOpen(int channel, int mode, int bits, int 
 void sf_spiClose(void);     /* int spiClose(int channel) */
 void sf_spiByte(void);      /* unsigned char spiByte(int channel, unsigned char data) */
 void sf_spiBlock(void);     /* void spiBlock(int channel, unsigned char *buffer, size_t len) */
+
+void sf_comOpen(void);      /* int comOpen(int channel, int mode, int protocol, int baudrate, int rx_buffer_size) */
+void sf_comClose(void);     /* int comClose(int channel) */
+void sf_comPeek(void);      /* int comPeek(int channel) */
+                            /* return -1 if there is nothing in the reception buffer, or the first received byte without removing it */
+void sf_comBuff(void);      /* int comBuff(int channel) */
+                            /* return the number of bytes in the reception buffer for a channel */
+void sf_comTx(void);        /* void comTx(int channel, int bytes, unsigned char *buffer) */
+void sf_comRx(void);        /* int comRx(int channel, int bytes, unsigned char *buffer) */
+                            /* return the number of actually received bytes */
+void sf_comRxCall(void);    /* void comRxCall(int channel, int bytes, void (*intHandler)(void)) */
+                            /* call the function every time when there are the specified number or more bytes in the channel reception buffer */
+
 void sf_i2cInit(void);      /* void i2cInit(int baudrate) */
 void sf_i2cStart(void);     /* void i2cStart(void) */
 void sf_i2cRepStart(void);  /* void i2cRepStart(void) */
