@@ -202,8 +202,8 @@ const system_library_t system_libs[] = {
     { "<time.h>", time_const_table, time_func_table, time_src, NULL },
 	{ "<assert.h>", NULL, assert_func_table, NULL, NULL },
 	{ "<conio.h>", NULL, conio_func_table, NULL, NULL },
-    { "<graphics.h>", graphics_const_table, graphics_func_table, graphics_src, graph_init },  /* HW-independent graphics */
-	{ "<platform.h>", platform_const_table, platform_func_table, platform_src, NULL },  /* platform-dependent library */
+    { "<graphics.h>", graphics_const_table, graphics_func_table, graphics_src, graph_init },   /* HW-independent graphics */
+	{ "<platform.h>", platform_const_table, platform_func_table, platform_src, pltfm_init },   /* platform-dependent library */
     #if DISABLE_FILE == 0
     { "<fatfs.h>", fatfs_const_table, fatfs_func_table, fatfs_src, stdio_init },	/* FatFs; reusing stdio_init() */
     #endif
@@ -247,6 +247,7 @@ int Cimpl(const char *source) {
 	prog = prog_begin = (char *) source;
 	prog_end = NULL; included_libs = NULL;
 	vars = NULL; types = NULL; funcs = NULL; sys_funcs = NULL; labels = NULL;
+    callbacks = NULL;
 	paren_depth = get_depth = accN = 0;	/* zero depth, default accumulator */
 	exit_depth = -1;
 	token = UNKNOWN; block = NULL;
@@ -481,12 +482,11 @@ void error(error_t e) {
 /* Ctrl-C by default */
 void wait_break(void) {
     if(settings.brk_code < 0) error(TERMINATED);
-    int k = kbhit();
-    if(k) {
-        if(k == 1) {    /* compatibility with bool kbhit() makes #pragma BREAK 1 work differently (pause/break) */
-            k = getchx();
-            while(kbhit() > 0) getchx();
-        }
+    if(kbhit() > 0) {
+        uint16_t ee = (enable_flags & FLAG_NO_ECHO);
+        enable_flags |= FLAG_NO_ECHO;
+        int k = getchx();
+        if(!ee) enable_flags &= ~FLAG_NO_ECHO;
         if(k == settings.brk_code) error(TERMINATED);
     }
 }
@@ -1372,13 +1372,13 @@ void _get_value(tcode_t topr, void *vpre) {
 					indexed = ixt;
 					var_parent = vpp; parent_addr = pap;
 					vpost = vprec; vprec = vtmp;
-					((void (*)()) k->func)();	/* execute the operator handler */
+					((void (*)(void)) k->func)();       /* execute the operator handler */
 					vprec = vpost;
 
 				}
 				else {	/* referring to structure and union members */
 					vpost = vprec; vprec = vtmp;
-					((void (*)()) k->func)();	/* execute the operator handler */
+					((void (*)(void)) k->func)();	/* execute the operator handler */
 					var_get(vprec);
 					token_entry = prog;
 				}
@@ -1508,6 +1508,8 @@ void execute_timers(void) {
             }
         }
     }
+    callback_t *c = callbacks;
+    while(c != NULL) { c->call(); c = c->next; }
 }
 
 
@@ -1669,7 +1671,7 @@ void execute_statement(var_t *parent) {
 
 	else if(token > KEYWORD && token < OPERATOR) {	/* C language keywords */
 		keyword_t *k = (keyword_t *) v;
-		if(k->func) ((void (*)()) k->func)();		/* execute the keyword handler */
+		if(k->func) ((void (*)(void)) k->func)();	/* execute the keyword handler */
 	}
 
 	else if(v) _get_value(0, v);					/* try it as an expression */

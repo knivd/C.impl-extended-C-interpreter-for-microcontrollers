@@ -6,7 +6,7 @@
  *
  * --------------------------------------------------------------------------------------
  *  LICENSE INFORMATION
- *   1. This code is "linkware". It is free for use, modification, and distribusion
+ *   1. This code is "linkware". It is free for use, modification, and distribution
  *      without any limitations. The only requirement is to link with the author on
  *      LinkedIn: https://www.linkedin.com/in/knivd/ or follow on Twitter: @knivd
  *   2. The author assumes no responsibility for any loss or damage caused by this code
@@ -177,8 +177,8 @@ typedef uint32_t uint_t;
 #define MAX_ID_LENGTH       25  /* maximum allowed length for program identifiers (must be less than 255) */
 #define MAX_DIMENSIONS      5   /* maximum number of dimensions for variable */
 #define MAX_PARAMS			20	/* maximum number of parameters in a function */
-#define MAX_TERMS          	40	/* maximum number of nested terms (stack size must be large with greater depths) */
-#define MAX_NESTED			15	/* maximum level of nesting in loops */
+#define MAX_TERMS          	35	/* maximum number of nested terms (stack size must be large with greater depths) */
+#define MAX_NESTED			10	/* maximum level of nesting in loops */
 #define MAX_TIMERS          5   /* maximum number of simultaneous working internal timers */
 
 #if DISABLE_LONG_LONG == 0
@@ -393,18 +393,18 @@ typedef struct _func_t {
 
 /* system library function structure */
 typedef struct _sys_func_t {
-    void (*fn)();	/* pointer to the function handler */
-    char *name;		/* text name of the function */
-    uint8_t nlen;	/* length of the text name in characters */
-	char *help;		/* additional help information in the form of an encoded string */
-					/* v (void), B (BOOL), c (char), s (short), i (integer), l (long), L (long long) */
-					/* f (float), d (double), D (long double), F (FILE), z (size_t) */
-					/* C (const), u (unsigned), * (*), . (...), t (time_t), m (struct tm) */
-					/* individual descriptions are separated by ','; the first description is the function result */
-					/* no other characters (even spaces) are allowed in the description string */
-					/* if the string starts with ':' the rest of the string is free format and not interpreted */
-					/* example: "uL*,d*,Ci" describes a function (let's assume its name is F): */
-					/*                                   unsigned long long *F(double *, const int) */
+    void (*fn)(void);   /* pointer to the function handler */
+    char *name;         /* text name of the function */
+    uint8_t nlen;       /* length of the text name in characters */
+	char *help;         /* additional help information in the form of an encoded string */
+                        /* v (void), B (BOOL), c (char), s (short), i (integer), l (long), L (long long) */
+                        /* f (float), d (double), D (long double), F (FILE), z (size_t) */
+                        /* C (const), u (unsigned), * (*), . (...), t (time_t), m (struct tm) */
+                        /* individual descriptions are separated by ','; the first description is the function result */
+                        /* no other characters (even spaces) are allowed in the description string */
+                        /* if the string starts with ':' the rest of the string is free format and not interpreted */
+                        /* example: "uL*,d*,Ci" describes a function (let's assume its name is F): */
+                        /*                                   unsigned long long *F(double *, const int) */
     struct _sys_func_t *next;   /* next system function in list of definitions (default NULL, updated in execution) */
 } sys_func_t;
 
@@ -421,11 +421,17 @@ typedef struct {
     const sys_const_t *const_table; /* library constants */
     const sys_func_t *func_table;   /* library functions */
     const char *src;    /* source to be executed during the process of installation */
-    void (*init)();    	/* optional initialisation code */
+    void (*init)(void);	/* optional initialisation code */
 } system_library_t;
 
 /* system libraries */
 extern const system_library_t system_libs[];
+
+/* system callback drivers */
+typedef struct _callback_t {
+    void (*call)(void);         /* function handler */
+    struct _callback_t *next;   /* pointer to the next handler */
+} callback_t;
 
 void wait_break(void);
 void convert(data_t *d, data_t *mod);
@@ -483,6 +489,7 @@ var_t *var_parent;		/* used by get_token() to properly address variables with ma
 uint8_t *parent_addr;	/* address correction for the parent variable */
 var_t *prototype;		/* data type pointer for user-defined types */
 uint8_t assert_flag;	/* flag indicating that if an error happens it will be assertion failure */
+callback_t *callbacks;  /* additionally installed callback functions */
 
 #define STR_BUFFERS	4
 char *strbuf[STR_BUFFERS];	/* common string buffers */
