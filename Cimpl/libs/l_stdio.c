@@ -367,15 +367,10 @@ void sf_puts(void) {
 void sf_getchar(void) {
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
-    uint16_t ee = 0;
-    if(enable_flags & FLAG_VIDEO) {
-        ee = (enable_flags & FLAG_NO_ECHO);
-        enable_flags |= FLAG_NO_ECHO;
-    }
+    uint16_t ee = (enable_flags & FLAG_NO_ECHO);
+    enable_flags |= FLAG_NO_ECHO;
     ival(accN) = getchx();
-    if(enable_flags & FLAG_VIDEO) {
-        if(!ee) enable_flags &= ~FLAG_NO_ECHO;
-    }
+    if(!ee) enable_flags &= ~FLAG_NO_ECHO;
 }
 
 
