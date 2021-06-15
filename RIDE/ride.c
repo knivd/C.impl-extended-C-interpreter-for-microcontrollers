@@ -627,11 +627,10 @@ FRESULT open_file(char *buf, char cmd) {
 unsigned long run_file(char *fn) {
 	unsigned long result = 0;
     file_to_run = fn;
-    uint16_t flags_temp = 0;
 
+    uint16_t flags_temp = (enable_flags & FLAG_NO_ECHO);
+    enable_flags &= ~FLAG_NO_ECHO;
     if(enable_flags & FLAG_VIDEO) {
-        flags_temp = (enable_flags & FLAG_NO_ECHO);
-        enable_flags &= ~FLAG_NO_ECHO;
         fontScale = 1; fontBcol = 0; fontFcol = 0xFFFFFF;
         font = (font_t *) &sysFont0508;
     }
@@ -670,9 +669,9 @@ unsigned long run_file(char *fn) {
         x_free((byte **) &code);
     } while(file_to_run);
 
+    if(flags_temp) enable_flags |= FLAG_NO_ECHO;
+    else enable_flags &= ~FLAG_NO_ECHO;
     if(enable_flags & FLAG_VIDEO) {
-        if(flags_temp) enable_flags |= FLAG_NO_ECHO;
-        else enable_flags &= ~FLAG_NO_ECHO;
         fontScale = 1; fontBcol = 0; fontFcol = 0xFFFFFF;
         font = (font_t *) &sysFont0508;
     }
