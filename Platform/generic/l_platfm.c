@@ -7,15 +7,30 @@ const sys_const_t platform_const_table[] = {
     { { {0}, 0, 0, {0} }, NULL, 0 }	/* must be final in this array */
 };
 
-
 const sys_func_t platform_func_table[] = {
 
 	/* system */
     { sf_delay_ms,      "delay_ms",     8,  "v,ul", NULL },
     { sf_set_timer,     "set_timer",    9,  "v,ul", NULL },
-   
+
     {NULL, NULL, 0, NULL, NULL}
 };
+
+callback_t cb = { NULL, NULL };
+
+
+void pltfm_init(void) {
+	if(cb.call == NULL) {
+		cb.call = pltfm_call;
+		cb.next = callbacks;
+		callbacks = &cb;        /* add to the execution chain */
+	}
+}
+
+
+void pltfm_call(void) {
+	// nothing needed for now
+}
 
 
 void sf_delay_ms(void) {
@@ -30,10 +45,13 @@ void sf_set_timer(void) {
     get_param(&d1, (FT_UNSIGNED | DT_LONG), 0); /* milliseconds */
     get_comma();
     func_t *f = get_token();
-	if(token != FUNCTION || !f) error(SYNTAX);
-    skip_spaces(0);
-    if(*prog != ')') error(CL_PAREN_EXPECTED);
-    prog++;
+	if(token != NUMBER) {
+		if(token != FUNCTION || !f) error(SYNTAX);
+		skip_spaces(0);
+		if(*prog != ')') error(CL_PAREN_EXPECTED);
+		prog++;
+	}
+	else f = (func_t *) (uintptr_t) acc[accN].val.i;
     unsigned char t;
     for(t = 0; t < MAX_TIMERS && timers[t].reload && timers[t].handler != f; t++);
     if(t >= MAX_TIMERS) error(INSUFFICIENT_RESOURCE);

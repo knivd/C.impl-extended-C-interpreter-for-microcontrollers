@@ -25,6 +25,9 @@ extern const sys_func_t platform_func_table[];
     "const char const *platform = \"PC\";\r\n" \
     ETXSTR
 
+void pltfm_init(void);
+void pltfm_call(void);
+
 void sf_delay_ms(void);     /* void delay_ms(unsigned long milliseconds) */
 void sf_set_timer(void);    /* void set_timer(unsigned long milliseconds, void (*intHandler)(void) */
 
