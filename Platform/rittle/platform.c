@@ -552,13 +552,16 @@ void initPlatform(void) {
     INTDisableInterrupts();
     DisableWDT();
 
-	SystemUnlock();
-	OSCCONbits.SLP2SPD = 1;	/* use FRC until the system clock is ready */
-	SystemLock();
+    if(sys_freq_khz == 0) { /* executed only once */
+        SystemUnlock();
+        OSCCONbits.SLP2SPD = 1;	/* use FRC until the system clock is ready */
+        SystemLock();
+    }
 
-	hwp_flags |= HWP_ECLK_PRESENT;  /* ### TODO: check for present external clock before switching to it */
+    /* ### TODO: check for present external clock before switching to it */
+	hwp_flags |= HWP_ECLK_PRESENT;
 
-    if(sys_freq_khz == 0) {
+    if(sys_freq_khz == 0) { /* executed only once */
         sys_freq_khz = ((unsigned long) SYSCLK) / 1000ul;
         set_sysFreq(sys_freq_khz);
         SysWaitStateConfig(1000ul * sys_freq_khz);
@@ -692,8 +695,10 @@ void initPlatform(void) {
 				ADC12_CLOCK_SOURCE_FRC, 1, ADC12_WARMUP_CLOCK_128);
 
 	/* initialise and open the console ports */
-    openCOM(CONSOLE_COM, COM_RX_SIZE, CONSOLE_BAUD,
-                (UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1), (UART_ENABLE_PINS_TX_RX_ONLY));
+    if(CONSOLE_COM >= UART1 && CONSOLE_COM < (UART1 + COM_PORTS)) {
+        openCOM(CONSOLE_COM, COM_RX_SIZE, CONSOLE_BAUD,
+                    (UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1), (UART_ENABLE_PINS_TX_RX_ONLY));
+    }
     if(hwp_flags & HWP_ECLK_PRESENT) openUSB(1);
 
     if((hwp_flags & HWP_ECLK_WARNED) == 0) {    /* missing clock warning */
@@ -710,12 +715,12 @@ void initPlatform(void) {
 
 /* set system clock frequency in MHz and return 0 if successful or -1 in case of invalid parameter */
 int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_sysFreq(unsigned long freq_khz) {
-	unsigned int mul = 48;	/* PLL multiplier value (multiplying input clock 8 MHz) */
+	unsigned long mul = 48;	/* PLL multiplier value (multiplying input clock 8 MHz) */
 	OSC_SYSPLL_OUT_DIV div = OSC_SYSPLL_OUT_DIV_2;		/* PLL divider value */
 	/* reminder: peripheral clocks (especially PBCLK3) must be kept at 64 MHz at all times */
 	OSC_PB_CLOCK_DIV_TYPE pdiv145 = OSC_PB_CLOCK_DIV_2;	/* divider for PBCLK1/4/5 (up to 100 MHz) */
-	OSC_PB_CLOCK_DIV_TYPE pdiv23 = OSC_PB_CLOCK_DIV_3;	/* divider for PBCLK2/3 (fixed 64 MHz) */
-	OSC_PB_CLOCK_DIV_TYPE pdiv7 = OSC_PB_CLOCK_DIV_1;	/* divider for PBCLK7 */
+	OSC_PB_CLOCK_DIV_TYPE pdiv23 = OSC_PB_CLOCK_DIV_3;	/* divider for PBCLK2/3 (fixed at 64 MHz) */
+	OSC_PB_CLOCK_DIV_TYPE pdiv7 = OSC_PB_CLOCK_DIV_1;	/* divider for PBCLK7 (up to 252 MHz) */
 
 	if(freq_khz == 4000) {
 		mul = 64;
@@ -765,8 +770,9 @@ int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_
 		pdiv7 = OSC_PB_CLOCK_DIV_1;
 	}
 
-	else return -1;
-	OSCPLLClockUnlock();	/* temporarily switch to FRC */
+	else return -1;         /* invalid parameter */
+
+    OSCPLLClockUnlock();	/* temporarily switch to FRC */
 	OSCClockSourceSwitch(OSC_FRC, OSC_SYSPLL_FREQ_RANGE_BYPASS, OSC_SYSPLL_IN_DIV_1, 1, 1, TRUE);
 	OSCPLLClockLock();
 
@@ -784,11 +790,11 @@ int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_
 	OscPBClockDivisorSet(OSC_PERIPHERAL_BUS_7, pdiv7);
 	OscPBOutputClockEnable(OSC_PERIPHERAL_BUS_7);
 	OscPBClockDivisorSet(OSC_PERIPHERAL_BUS_8, pdiv145);	/* not used but still have to make sure it is within limits */
-	SystemLock();
+    SystemLock();
 
-	unsigned long sysfreq = (8000000 * mul) / (div + 1);    /* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
-	SysWaitStateConfig(sysfreq);
-	SysPerformanceConfig(sysfreq, PCACHE_PREFETCH_ENABLE_ALL);
+	unsigned long sysfreq = (8000000ul * mul) / (1ul << div);   /* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
+    SysWaitStateConfig(sysfreq);
+    SysPerformanceConfig(sysfreq, PCACHE_PREFETCH_ENABLE_ALL);
 	OSCPLLClockUnlock();
 	if(hwp_flags & HWP_ECLK_PRESENT) {  /* using the external clock */
 		OSCClockSourceSwitch(OSC_PRIMARY_WITH_PLL,
