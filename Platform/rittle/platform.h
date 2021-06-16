@@ -159,7 +159,7 @@ IMPORTANT: PBCLK2 and PBCLK3 must be kept 64 MHz at all CPU frequencies
 #define HWP_ECLK_WARNED     BIT(1)	/* warning about missing clock has been shown already */
 
 extern unsigned char hwp_flags;     /* hardware flags */
-extern unsigned short sys_freq_mhz; /* current system clock frequency in MHz */
+extern unsigned long sys_freq_khz;  /* current system clock frequency in kHz */
 
 int com_buff_size[COM_PORTS];
 volatile int com_rx_in[COM_PORTS];

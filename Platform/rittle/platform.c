@@ -19,7 +19,7 @@ volatile unsigned long ms_clock = 0;    /* counter of the milliseconds since the
 volatile unsigned long ss_time = 0;     /* counter of the seconds since Jan 1, 1970, 00:00:00.000 */
 
 unsigned char hwp_flags = 0;            /* hardware flags */
-unsigned short sys_freq_mhz = 0;        /* current system clock frequency in MHz */
+unsigned long sys_freq_khz = 0;         /* current system clock frequency in kHz */
 
 unsigned char *SysMem = NULL;   // system memory
 unsigned long SysMemSize = 0;   // size in bytes of the allocated system memory
@@ -558,10 +558,12 @@ void initPlatform(void) {
 
 	hwp_flags |= HWP_ECLK_PRESENT;  /* ### TODO: check for present external clock before switching to it */
 
-    if(sys_freq_mhz == 0) sys_freq_mhz = SYSCLK / 1000000ul;
-    set_sysFreq(1000lu * sys_freq_mhz);
-	SysWaitStateConfig(1000000ul * sys_freq_mhz);
-	SysPerformanceConfig((1000000ul * sys_freq_mhz), PCACHE_PREFETCH_ENABLE_ALL);
+    if(sys_freq_khz == 0) {
+        sys_freq_khz = ((unsigned long) SYSCLK) / 1000ul;
+        set_sysFreq(sys_freq_khz);
+        SysWaitStateConfig(1000ul * sys_freq_khz);
+        SysPerformanceConfig((1000ul * sys_freq_khz), PCACHE_PREFETCH_ENABLE_ALL);
+    }
 
     #ifdef DISABLE_DEBUG
     mJTAGPortEnable(DEBUG_JTAGPORT_OFF);
@@ -602,7 +604,7 @@ void initPlatform(void) {
         SysMemSize = x_meminit();
     }
 
-    /* initialise the video (if present) */
+    /* no video in the PIC32MZ port */
     x_malloc((byte **) &VidMem, 0); // set VidMem = NULL
     VidMemSize = 0;
     Vmode = Hres = Vres = 0;
@@ -647,7 +649,7 @@ void initPlatform(void) {
 	PMD1 = PMD2 = PMD3 = PMD4 = PMD5 = PMD6 = PMD7 = 0;
 	PMD1 |= BIT(12);	/* comparator voltage reference */
 	PMD2 |= (BIT(0) | BIT(1));	/* comparators 1 and 2 */
-	PMD3 |= 0x1ff;      /* input capture 1..9 */
+	PMD3 |= 0x1FF;      /* input capture 1..9 */
 	PMD5 |= (BIT(11) | BIT(12) | BIT(13));	/* SPI4, SPI5, SPI6 */
 	PMD5 |= (BIT(17) | BIT(18) | BIT(19));	/* I2C2, I2C3, I2C4 */
 	PMD5 |= BIT(29);	/* CAN2 */
@@ -677,10 +679,10 @@ void initPlatform(void) {
     CS_HIGH();
 
     /* reserve the external oscillator SLEEP control output */
-    if(hwp_flags & HWP_ECLK_PRESENT) {
+    /* if(hwp_flags & HWP_ECLK_PRESENT) {
         PORTSetPinsDigitalOut(IOPORT_C, BIT_15);
         LATCbits.LATC15 = 0;
-    }
+    } */
 
 	/* basic initialisation of the ADC */
 	ADC12Setup(ADC12_VREF_AVDD_AVSS, ADC12_CHARGEPUMP_DISABLE,
@@ -691,8 +693,7 @@ void initPlatform(void) {
 
 	/* initialise and open the console ports */
     openCOM(CONSOLE_COM, COM_RX_SIZE, CONSOLE_BAUD,
-            (UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1),
-            (UART_ENABLE_PINS_TX_RX_ONLY));
+                (UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1), (UART_ENABLE_PINS_TX_RX_ONLY));
     if(hwp_flags & HWP_ECLK_PRESENT) openUSB(1);
 
     if((hwp_flags & HWP_ECLK_WARNED) == 0) {    /* missing clock warning */
@@ -708,8 +709,7 @@ void initPlatform(void) {
 
 
 /* set system clock frequency in MHz and return 0 if successful or -1 in case of invalid parameter */
-int set_sysFreq(unsigned long freq_khz) {
-    unsigned int freq_mhz = freq_khz / 1000;
+int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_sysFreq(unsigned long freq_khz) {
 	unsigned int mul = 48;	/* PLL multiplier value (multiplying input clock 8 MHz) */
 	OSC_SYSPLL_OUT_DIV div = OSC_SYSPLL_OUT_DIV_2;		/* PLL divider value */
 	/* reminder: peripheral clocks (especially PBCLK3) must be kept at 64 MHz at all times */
@@ -717,7 +717,7 @@ int set_sysFreq(unsigned long freq_khz) {
 	OSC_PB_CLOCK_DIV_TYPE pdiv23 = OSC_PB_CLOCK_DIV_3;	/* divider for PBCLK2/3 (fixed 64 MHz) */
 	OSC_PB_CLOCK_DIV_TYPE pdiv7 = OSC_PB_CLOCK_DIV_1;	/* divider for PBCLK7 */
 
-	if(freq_mhz == 4) {
+	if(freq_khz == 4000) {
 		mul = 64;
 		div = OSC_SYSPLL_OUT_DIV_8;
 		pdiv145 = OSC_PB_CLOCK_DIV_1;
@@ -725,7 +725,7 @@ int set_sysFreq(unsigned long freq_khz) {
 		pdiv7 = OSC_PB_CLOCK_DIV_16;
 	}
 
-	else if(freq_mhz == 16) {
+	else if(freq_khz == 16000) {
 		mul = 64;
 		div = OSC_SYSPLL_OUT_DIV_8;
 		pdiv145 = OSC_PB_CLOCK_DIV_1;
@@ -733,7 +733,7 @@ int set_sysFreq(unsigned long freq_khz) {
 		pdiv7 = OSC_PB_CLOCK_DIV_4;
 	}
 
-	else if(freq_mhz == 64) {
+	else if(freq_khz == 64000) {
 		mul = 64;
 		div = OSC_SYSPLL_OUT_DIV_8;
 		pdiv145 = OSC_PB_CLOCK_DIV_1;
@@ -741,7 +741,7 @@ int set_sysFreq(unsigned long freq_khz) {
 		pdiv7 = OSC_PB_CLOCK_DIV_1;
 	}
 
-	else if(freq_mhz == 128) {
+	else if(freq_khz == 128000) {
 		mul = 64;
 		div = OSC_SYSPLL_OUT_DIV_4;
 		pdiv145 = OSC_PB_CLOCK_DIV_2;
@@ -749,7 +749,7 @@ int set_sysFreq(unsigned long freq_khz) {
 		pdiv7 = OSC_PB_CLOCK_DIV_1;
 	}
 
-	else if(freq_mhz == 192) {
+	else if(freq_khz == 192000) {
 		mul = 48;
 		div = OSC_SYSPLL_OUT_DIV_2;
 		pdiv145 = OSC_PB_CLOCK_DIV_2;
@@ -757,7 +757,7 @@ int set_sysFreq(unsigned long freq_khz) {
 		pdiv7 = OSC_PB_CLOCK_DIV_1;
 	}
 
-	else if(freq_mhz == 256) {
+	else if(freq_khz == 256000) {
 		mul = 64;
 		div = OSC_SYSPLL_OUT_DIV_2;
 		pdiv145 = OSC_PB_CLOCK_DIV_3;
@@ -786,7 +786,7 @@ int set_sysFreq(unsigned long freq_khz) {
 	OscPBClockDivisorSet(OSC_PERIPHERAL_BUS_8, pdiv145);	/* not used but still have to make sure it is within limits */
 	SystemLock();
 
-	unsigned long sysfreq = (8000000 * mul) / (div + 1);	/* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
+	unsigned long sysfreq = (8000000 * mul) / (div + 1);    /* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
 	SysWaitStateConfig(sysfreq);
 	SysPerformanceConfig(sysfreq, PCACHE_PREFETCH_ENABLE_ALL);
 	OSCPLLClockUnlock();
@@ -799,7 +799,7 @@ int set_sysFreq(unsigned long freq_khz) {
 					OSC_SYSPLL_FREQ_RANGE_5M_TO_10M, OSC_SYSPLL_IN_DIV_1, mul, div, TRUE);
 	}
 	OSCPLLClockLock();
-	sys_freq_mhz = freq_mhz;
+	sys_freq_khz = sysfreq / 1000;
 	return 0;
 }
 

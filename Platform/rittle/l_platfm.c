@@ -109,7 +109,7 @@ const sys_func_t platform_func_table[] = {
 
     /* non-portable */
     { sf_setSysFreq,    "setSysFreq",   10, "i,ul", NULL },
-    { sf_getSysFreq,    "getSysFreq",   10, "i", NULL },
+    { sf_getSysFreq,    "getSysFreq",   10, "ul,v", NULL },
 
     {NULL, NULL, 0, NULL, NULL}
 };
@@ -462,17 +462,17 @@ void sf_getVmode(void) {
 }
 
 
+void sf_getSysFreq(void) {
+    ival(accN) = sys_freq_khz;
+    acc[accN].ind = 0;
+    acc[accN].type = (FT_UNSIGNED | DT_LONG);
+}
+
+
 void sf_setSysFreq(void) {
     get_param(&d1, (FT_UNSIGNED | DT_LONG), 0);     /* kHz */
     ival(accN) = set_sysFreq(d1.val.i);
     initPlatform();
-    acc[accN].ind = 0;
-    acc[accN].type = DT_INT;
-}
-
-
-void sf_getSysFreq(void) {
-    ival(accN) = sys_freq_mhz;
     acc[accN].ind = 0;
     acc[accN].type = DT_INT;
 }

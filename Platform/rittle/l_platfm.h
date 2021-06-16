@@ -73,7 +73,7 @@ void sf_setPixel(void);     /* void setPixel(int x, int y, int c) */
 void sf_getPixel(void);     /* int getPixel(int x, int y) */
 
 void sf_setSysFreq(void);   /* int setSysFreq(unsigned lonf khz) */
-void sf_getSysFreq(void);   /* int getSysFreq(void) */
+void sf_getSysFreq(void);   /* unsigned long getSysFreq(void) */
 
 #ifdef __cplusplus
 }
