@@ -148,7 +148,7 @@ IMPORTANT: PBCLK2 and PBCLK3 must be kept 64 MHz at all CPU frequencies
 
 #define COM_RX_SIZE     256     /* standard buffer size for COM ports */
 
-#define CONSOLE_COM     UART4   /* COM port linked to the serial console (set -1 if none) */
+#define CONSOLE_COM     UART6   /* COM port linked to the serial console (set -1 if none) */
 #define CONSOLE_BAUD    115200  /* bardrate for the serial console (protocol fixed at 8N1) */
 #define CONSOLE_ECHO    0       /* value above 0 will enable console echo */
 
