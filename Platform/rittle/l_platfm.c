@@ -471,6 +471,7 @@ void sf_getSysFreq(void) {
 
 void sf_setSysFreq(void) {
     get_param(&d1, (FT_UNSIGNED | DT_LONG), 0);     /* kHz */
+    openUSB(0);
     ival(accN) = set_sysFreq(d1.val.i);
     initPlatform();
     acc[accN].ind = 0;

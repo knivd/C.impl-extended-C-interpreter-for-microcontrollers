@@ -575,18 +575,18 @@ void initPlatform(void) {
 	DisableWDT();
 	SystemUnlock();
 
-	CFGCONbits.IOLOCK = 0;	/* enable writing to the PPSx registers */
-	CFGCONbits.PMDLOCK = 0;	/* enable writing to the PMDx registers */
+	CFGCONbits.IOLOCK = 0;      /* enable writing to the PPSx registers */
+	CFGCONbits.PMDLOCK = 0;     /* enable writing to the PMDx registers */
 	/* see Errata #9 */
 	/* CFGCONbits.USBSSEN = 1; */	/* shut down the USB in sleep mode */
-	CFGCONbits.OCACLK = 1;	/* OC outputs will use their own timers */
-	CFGCONbits.ICACLK = 1;	/* IC inputs will use their own timers */
-	CFGCONbits.IOANCPEN = 0; /* disable the analogue port charge pump */
+	CFGCONbits.OCACLK = 1;      /* OC outputs will use their own timers */
+	CFGCONbits.ICACLK = 1;      /* IC inputs will use their own timers */
+	CFGCONbits.IOANCPEN = 0;    /* disable the analogue port charge pump */
 
     #ifdef DISABLE_DEBUG
-	CFGCONbits.JTAGEN = 0;	/* disable JTAG */
-	CFGCONbits.TDOEN = 0;	/* disable TDO output */
-	CFGCONbits.TROEN = 0;	/* disable trace output */
+	CFGCONbits.JTAGEN = 0;      /* disable JTAG */
+	CFGCONbits.TDOEN = 0;       /* disable TDO output */
+	CFGCONbits.TROEN = 0;       /* disable trace output */
     #endif
 
 	OSCPBOutputClockDisable(OSC_PERIPHERAL_BUS_8);	/* PBCLK8 is never needed */
@@ -714,7 +714,7 @@ void initPlatform(void) {
 
 
 /* set system clock frequency in MHz and return 0 if successful or -1 in case of invalid parameter */
-int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_sysFreq(unsigned long freq_khz) {
+int set_sysFreq(unsigned long freq_khz) {
 	unsigned long mul = 48;	/* PLL multiplier value (multiplying input clock 8 MHz) */
 	OSC_SYSPLL_OUT_DIV div = OSC_SYSPLL_OUT_DIV_2;		/* PLL divider value */
 	/* reminder: peripheral clocks (especially PBCLK3) must be kept at 64 MHz at all times */
@@ -792,7 +792,7 @@ int __attribute__((nomips16, nomicromips)) __attribute__((optimize("-O0"))) set_
 	OscPBClockDivisorSet(OSC_PERIPHERAL_BUS_8, pdiv145);	/* not used but still have to make sure it is within limits */
     SystemLock();
 
-	unsigned long sysfreq = (8000000ul * mul) / (1ul << div);   /* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
+	unsigned long sysfreq = (8000000ul * mul) / (1ul << (unsigned long) div);   /* calculate the new SYSCLK from (mul) and (div) and PLL input clock 8 MHz */
     SysWaitStateConfig(sysfreq);
     SysPerformanceConfig(sysfreq, PCACHE_PREFETCH_ENABLE_ALL);
 	OSCPLLClockUnlock();
