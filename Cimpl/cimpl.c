@@ -1248,6 +1248,8 @@ void *get_token(void) {
 		if(*prog == '[') {	/* dimensions are provided */
 			char *entry_saved = token_entry;
 			uint8_t idlen_save = idlen;
+   			var_t *vpt = var_parent; var_parent = NULL;
+			uint8_t *pat = parent_addr; parent_addr = NULL;
 			skip_spaces(1);			/* skip the opening bracket */
 			while(indexed < MAX_DIMENSIONS && acc[accN].dim[indexed]) indexed++;
 			do {
@@ -1271,6 +1273,8 @@ void *get_token(void) {
 				if(*prog != '[') break;
 				skip_spaces(1);		/* skip the opening bracket */
 			} while(1);
+			var_parent = vpt;
+			parent_addr = pat;
 			idlen = idlen_save;
 			token_entry = entry_saved;
 		}
