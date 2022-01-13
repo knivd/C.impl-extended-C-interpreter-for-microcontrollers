@@ -508,7 +508,9 @@ void resetPlatform(void) {
 
 
 /* not sure why the compiler wants this ??? */
-int open(const char *buf, int flags, int mode) {}
+int open(const char *buf, int flags, int mode) {
+    return 0;
+}
 
 
 /* CPU exceptions handler */
@@ -568,10 +570,6 @@ void initPlatform(void) {
         SysPerformanceConfig((1000ul * sys_freq_khz), PCACHE_PREFETCH_ENABLE_ALL);
     }
 
-    #ifdef DISABLE_DEBUG
-    mJTAGPortEnable(DEBUG_JTAGPORT_OFF);
-    #endif
-
 	DisableWDT();
 	SystemUnlock();
 
@@ -583,10 +581,11 @@ void initPlatform(void) {
 	CFGCONbits.ICACLK = 1;      /* IC inputs will use their own timers */
 	CFGCONbits.IOANCPEN = 0;    /* disable the analogue port charge pump */
 
+    CFGCONbits.TROEN = 0;       /* disable trace output */
+    CFGCONbits.JTAGEN = 0;      /* disable JTAG */
+    mJTAGPortEnable(DEBUG_JTAGPORT_OFF);
     #ifdef DISABLE_DEBUG
-	CFGCONbits.JTAGEN = 0;      /* disable JTAG */
 	CFGCONbits.TDOEN = 0;       /* disable TDO output */
-	CFGCONbits.TROEN = 0;       /* disable trace output */
     #endif
 
 	OSCPBOutputClockDisable(OSC_PERIPHERAL_BUS_8);	/* PBCLK8 is never needed */
@@ -607,7 +606,7 @@ void initPlatform(void) {
         SysMemSize = x_meminit();
     }
 
-    /* no video in the PIC32MZ port */
+    /* there is no video on the Jasmine board */
     x_malloc((byte **) &VidMem, 0); // set VidMem = NULL
     VidMemSize = 0;
     Vmode = Hres = Vres = 0;

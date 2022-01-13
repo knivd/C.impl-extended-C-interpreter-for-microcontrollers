@@ -8,13 +8,11 @@ extern "C" {
 #include <xc.h>
 
 /* DEVCFG0 */
-#ifdef DISABLE_DEBUG
+#pragma config ICESEL =     ICS_PGx2
+#pragma config EJTAGBEN =   NORMAL
 #pragma config DEBUG =      OFF
 #pragma config JTAGEN =     OFF
 #pragma config TRCEN =      OFF
-#pragma config EJTAGBEN =   REDUCED
-#endif
-#pragma config ICESEL =     ICS_PGx2
 #pragma config BOOTISA =    MIPS32
 #pragma config FECCCON =    OFF_UNLOCKED
 #pragma config FSLEEP =     OFF
@@ -32,9 +30,9 @@ extern "C" {
 #pragma config FSOSCEN =    OFF
 #pragma config IESO =       ON
 #pragma config POSCMOD =    HS		/* change to EC to force use of external clock only */
-#pragma config OSCIOFNC =   ON
+#pragma config OSCIOFNC =   OFF
 #pragma config FCKSM =      CSECME
-#pragma config WDTPS =      PS32
+#pragma config WDTPS =      PS128
 #pragma config WDTSPGM =    STOP
 #pragma config FWDTEN =     OFF
 #pragma config WINDIS =     NORMAL
@@ -52,7 +50,7 @@ extern "C" {
 */
 #pragma config FPLLIDIV =   DIV_1		/* change to DIV_3 for forced 24 MHz external clock only */
 #pragma config FPLLRNG =    RANGE_5_10_MHZ
-#pragma config FPLLICLK =   PLL_FRC		/* change to PLL_POSC to force external clock only */
+#pragma config FPLLICLK =   PLL_FRC     /* change to PLL_POSC to force external clock only */
 #pragma config FPLLMULT =   MUL_48
 #pragma config FPLLODIV =   DIV_2
 #pragma config UPLLFSEL =   FREQ_24MHZ
