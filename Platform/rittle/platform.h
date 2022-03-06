@@ -103,11 +103,14 @@ extern "C" {
 /* these definitions are now placed in ffconf.h */
 
 /* Definitions of physical drive number for each drive */
-/* #define DEV_NUL     0   */ /* NULL device */
-/* #define DEV_IFS     1   */ /* internal flash disk */
-/* #define DEV_RAM     2   */ /* small internal RAM disk for data exchange between files */
-/* #define DEV_SD1     3   */ /* external SD card 1 */
-/* #define DEV_SD2     4   */ /* external SD card 2 */
+/* NOTE: these definitions are now moved to ffconf.h */
+#if 0
+    #define DEV_NUL     0   /* NULL device */
+    #define DEV_IFS     1   /* internal flash disk */
+    #define DEV_RAM     2   /* small internal RAM disk for data exchange between files */
+    #define DEV_SD1     3   /* external SD card 1 */
+    #define DEV_SD2     4   /* external SD card 2 */
+#endif
 
 #define POSCCLK 24000000ul  /* external primary oscillator frequency (Hz) */
 #define SOSCCLK 32768ul     /* external secondary oscillator frequency (Hz) */
@@ -148,7 +151,7 @@ IMPORTANT: PBCLK2 and PBCLK3 must be kept 64 MHz at all CPU frequencies
 
 #define COM_RX_SIZE     256     /* standard buffer size for COM ports */
 
-#define CONSOLE_COM     UART6   /* COM port linked to the serial console (set -1 if none) */
+#define CONSOLE_COM     UART4   /* COM port linked to the serial console (set -1 if none) */
 #define CONSOLE_BAUD    115200  /* bardrate for the serial console (protocol fixed at 8N1) */
 #define CONSOLE_ECHO    0       /* value above 0 will enable console echo */
 
