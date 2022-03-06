@@ -15,9 +15,12 @@ const volatile unsigned int *pbase[] = { BASEA, BASEB, BASEC, BASED, BASEE, BASE
 
 volatile unsigned long keybuf = 0;
 volatile unsigned char msK = 0;
-volatile long conBuffer[CON_BUFFER_SIZE];
+volatile long conRxBuffer[CON_BUFFER_SIZE];
 volatile unsigned char conRx_in = 0;    // incoming character index
 volatile unsigned char conRx_out = 0;   // outgoing character index
+volatile long conTxBuffer[CON_BUFFER_SIZE];
+volatile unsigned char conTx_in = 0;    // incoming character index
+volatile unsigned char conTx_out = 0;   // outgoing character index
 int is_big = 0;
 int getch_ch = 0;
 
@@ -64,7 +67,7 @@ void initPlatform(void) {
     // initialise the SD card interface
     currentSD = 0;
     CS_HIGH();
-    CNPUASET = BIT(1);      // enable the internal pull-up resistor on the SD card CS# line
+    CNPUASET = SD1_nCS_BIT; // enable the internal pull-up resistor on the SD1 card CS# line
 
     // initialise the PS/2 keyboard
     LATBSET = (BIT(5) | BIT(7));    // initialise the lines as output for a short time
@@ -81,18 +84,21 @@ void initPlatform(void) {
         if(PORTB & BIT(5)) enable_flags |= FLAG_SERIAL;
         CNPDBCLR = BIT(5); CNPUBSET = BIT(5);   // restore the pull-up on the RX pin
         if(enable_flags & FLAG_SERIAL) {
-            memset((char *) conBuffer, 0, sizeof(conBuffer));
+            memset((char *) conRxBuffer, 0, sizeof(conRxBuffer));
             conRx_in = conRx_out = 0;
+            memset((char *) conTxBuffer, 0, sizeof(conTxBuffer));
+            conTx_in = conTx_out = 0;
             PPSInput(2, U2RX, RPB5);
-            SERIAL_TX = 1; SERIAL_TX_TRIS = 0;  // Tx will be bit-banged
+            SERIAL_TX = 1; SERIAL_TX_TRIS = 0;  // console Tx will be bit-banged
             UARTEnable(UART2, 0);
             UARTConfigure(UART2, (UART_ENABLE_HIGH_SPEED | UART_ENABLE_PINS_TX_RX_ONLY));
             UARTSetLineControl(UART2, (UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1));
             UARTSetDataRate(UART2, _PB_FREQ, SERIAL_BAUDRATE);
-            UARTSetFifoMode(UART2, UART_INTERRUPT_ON_RX_NOT_EMPTY);
+            UARTSetFifoMode(UART2, (UART_INTERRUPT_ON_RX_NOT_EMPTY | UART_INTERRUPT_ON_TX_NOT_FULL));
             UARTEnable(UART2, (UART_ENABLE | UART_PERIPHERAL | UART_TX | UART_RX));
             INTSetVectorPriority(INT_UART_2_VECTOR, INT_PRIORITY_LEVEL_3);
             INTEnable(INT_U2RX, INT_ENABLED);
+            //INTEnable(INT_U2TX, INT_ENABLED);
         }
     }
 
@@ -120,17 +126,40 @@ void initPlatform(void) {
 
 
 // UART console interrupt handler
-void __ISR(_UART_2_VECTOR, IPL3AUTO) ConsoleRxHandler(void) {
-    while(UARTReceivedDataIsAvailable(UART2)) {
-        int e = UARTGetLineStatus(UART2) & (UART_PARITY_ERROR | UART_FRAMING_ERROR | UART_OVERRUN_ERROR);
-        int c = UARTGetDataByte(UART2);
-        U2STACLR = e;
-        if(!e) {
-            keybuf = (keybuf << 8) + c;
-            msK = MSK_WAIT_MS;
+void __ISR(_UART_2_VECTOR, IPL3AUTO) ConsoleHandler(void) {
+    if(INTGetFlag(INT_U2RX)) {  // interrupt on received characters
+        while(UARTReceivedDataIsAvailable(UART2)) {
+            int e = UARTGetLineStatus(UART2) & (UART_PARITY_ERROR | UART_FRAMING_ERROR | UART_OVERRUN_ERROR);
+            int c = UARTGetDataByte(UART2);
+            U2STACLR = e;
+            if(!e) {
+                keybuf = (keybuf << 8) + c;
+                msK = MSK_WAIT_MS;
+            }
         }
+        INTClearFlag(INT_U2RX);
     }
-    INTClearFlag(INT_U2RX);
+    if(INTGetFlag(INT_U2TX)) {  // interrupt on empty transmit buffer
+        if(conTx_out != conTx_in && UARTTransmitterIsReady(UART2)) {
+            UART_DATA ud;
+            ud.__data = (UINT16) conTxBuffer[conTx_out];
+            if(++conTx_out >= CON_BUFFER_SIZE) conTx_out = 0;
+            UARTSendData(UART2, ud);    // output to the console
+        }
+        if(conTx_out == conTx_in) INTEnable(INT_U2TX, INT_DISABLED);    // stop the interrupt when the buffer is empty
+        INTClearFlag(INT_U2TX);
+    }
+}
+
+
+// UART transmission via interrupt
+// NOTE: can't be done in ELLO 1A because the console TX is emulated by bit banging
+//       definitely something to be improved in a next hardware revision
+void consoleTx(uint8_t data) {
+    conTxBuffer[conTx_in] = data;
+    if(++conTx_in >= CON_BUFFER_SIZE) conTx_in = 0;
+    while(conTx_in == conTx_out);   // wait only if the TX buffer gets full
+    INTEnable(INT_U2TX, INT_ENABLED);
 }
 
 
@@ -138,7 +167,7 @@ void __ISR(_UART_2_VECTOR, IPL3AUTO) ConsoleRxHandler(void) {
 void addKey(void) {
     msK = 0;
     if(keybuf) {
-        conBuffer[conRx_in] = keybuf; keybuf = 0;
+        conRxBuffer[conRx_in] = keybuf; keybuf = 0;
         if(++conRx_in >= CON_BUFFER_SIZE) conRx_in = 0;
         if(conRx_in == conRx_out) {
             if(++conRx_out >= CON_BUFFER_SIZE) conRx_out = 0;
@@ -148,7 +177,8 @@ void addKey(void) {
 
 
 // CPU exceptions handler
-void __attribute__ ((nomips16)) _general_exception_handler(void)	{
+__attribute__ ((nomips16))
+void _general_exception_handler(void)	{
     const static char *szException[] = {
         "Interrupt",                        // 0
         "Unknown",                          // 1
@@ -173,13 +203,14 @@ void __attribute__ ((nomips16)) _general_exception_handler(void)	{
     volatile static unsigned long codeException;
     volatile static unsigned long addressException;
     const char *pszExcept;
+    //asm volatile ("di");    // disable all interrupts (will not be able to print!!)
     asm volatile ("mfc0 %0,$13" : "=r" (codeException));
     asm volatile ("mfc0 %0,$14" : "=r" (addressException));
     codeException = (codeException & 0x7C) >> 2;
     if(codeException < 19) {
         pszExcept = szException[codeException];
-        printf("\r\n\nCPU EXCEPTION: '%s' at address $%04lx\r\nRestarting...\r\n\n\n", pszExcept, addressException);
-        mSec(5000); /* 5 seconds delay */
+        printf("\r\n\nCPU EXCEPTION at $%04lX: %s\r\nRestarting...\r\n\n\n", addressException, pszExcept);
+        uSec(5000000);  /* 5 seconds delay */
     }
     SoftReset();
 }
@@ -213,12 +244,12 @@ note that (bytes) need to be a multiple of:
 - BYTE_ROW_SIZE (and aligned that way) if you intend to write rows
 - sizeof(int) if you intend to write words
 */
-#define ALLOCATE(name, align, bytes) const unsigned char name[(bytes)] __attribute__ ((aligned(align), space(prog), section(".ifs"))) = { [0 ... (bytes)-1] = 0xFF }
+#define ALLOCATE(name, align, bytes) __attribute__ ((aligned(align), space(prog), section(".ifs"))) const unsigned char name[(bytes)] = { [0 ... (bytes)-1] = 0xFF }
 
 #if IFS_DRV_KB > 0
 ALLOCATE(ifs_data, BYTE_PAGE_SIZE, (IFS_DRV_KB * 1024ul));
 #else
-unsigned char ifs_data[1];  // fake IFS area when there is no IFS drive
+const unsigned char ifs_data[1];    // fake IFS area when there is no IFS drive
 #endif
 
 
@@ -234,7 +265,7 @@ volatile unsigned char usbTx_out = 0;       // outgoing character index
 
 
 void doUSB(void) {
-	if(U1OTGSTATbits.VBUSVD) {    // is there 5V on the USB?
+	//if(U1OTGSTATbits.VBUSVD) {    // is there 5V on the USB?
         enable_flags |= FLAG_USB_PRES;
         #ifndef USB_USE_INTERRUPTS
         usb_service();
@@ -279,8 +310,8 @@ void doUSB(void) {
 
 		}
         else enable_flags &= ~FLAG_USB;
-	}
-    else enable_flags &= ~(FLAG_USB_PRES | FLAG_USB);
+	//}
+    //else enable_flags &= ~(FLAG_USB_PRES | FLAG_USB);
 }
 
 
@@ -760,16 +791,34 @@ void __ISR(_EXTERNAL_3_VECTOR, IPL2AUTO) INT3Interrupt(void) {
 
 // get character from the console without removing it from the buffer
 // return the current character from the input buffer, or EOF in case the buffer is empty
-__attribute__ ((used)) int kbhit(void) {
-    if(getch_ch) return getch_ch;
-    int ch = _mon_getc(0);
+__attribute__ ((used))
+int kbhit(void) {
+    int ch;
+    if(getch_ch) {
+        if(settings.brk_code > 0) {
+            uint16_t ee = (enable_flags & FLAG_NO_ECHO);
+            enable_flags |= FLAG_NO_ECHO;
+            ch = getch_ch;
+            if(!ee) enable_flags &= ~FLAG_NO_ECHO;
+            if(ch == settings.brk_code) enable_flags &= ~FLAG_EXECUTING;
+        }
+        return getch_ch;
+    }
+    ch = _mon_getc(0);
     if(ch == EOF) ch = 0;
+    else if(settings.brk_code > 0) {
+        uint16_t ee = (enable_flags & FLAG_NO_ECHO);
+        enable_flags |= FLAG_NO_ECHO;
+        if(!ee) enable_flags &= ~FLAG_NO_ECHO;
+        if(ch == settings.brk_code) enable_flags &= ~FLAG_EXECUTING;
+    }
     return ch;
 }
 
 
 // getch() hook
-__attribute__ ((used)) char getch(void) {
+__attribute__ ((used))
+char getch(void) {
     if(getch_ch == 0) {
         getch_ch = _mon_getc(1);
         is_big = (getch_ch & 0xFFFFFF00);
@@ -783,14 +832,15 @@ __attribute__ ((used)) char getch(void) {
 // get character from the console
 // (blocking) non-zero indicates that the function must be blocking and wait for character
 // return the current character from the input buffer, or EOF in case the buffer is empty
-__attribute__ ((used)) int _mon_getc(int blocking) {
+__attribute__ ((used))
+int _mon_getc(int blocking) {
     static int cKey = EOF;
 	int ch = EOF;
     if(blocking) drawChar(0);   // clear the key buffer and draw cursor
     do {
         if(enable_flags & (FLAG_SERIAL | FLAG_USB)) {
             if(conRx_in != conRx_out) {
-                ch = conBuffer[conRx_out];
+                ch = conRxBuffer[conRx_out];
                 if(blocking) {
                     if(++conRx_out >= CON_BUFFER_SIZE) conRx_out = 0;
                 }
@@ -811,7 +861,8 @@ __attribute__ ((used)) int _mon_getc(int blocking) {
             else ch = keyDown;
         }
     } while(blocking && ch == EOF);
-    if(ch > EOF && ch < 0x100 && blocking && ch != settings.brk_code && (enable_flags & FLAG_NO_ECHO) == 0) printf("%c", ch);
+    if(ch >= ' ' && ch < 0x100 && blocking &&
+        ch != settings.brk_code && (enable_flags & FLAG_NO_ECHO) == 0) printf("%c", ch);
     return ch;
 }
 
@@ -830,7 +881,7 @@ __attribute__ ((used)) int _mon_getc(int blocking) {
 
 // table with parameters for the supported video modes
 unsigned int VideoParams[1][8] = {
-    { 480, 320, 3, 33297, 228, 48, 25, 28 }
+    { 480, 250, 3, 31778, 370, 47, 195, 51 },
 };
 
 #define SV_PREEQ    0   // generating blank lines before the vertical sync
@@ -902,6 +953,8 @@ void initVideo(uint8_t mode) {
     DmaChnOpen(1, 3, DMA_OPEN_DEFAULT);     // setup DMA 1 to send data to SPI channel 2
     DmaChnSetEventControl(1, (DMA_EV_START_IRQ_EN | DMA_EV_START_IRQ(_SPI2_TX_IRQ)));
     DmaChnSetTxfer(1, (void *) &VidMem[VpageAddr], (void *) &SPI2BUF, (Hwords32 * 4), 4, 4);
+
+    clearScreen(0);
 }
 
 
@@ -1002,7 +1055,8 @@ void setPixel(int x, int y, int c) {
 }
 
 
-__attribute__ ((used)) void _mon_putc(char ch) {
+__attribute__ ((used))
+void _mon_putc(char ch) {
     if(ch) {
         if(enable_flags & FLAG_SERIAL) {
             uint16_t bitp = (1000000 / SERIAL_BAUDRATE);
@@ -1040,15 +1094,17 @@ __attribute__ ((used)) void _mon_putc(char ch) {
 }
 
 
-__attribute__ ((used)) void _mon_puts(const char *s) {
+__attribute__ ((used))
+void _mon_puts(const char *s) {
     while(s && *s) _mon_putc((int) *(s++));
 }
 
 
 // SYSTEM SPI AND FILE SYSTEM ===================================================================
 
-/* not completely sure why but the compiler wants this definition... */
-int open (const char *buf, int flags, int mode) { return 0; }
+/* not completely sure why but the compiler wants these definitions... */
+int open(const char *buf, int flags, int mode) { return 0; }
+size_t read(int n, void *p, size_t s) { return 0; }
 
 
 /* open SPI channel */
@@ -1425,9 +1481,6 @@ void UART_rxInt(unsigned char port) {
             if(com_rx_in[port] == com_rx_out[port]) {
                 if(++com_rx_out[port] >= com_buff_size[port]) com_rx_out[port] = 0;   /* discard the oldest character in the buffer */
             }
-            #if CONSOLE_ECHO > 0
-                if(CONSOLE_COM == port) _mon_putc(c.__data);
-            #endif
 		}
 	}
 }
@@ -1453,7 +1506,8 @@ void UART_tx(unsigned char port, char data) {
 
 // BIOS functions ===============================================================================
 
-__attribute__ ((address(0xA0000000))) const void * const ELLO[] = {
+__attribute__ ((address(0xA0000000)))
+const void * const ELLO[] = {
 
             // memory
 /* 0 */     (void *) &SysMem,

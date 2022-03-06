@@ -24,26 +24,26 @@ extern "C" {
 #include "../../fatfs/source/diskio.h"
 
 #ifndef BIT
-#define BIT(b) (1ul << (b))
+#define BIT(b) (1ull << (b))
 #endif
 
 #define _XTAL_FREQ      50000000ul  // oscillator frequency as defined in the configuration bits
 #define _PB_FREQ        50000000ul  // peripheral bus frequency as defined in the configuration bits
 
-#define IFS_DRV_KB      65          // IFS drive size in kB (this can be 0 if IFS drive is not required)
+#define IFS_DRV_KB      62          // IFS drive size in kB (this can be 0 if IFS drive is not required)
 #define RAM_DRV_KB      0           // RAM drive size in kB (this can be 0 if RAM drive is not required)
 
 #define SERIAL_BAUDRATE 38400       // serial console baudrate; protocol 8N1
 #define SERIAL_TX       LATBbits.LATB7      // serial console Tx line (Rx is fixed at RB5)
 #define SERIAL_TX_TRIS  TRISBbits.TRISB7
 
-extern const unsigned char ifs_data[]; // the C: drive area
+extern const unsigned char ifs_data[]; // the IFS: drive area
 
 
 // SYSTEM DEFINITIONS ===========================================================================
 
-void __attribute__((nomips16)) _general_exception_handler(void);
-void __attribute__ ((nomips16)) reset(void);
+void _general_exception_handler(void);
+void reset(void);
 void initPlatform(void);
 void resetPlatform(void);
 void empty(void);
@@ -70,17 +70,17 @@ void scrollUp(int vl, int c);
 void setPixel(int x, int y, int c);
 int getPixel(int x, int y);
 
-__attribute__ ((used)) void _mon_putc(char ch);
-__attribute__ ((used)) void _mon_puts(const char *s);
+void _mon_putc(char ch);
+void _mon_puts(const char *s);
 
 
 // PS/2 KEYBOARD ================================================================================
 
-#define CON_BUFFER_SIZE     160 // size of the input console buffer
+#define CON_BUFFER_SIZE     32  // size of the input console buffer
 #define DEFAULT_KBD_FLAGS   0   // Scroll / Num / Caps flags
 
 #ifndef MSK_WAIT_MS
-#define MSK_WAIT_MS     	15  // give this many milliseconds time for the next key in escape sequences
+#define MSK_WAIT_MS     	20  // give this many milliseconds time for the next key in escape sequences
 #endif
 
 volatile uint8_t kbdFlags;      // keyboard LED flags: [.0] ScrollLock; [.1] NumLock; [.2] CapsLock
@@ -90,9 +90,9 @@ volatile uint32_t msKbdTimer;   // self-resettable millisecond countdown timer
 void setKbdLEDs(uint8_t flags);
 void initKeyboard(void);
 
-__attribute__ ((used)) int _mon_getc(int blocking);
-__attribute__ ((used)) int kbhit(void);
-__attribute__ ((used)) char getch(void);
+int _mon_getc(int blocking);
+int kbhit(void);
+char getch(void);
 
 
 // USB ==========================================================================================

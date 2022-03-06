@@ -34,7 +34,7 @@
 #define EP_0_LEN 8
 
 #define EP_1_OUT_LEN 1
-#define EP_1_IN_LEN 10 /* May need to be longer, depending
+#define EP_1_IN_LEN 16 /* May need to be longer, depending
                         * on the notifications you support. */
  /* The code in the demo app assumes that EP2 IN and OUT are the same length */
 #define EP_2_LEN 64
