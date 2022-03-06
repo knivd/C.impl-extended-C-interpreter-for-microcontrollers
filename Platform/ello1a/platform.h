@@ -76,11 +76,11 @@ void _mon_puts(const char *s);
 
 // PS/2 KEYBOARD ================================================================================
 
-#define CON_BUFFER_SIZE     32  // size of the input console buffer
+#define CON_BUFFER_SIZE     64  // size of the input console buffer
 #define DEFAULT_KBD_FLAGS   0   // Scroll / Num / Caps flags
 
 #ifndef MSK_WAIT_MS
-#define MSK_WAIT_MS     	20  // give this many milliseconds time for the next key in escape sequences
+#define MSK_WAIT_MS     	25 // give this many milliseconds time for the next key in escape sequences
 #endif
 
 volatile uint8_t kbdFlags;      // keyboard LED flags: [.0] ScrollLock; [.1] NumLock; [.2] CapsLock
