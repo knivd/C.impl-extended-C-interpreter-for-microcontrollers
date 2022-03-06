@@ -52,7 +52,7 @@ void sf_BIT(void) {
     get_param(&d1, (FT_UNSIGNED | DT_CHAR), 0);
     acc[accN].ind = 0;
     acc[accN].type = (FT_UNSIGNED | DT_LONG);
-    ival(accN) = (1ul << d1.val.i);
+    ival(accN) = (1ull << d1.val.i);
 }
 
 
