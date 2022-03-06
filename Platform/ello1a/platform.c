@@ -881,7 +881,7 @@ int _mon_getc(int blocking) {
 
 // table with parameters for the supported video modes
 unsigned int VideoParams[1][8] = {
-    { 480, 250, 3, 31778, 370, 47, 195, 51 },
+    { 480, 250, 3, 33292, 397, 59, 82, 26 },
 };
 
 #define SV_PREEQ    0   // generating blank lines before the vertical sync
