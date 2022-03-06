@@ -12,7 +12,8 @@ extern "C" {
 typedef unsigned char byte;
 
 /* global MEMORY[] array */
-__attribute__ ((aligned(8))) byte MEMORY[1024ul * MEMORY_SIZE_KB];
+__attribute__ ((aligned(8)))
+byte MEMORY[1024ul * MEMORY_SIZE_KB];
 
 #include <stdlib.h> /* needed for the size_t definition */
 
@@ -52,6 +53,10 @@ size_t x_total(void);
 
 /* list all currently allocated blocks (FOR DEBUG) */
 void x_list_alloc(void);
+
+/* optimise the memory and try to free up a block with size (sz) or more */
+/* NOTE: this is typically an internal function, but can be called externally in case of a need */
+void x_defrag(size_t sz);
 
 #ifdef __cplusplus
 }

@@ -109,7 +109,6 @@ void x_list_alloc(void) {
 }
 
 
-/* internal function */
 /* optimise the memory and try to free up a block with size (sz) or more */
 void x_defrag(size_t sz) {
 	xhdr_t *t, *h = (xhdr_t *) (pMEMORY + xmem_bytes);
@@ -144,7 +143,7 @@ int x_free(byte **var) {
 	if(!h) return -1;
 	h->len = -h->len;	/* mark the block as free */
 	*var = NULL;
-    if((++defrag_cnt % 50) == 0) x_defrag((size_t) -1); /* run memory defragmentation from time to time */
+    if((++defrag_cnt % 31) == 0) x_defrag((size_t) -1); /* run memory defragmentation from time to time */
 	return 0;
 }
 
@@ -193,7 +192,7 @@ void *x_malloc(byte **var, size_t sz) {
 		}
 	}
 	else {	/* a new block will have to be allocated */
-        if(attempts == 2) { x_defrag(sz); attempts--; goto retry; }
+        if(attempts > 1) { x_defrag(sz); attempts--; goto retry; }
 		if((dcur + sz) > (byte *) (hcur - 1)) {
 			if(attempts == 1) { x_defrag((size_t) -1); attempts--; goto retry; }
 			return NULL;	/* ran out of options */

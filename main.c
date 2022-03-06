@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 // main entry point
 int main(void) {
 
@@ -14,7 +15,6 @@ int main(void) {
 
 	initPlatform();
     beep();
-
     int ch;
     FRESULT fr = FR_OK;
 
@@ -56,14 +56,11 @@ int main(void) {
         posX = (Hres - (17 + strlen(AUTHOR) + strlen(SW_VERSION)) * fontScale *
                             (font->header.width + font->header.blankL + font->header.blankR)) / 2;
     }
-    printf("R%s (C) %c%c%c %s, %s\r", SW_VERSION,
-                                        __DATE__[strlen(__DATE__) - 11],
-										__DATE__[strlen(__DATE__) - 10],
-										__DATE__[strlen(__DATE__) - 9],
-										&__DATE__[strlen(__DATE__) - 4],
-                                        AUTHOR);
+    PRINT_VER_INFO(); printf("   \r");
 
     if((enable_flags & FLAG_VIDEO) == 0 || (enable_flags & FLAG_USB)) printf("\n");
+    if(RAM_DRV_KB > 0) printf("[ram]");
+    if(IFS_DRV_KB > 0) printf("[ifs]");
     if(enable_flags & FLAG_USB) printf("[usb]");
     if(enable_flags & FLAG_SERIAL) printf("[ser]");
     if(enable_flags & FLAG_PS2) printf("[kbd]");
@@ -94,7 +91,7 @@ int main(void) {
     }
 	f_close(&File);
 
-    if(enable_flags & FLAG_VIDEO) printf("Video  RAM: %5lu bytes\r\n", VidMemSize);
+    if(enable_flags & FLAG_VIDEO) printf("Video  RAM: %5lu bytes (%d x %d)\r\n", VidMemSize, Hres, Vres);
     printf("System RAM: %5lu bytes\r\n", SysMemSize);
     if(enable_flags & FLAG_PS2) {
         printf("Kbd layout: ");
@@ -148,7 +145,7 @@ int main(void) {
 	/* login with password */
     passw_mode = 1;
     while(1) {
-        ch = edit_line(NULL, 0, 0);
+        ch = edit_line(NULL, 0, 0, hl_keys_RIDE);
         if(ch == KEY_ENT) {
             printf("\r");
             #ifdef BOOTLOADER_APP
