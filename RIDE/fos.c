@@ -9,7 +9,7 @@
 
 #define FOS_BUF	FF_LFN_BUF	/* path and filename buffer size */
 
-char *wbuf = NULL;			/* working buffer */
+char *wbuf = NULL;			/* work buffer */
 
 
 /* show file error message */
@@ -145,21 +145,21 @@ char *wildname(char *mask, char *p1, char *p2, char *buf) {
 /* 'chb' is pointer to free working buffer */
 /* 'msgf' enables messages on the screen (ignored for 'L') */
 void group_exec(char cmd, char *pcmd, char *chb, char msgf) {
-    DIR *dir = NULL;
-	FILINFO *finfo = NULL;
-	x_malloc((byte **) &dir, sizeof(DIR));
-	x_malloc((byte **) &finfo, sizeof(FILINFO));
-    char *par2 = strchr(pcmd, ',');
-    if(par2) {
-        *(par2++) = '\0';   /* detach the second parameter from pcmd */
-        while(*par2 == ' ') par2++;
-        if(*par2 == '\0') par2 = NULL;
-    }
+    x_free((byte **) &wbuf);
+	x_malloc((byte **) &wbuf, FOS_BUF + 1);	/* working buffer for file names and path */
     char *cbuf = NULL;
     x_malloc((byte **) &cbuf, FOS_BUF + 1);	/* buffer for the current path */
-	x_free((byte **) &wbuf);
-	x_malloc((byte **) &wbuf, FOS_BUF + 1);	/* working buffer for file names and path */
+    DIR *dir = NULL;
+	x_malloc((byte **) &dir, sizeof(DIR));
+    FILINFO *finfo = NULL;
+	x_malloc((byte **) &finfo, sizeof(FILINFO));
 	if(dir && finfo && chb && cbuf && wbuf) {
+        char *par2 = strchr(pcmd, ',');
+        if(par2) {
+            *(par2++) = '\0';   /* detach the second parameter from pcmd */
+            while(*par2 == ' ') par2++;
+            if(*par2 == '\0') par2 = NULL;
+        }
         f_getcwd(cbuf, FOS_BUF);			/* store the current path */
         char *sep = strrchr(pcmd, '/');
         char *sep2 = strrchr(pcmd, '\\');
@@ -280,7 +280,16 @@ void group_exec(char cmd, char *pcmd, char *chb, char msgf) {
         f_mount(&FatFs, cbuf, 1);
         f_chdir(cbuf);
     }
-    else if(msgf) errmem();
+    else {
+        #if 0
+        printf("\r\n");
+        printf("dir   %p\r\n", dir);
+        printf("finfo %p\r\n", finfo);
+        printf("cbuf  %p\r\n", cbuf);
+        printf("wbuf  %p\r\n", wbuf);
+        #endif
+        if(msgf) errmem();
+    }
 	x_free((byte **) &finfo);
 	x_free((byte **) &dir);
     x_free((byte **) &cbuf);
@@ -527,7 +536,7 @@ void execute_cmd_fos(char *pcmd) {
 						printf("  | ");
 						for(z = 0; z < pc; z++) {
 							if(ch[z] >= ' ' && ch[z] != 0x7F) printf("%c", ch[z]);
-							else printf("%c", '.');
+							else printf(".");   /* unprintable codes */
 						}
 						ln += pc; pc = 0;
 						if(f) printf("\r\n%06lX:", (unsigned long) ln);

@@ -1,7 +1,8 @@
 #include <math.h>
 #include "../xmem.h"
 #include "graphics.h"
-#include "../config.h"  // links to the basic drawing functions setPixel() and getPixel()
+#include "../config.h"
+#include "ride.h"  // links to the basic drawing functions setPixel() and getPixel()
 
 
 void drawLine(int x1, int y1, int x2, int y2, int c) {
@@ -192,7 +193,7 @@ void drawCircle(int x, int y, int r, int c) {
 
 void drawEllipse(int x, int y, int rx, int ry, double tiltAngle, int c) {
 	double C = cos(tiltAngle);
-	double S = sin(tiltAngle);
+	double S_C = sin(tiltAngle);
 	double xt, yt, xp, yp;
 	if(rx > 0 && ry > 0) {  // solid ellipse
 		for(yt = -ry; yt <= ry; yt++) {
@@ -201,8 +202,8 @@ void drawEllipse(int x, int y, int rx, int ry, double tiltAngle, int c) {
 				double dy = (double) yt / (double) ry;
 				double dd = ((dx * dx) + (dy * dy));
 				if(dd <= 1.0) {
-					xp =  C * xt + S * yt;
-					yp = -S * xt + C * yt;
+					xp =  C * xt + S_C * yt;
+					yp = -S_C * xt + C * yt;
 					setPixel(x + xp, y + yp, c);
 				}
 			}
@@ -213,14 +214,14 @@ void drawEllipse(int x, int y, int rx, int ry, double tiltAngle, int c) {
 		double th = 0.0, st = 0.025;
 		xt = rx * cos(th);
 		yt = ry * sin(th);
-		xp =  C * xt + S * yt;
-		yp = -S * xt + C * yt;
+		xp =  C * xt + S_C * yt;
+		yp = -S_C * xt + C * yt;
 		int xb = xp, yb = yp;
 		for(th = st; th <= (2 * 3.14159265358979323846); th += st) {
 			xt = rx * cos(th);
 			yt = ry * sin(th);
-			xp =  C * xt + S * yt;
-			yp = -S * xt + C * yt;
+			xp =  C * xt + S_C * yt;
+			yp = -S_C * xt + C * yt;
 			drawLine(x + xb, y + yb, x + xp, y + yp, c);
 			xb = xp; yb = yp;
 		}
@@ -238,20 +239,20 @@ void drawSector(int x, int y, int rx, int ry, double tiltAngle, double startAngl
 		endAngle = v;
 	}
     double C = cos(tiltAngle);
-	double S = sin(tiltAngle);
+	double S_C = sin(tiltAngle);
 	int xt, yt, xp, yp;
 	double th, st = 0.015;
 	xt = rx * cos(startAngle);
 	yt = ry * sin(startAngle);
-	xp =  C * xt + S * yt;
-	yp = -S * xt + C * yt;
+	xp =  C * xt + S_C * yt;
+	yp = -S_C * xt + C * yt;
 	drawLine(x, y, x + xp, y + yp, c);
 	int xb = xp, yb = yp;
 	for(th = startAngle; th <= endAngle; th += st) {
 		xt = rx * cos(th);
 		yt = ry * sin(th);
-		xp =  C * xt + S * yt;
-		yp = -S * xt + C * yt;
+		xp =  C * xt + S_C * yt;
+		yp = -S_C * xt + C * yt;
 		drawLine(x + xb, y + yb, x + xp, y + yp, c);
 		if(!outline) drawLine(x, y, x + xp, y + yp, c);     // make it solid
 		xb = xp; yb = yp;
@@ -355,7 +356,7 @@ void drawShape(int x, int y, double tiltAngle, char *def) {
     char draw = 1;
 	int xt, yt, vx, vy, col = 0;
     double C = cos(tiltAngle);
-    double S = sin(tiltAngle);
+    double S_C = sin(tiltAngle);
 	while(*def) {
         if(*def == ' ') def++;
         else if(*def == 'C' || *def == 'c') {   // set drawing colour and enable draw
@@ -382,8 +383,8 @@ void drawShape(int x, int y, double tiltAngle, char *def) {
 			if(*def != ',') continue;   // ignore command with insufficient parameters
             def++;
 			vy = getnum(&def);  /* vertical displacement */
-            xt =  C * vx + S * vy;
-            yt = -S * vx + C * vy;
+            xt =  C * vx + S_C * vy;
+            yt = -S_C * vx + C * vy;
             if(draw) drawLine(x, y, x + xt, y + yt, col);
             x += xt; y += yt;
 		}
@@ -414,7 +415,7 @@ void drawChar(int ch) {
 			return;
 		}
 		else if(ch == '\t') {
-			for(c = 0; c < strlen(TABSTR); c++) drawChar(' ');
+			for(c = 0; c < settings.tab_width; c++) drawChar(' ');
 			return;
 		}
 		else if(ch == '\b') {
@@ -500,7 +501,8 @@ void drawChar(int ch) {
 
 // SYSTEM FONT ==================================================================================
 
-// standard ASCII font 5x8 pixels (drawn in 6x11 pixels box)
+// standard ASCII font 5x8 pixels (drawn in 6x10 pixels box)
+__attribute__ ((space(prog)))
 const font_t sysFont0508 = { {
     1,      // code of the first character in the font
     255,    // 255 characters in this font (ASCII codes 0x01 ... 0xFF)
@@ -508,7 +510,7 @@ const font_t sysFont0508 = { {
     8,      // 8 rows in every character
     1,      // blank columns on the left side of every character
     0,      // blank columns on the right side of every character
-    2,      // blank rows on the top side of every character
+    1,      // blank rows on the top side of every character
     1,      // blank rows on the bottom side of every character
     "ELLO System Font"
     }, {

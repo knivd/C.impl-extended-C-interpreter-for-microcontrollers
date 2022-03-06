@@ -35,13 +35,16 @@ extern "C" {
 #include "graphics.h"
 #include "kbdcodes.h"
 
+/* these are the codes of all keys which need to be released by edit_line() for handling outside */
+/* this array must finish with code 0 */
+extern const int hl_keys_RIDE[];
+
 void RIDE(void);
 void RIDE_release_memory(void);
 int getchx(void);
-int edit_line(char *line, unsigned int line_number, unsigned int x);
+int edit_line(char *line, unsigned int line_number, unsigned int x, const int *hl_keys);
 int wait_for_brcont(void);
 void execute_cmd_line(char *buf);
-void execute_cmd_fos(char *pcmd);
 unsigned long run_file(char *fn);
 void store_settings(void);
 uint32_t hash(const char *data, int len);
@@ -50,7 +53,7 @@ uint32_t hash(const char *data, int len);
 #define PAGE_WIDTH      80          /* default value for initialisation */
 
 /* defines the height of a "screen page" in rows; use a large number to make it "unlimited" */
-#define PAGE_HEIGHT     29          /* default value for initialisation */
+#define PAGE_HEIGHT     25          /* default value for initialisation */
 
 /* define the number of spaces that represent a single tabulation character */
 #define TAB_WIDTH       4           /* default value for initialisation */
@@ -92,15 +95,15 @@ unsigned char passw_mode;       /* flag for password mode in edit_line(); not di
 #endif
 
 /* basic keyboard codes */
-#define KEY_BREAK   '\003'  /* Ctrl-C used for terminating execution */
+#define KEY_BREAK   0x03        /* Ctrl-C used for terminating execution */
+#define KEY_ESC     0x1B        /* cancel and return with the original line */
 #define KEY_ENT     '\r'
 #define KEY_TAB     '\t'
 #define KEY_BSP     '\b'
 #define KEY_NLINE   '\n'
 #define KEY_BEEP    '\a'
-#define KEY_ESC     0x1B  	/* cancel and return with the original line */
 
-#define CTRL_AT     0x00	/* Ctrl-@ */
+#define CTRL_AT     0x00        /* Ctrl-@ */
 #define CTRL_A      0x01
 #define CTRL_B      0x02
 #define CTRL_C      0x03
@@ -112,7 +115,7 @@ unsigned char passw_mode;       /* flag for password mode in edit_line(); not di
 #define CTRL_I      0x09
 #define CTRL_J      0x0A
 #define CTRL_K      0x0B
-#define CTRL_L      0x0C	/* Ctrl-L clear the entire line */
+#define CTRL_L      0x0C        /* Ctrl-L clear the entire line */
 #define CTRL_M      0x0D
 #define CTRL_N      0x0E
 #define CTRL_O      0x0F
@@ -125,13 +128,13 @@ unsigned char passw_mode;       /* flag for password mode in edit_line(); not di
 #define CTRL_V      0x16
 #define CTRL_W      0x17
 #define CTRL_X      0x18
-#define CTRL_Y      0x19	/* Ctrl-Y clear to the end of the line */
-#define CTRL_Z      0x1A	/* Ctrl-Z access the log entries */
-#define CTRL_OPBRKT 0x1B	/* Ctrl-[ */
-#define CTRL_BSLASH 0x1C	/* Ctrl-\ */
-#define CTRL_CLBRKT 0x1D	/* Ctrl-] */
-#define CTRL_CARET  0x1E	/* Ctrl-^ */
-#define CTRL_UNDSCR 0x1F	/* Ctrl-_ */
+#define CTRL_Y      0x19        /* Ctrl-Y clear to the end of the line */
+#define CTRL_Z      0x1A        /* Ctrl-Z access the log entries */
+#define CTRL_OPBRKT 0x1B        /* Ctrl-[ */
+#define CTRL_BSLASH 0x1C        /* Ctrl-\ */
+#define CTRL_CLBRKT 0x1D        /* Ctrl-] */
+#define CTRL_CARET  0x1E        /* Ctrl-^ */
+#define CTRL_UNDSCR 0x1F        /* Ctrl-_ */
 
 #define MULPS2      0x0Ful
 

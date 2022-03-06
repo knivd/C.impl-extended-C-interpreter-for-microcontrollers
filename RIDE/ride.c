@@ -18,9 +18,9 @@
 
 /* these are the codes of all keys which need to be released by edit_line() for handling outside */
 /* this array must finish with code 0 */
-const int hl_keys[] = { KEY_UP, VTM_UP, WIN_UP, KEY_DOWN, VTM_DOWN, WIN_DOWN,
-						KEY_PGUP, VTM_PGUP, WIN_PGUP, KEY_PGDN, VTM_PGDN, WIN_PGDN,
-						KEY_F1, VTM_F1, WIN_F1, CTRL_F, CTRL_R, 0 };
+const int hl_keys_RIDE[] = { KEY_UP, VTM_UP, WIN_UP, KEY_DOWN, VTM_DOWN, WIN_DOWN,
+                             KEY_PGUP, VTM_PGUP, WIN_PGUP, KEY_PGDN, VTM_PGDN, WIN_PGDN,
+                             KEY_F1, VTM_F1, WIN_F1, CTRL_F, CTRL_R, CTRL_U, 0 };
 
 /* history entry structure */
 typedef struct {
@@ -71,7 +71,7 @@ void help(void) {
     printf("\r\n\n");
     help_line(">>> <Ctrl-Z> History          <Ctrl-N> Next line or add new");
     help_line(">>> <Ctrl-L> Clear full line  <Ctrl-Y> Clear to end of line");
-	help_line(">>> <Ctrl-V> Clear screen                                  ");
+	help_line(">>> <Ctrl-V> Clear screen     <Ctrl-U> Print line ruler    ");
     help_line(">>> '.' at start of a line marks a command line            ");
     help_line(">>> '@' represents the current line N     '#' source line N");
     help_line(">>> '!' is the number of lines incl current and to the end ");
@@ -79,7 +79,7 @@ void help(void) {
     help_line(".K cntry   Set keyboard layout (US, UK, DE, FR)            ");
 	}
     help_line(".^ code    Set keyboard break code (default 3)             ");
-    help_line(".N pw, ph  Page width (12-999 chars) and height (2+ lines) ");
+    help_line(".N pw, ph  Page width and height (12-999 chars, 2+ lines)  ");
     help_line(".T width   TAB width (1-80)                                ");
     help_line(".~         Equivalent to <Del>        .\\  New line <Enter>");
     help_line(".* count   Repeat the following cmd for spec'd number times");
@@ -104,7 +104,7 @@ void help(void) {
     #endif
 
     #ifdef COMPILER
-    help_line(".= [file]  Run mem or file  .B file  Compile to p-code exec");
+    help_line(".= [file]  Run mem or file  .B file  Compile to executable ");
     #else
     help_line(".= [file]  Run source in memory or from file               ");
     #endif
@@ -116,16 +116,13 @@ void help(void) {
     #endif
 
     help_line("./init drv:   Initialise drive  ./lock pwd   Lock access   ");
-    help_line("./dir [path][mask]  List files. Can do wildcards '?'and '*'");
+    help_line("./dir [path][mask]  List files. Accepted wildcards '?', '*'");
     help_line("./chdir [drv:][path]  Change drive and/or dir; Show current");  /* 'cd' also works */
     help_line("./mkdir path  Make new dir      ./rmdir path  Remove empty ");
     help_line("./del mask    Delete files      ./ren  mask_old , mask_new ");
-	help_line("./copy mask, mask   Copy files. Supports wildcards '*', '?'");
+	help_line("./copy mask, mask   Copy files. Accepted wildcards '?', '*'");
 	help_line("./list file   List text file    ./blist file  List bin file");
 	help_line("./date YYMMDD Set date          ./time HHMMSS Set time :24h");
-    #ifdef CIMPL
-	help_line("./lsl  <lib>  List consts & funcs in C.impl system library ");
-    #endif
     help_line("./reset       System reset                                 ");
     printf("\n");
     while(kbhit() > 0) getchx();
@@ -145,7 +142,8 @@ void RIDE_release_memory(void) {
     x_free((byte **) &find_str);
     x_free((byte **) &repl_str);
     curline = 1;
-	memset(buffer, 0, sizeof(buffer));  /* clear the edit buffer */
+	/*memset(buffer, 0, sizeof(buffer));*/  /* clear the edit buffer */
+    x_defrag(-1);   /* force full memory defragmentation */
 }
 
 
@@ -160,7 +158,9 @@ void store_settings(void) {
 	if(fr == FR_OK) f_write(&File, &settings, sizeof(ride_settings_t), &wr);
 	f_close(&File);
 	f_chmod(PWD_FILE, (AM_SYS | AM_HID), (AM_SYS | AM_HID));
-	if(fr != FR_OK) errf = errfile(fr, NULL);
+    #if IFS_DRV_KB > 0  // the settings file is normally stored in the IFS: drive
+        if(fr != FR_OK) errf = errfile(fr, NULL);
+    #endif
 }
 
 
@@ -257,6 +257,28 @@ void store_in_log(void) {
 }
 
 
+/* print the ruler */
+void ruler(void) {
+    printf("\r\n     ");	/* this is covering the "%3lu: " format in printLine() */
+    uint16_t r = 5;			/* 5 characters have been printed on the screen already */
+    uint32_t t = (curline + 1) / 1000;
+    while(t) {	/* compensate for line numbers longer than 3 characters */
+        printf(" ");
+        r++;
+        t /= 10;
+    }
+    t = settings.page_width - r;
+    for(r = 1; r < t; r++) {
+        if(r % 10) {
+            if(r % 5) printf(".");
+            else printf(":");
+        }
+        else printf( "%u", ((r / 10) % 10) );
+    }
+    printf("\r\n");
+}
+
+
 /* helper function for edit_line() */
 /* print line in buffer[] according to 'x_pos' and 'x_window' */
 void edit_line_update(unsigned int line_number, char show_xpos) {
@@ -332,7 +354,7 @@ int getchx(void) {
 /* 'x' will position the cursor at specified location within the line */
 /* the function returns the new line in buffer[] */
 /* exit code is the last pressed key */
-int edit_line(char *line, unsigned int line_number, unsigned int x) {
+int edit_line(char *line, unsigned int line_number, unsigned int x, const int *hl_keys) {
     int ch;
     const int *chh;
     unsigned int max_width = settings.page_width;
@@ -344,7 +366,7 @@ int edit_line(char *line, unsigned int line_number, unsigned int x) {
     if(line_number) max_width -= printf("%3d: ", line_number);
     x_pos = 0;
     while((x_window + x_pos) < x_org) {
-        if((x_window + x_pos + 1) < strlen(buffer)) {
+        if((x_window + x_pos + 1) <= strlen(buffer)) {
             if((x_pos + 1) < max_width) x_pos++; else x_window++;
         }
         else break;
@@ -626,51 +648,61 @@ FRESULT open_file(char *buf, char cmd) {
 /* return >=0 for success; -1 when unable to allocate memory; -2 if there was a file error */
 unsigned long run_file(char *fn) {
 	unsigned long result = 0;
+    uint32_t allocated = 0;
+    uint8_t exec_type = 0;      /* 0: interpreter */
+    uint32_t addr_entry = 0;
     file_to_run = fn;
 
-    uint16_t flags_temp = (enable_flags & FLAG_NO_ECHO);
-    enable_flags &= ~FLAG_NO_ECHO;
+    uint16_t flags_temp = enable_flags & (FLAG_NO_ECHO | FLAG_NO_CTRL | FLAG_NO_SCROLL);
+    enable_flags &= ~(FLAG_NO_ECHO | FLAG_NO_CTRL | FLAG_NO_SCROLL);
     if(enable_flags & FLAG_VIDEO) {
         fontScale = 1; fontBcol = 0; fontFcol = 0xFFFFFF;
         font = (font_t *) &sysFont0508;
     }
 
     do {
+        x_defrag(-1);   /* force full memory defragmentation */
         byte *code = NULL;
         if(file_to_run && *file_to_run) {
             FRESULT fr = f_open(&File, file_to_run, (FA_OPEN_EXISTING | FA_READ));
             if(fr != FR_OK) { f_close(&File); errfile(fr, NULL); return -2; }
             uint32_t fs = f_size(&File);
             RIDE_release_memory();
-            x_malloc((byte **) &code, (fs + 4));
+            allocated = fs + 4;
+            exec_type = addr_entry = 0;
+            x_malloc((byte **) &code, allocated);
             if(!code) { f_close(&File); errmem(); return -1; }
             UINT read;
-            fr = f_read(&File, code, fs, &read);
-            if(fr != FR_OK || read != fs) { f_close(&File); errfile(fr, NULL); return -2; }
+            fr = f_read(&File, code + addr_entry, fs, &read);
+            if(fr != FR_OK || read != fs) {
+                f_close(&File);
+                x_free((byte **) &code);
+                errfile(fr, NULL);
+                return -2;
+            }
             f_close(&File);
-			memset((code + fs), ETX, 4);
+			if(exec_type == 0) memset((code + fs), ETX, 4);
         }
 
 		while(kbhit() > 0) getchx();    /* clear the keyboard buffer */
 
         /* run (*code) with an external interpreter. This is the only place with a reference outside of RIDE */
         /* the interpreter must clear (*file_to_run) after execution, or have it loaded it with a new file to run */
-		printf("\r\n");
 
         #if defined(CIMPL)
         	result = Cimpl(code ? (char *) code : TEXT);
 
         #else
-        	printf("\r\nERROR: Missing code execution engine\r\n");
-        	file_to_run = NULL;
-
+            printf("\r\nERROR: Missing code execution engine\r\n");
+            file_to_run = NULL;
         #endif
 
         x_free((byte **) &code);
     } while(file_to_run);
+    x_defrag(-1);   /* force full memory defragmentation */
 
-    if(flags_temp) enable_flags |= FLAG_NO_ECHO;
-    else enable_flags &= ~FLAG_NO_ECHO;
+    enable_flags &= ~(FLAG_NO_ECHO | FLAG_NO_CTRL | FLAG_NO_SCROLL | FLAG_EXECUTING);
+    enable_flags |= flags_temp;
     if(enable_flags & FLAG_VIDEO) {
         fontScale = 1; fontBcol = 0; fontFcol = 0xFFFFFF;
         font = (font_t *) &sysFont0508;
@@ -1177,7 +1209,7 @@ void execute_cmd_line(char *buf) {
         }
 
 		/* compile and create an executable binary file */
-        // ### TODO: compiler?
+        /* ### TODO: compiler? */
 		#ifdef COMPILER
         else if(*b == 'B' || *b == 'b') {
             b++;
@@ -1222,8 +1254,9 @@ void execute_cmd_line(char *buf) {
         /* information */
         else if(*b == '?') {
             b++;
-            printf("\r\n>>> HINT: Use command .H for help\r\n\n");
-			printf(" Free memory: %lu bytes\r\n", ((unsigned long) x_total() >> 7) << 7);
+            printf("\r\n>>> HINT: Use command .H for help\r\n");
+            printf("Version "); PRINT_VER_INFO(); printf("\r\n\n");
+			printf("Free memory: %lu bytes\r\n", ((unsigned long) x_total() >> 7) << 7);
             time_t t0 = time(NULL);
 			printf("Current time: %s\r", ctime(&t0));
             execute_cmd_fos("\003d");	/* show the current path */
@@ -1252,38 +1285,6 @@ void execute_cmd_line(char *buf) {
 }
 
 
-#ifdef CIMPL
-/* interpret a single help string up to a comma or end */
-char *interpret_help(char *help_str, char *str) {
-	char *c = help_str;
-	while(c && *c && *c != ',') {
-		char nosp = 0;
-		if(*c == '*') { nosp = 1; sprintf(&str[strlen(str)], "*"); }
-		if(*c == 'v') sprintf(&str[strlen(str)], "void");
-		if(*c == 'B') sprintf(&str[strlen(str)], "BOOL");
-		if(*c == 'c') sprintf(&str[strlen(str)], "char");
-		if(*c == 's') sprintf(&str[strlen(str)], "short");
-		if(*c == 'i') sprintf(&str[strlen(str)], "int");
-		if(*c == 'l') sprintf(&str[strlen(str)], "long");
-		if(*c == 'L') sprintf(&str[strlen(str)], "long long");
-		if(*c == 'f') sprintf(&str[strlen(str)], "float");
-		if(*c == 'd') sprintf(&str[strlen(str)], "double");
-		if(*c == 'D') sprintf(&str[strlen(str)], "long double");
-		if(*c == 'F') sprintf(&str[strlen(str)], "FILE");
-		if(*c == 'z') sprintf(&str[strlen(str)], "size_t");
-		if(*c == 'C') sprintf(&str[strlen(str)], "const");
-		if(*c == 'u') sprintf(&str[strlen(str)], "unsigned");
-		if(*c == '.') sprintf(&str[strlen(str)], "...");
-		if(*c == 't') sprintf(&str[strlen(str)], "time_t");
-		if(*c == 'm') sprintf(&str[strlen(str)], "struct tm");
-		c++;
-		if(*c && *c != ',' && !nosp) sprintf(&str[strlen(str)], " ");
-	}
-	return c;
-}
-#endif
-
-
 /* main RIDE function */
 void RIDE(void) {
 	int ch, bkk = settings.brk_code;
@@ -1304,7 +1305,7 @@ void RIDE(void) {
 
         char *lz = find_line(curline);
         if(*lz == ETX) lz = insert_line(curline, "");	/* don't allow unitialised text */
-        ch = edit_line(lz, curline, hpos);
+        ch = edit_line(lz, curline, hpos, hl_keys_RIDE);
         hpos = 0;   /* hpos is only valid once */
 
         if(*buffer != '.') {    /* the first character in the line is not '.' so it is handled as text */
@@ -1366,6 +1367,10 @@ void RIDE(void) {
 			else if(ch == CTRL_V) {
 				printf("\r");
                 ch = 100; while(ch--) printf("\n");
+            }
+
+            else if(ch == CTRL_U) {
+                ruler();
             }
 
         }
@@ -1433,101 +1438,6 @@ void RIDE(void) {
 					}
 					else what();
 				}
-
-                #ifdef CIMPL
-				else if(!strncmp(c, "/lsl", 4)) {	/* ./lsl command */
-					c += 4;							/* unlocking is ./lock with no parameters */
-					while(*c == ' ') c++;
-					helpln_counter = 0;
-					char bf = 0;
-					const system_library_t *sl = system_libs;
-					if(*c) {
-				        while(sl->name && strncmp(c, sl->name, strlen(sl->name))) sl++;
-				        if(sl->name) {  /* found the library */
-							char str[100];
-							help_line("\r\n");
-							if(sl->src && *sl->src && !bf) {
-								unsigned int hcnt = 0;
-								const char *s = sl->src;
-								while(*s && *s != ETX && !bf) {
-									printf("%c", *s);
-									if(*(s++) == '\n' || hcnt >= settings.page_width) {
-										hcnt = 0;
-										if((int) ++helpln_counter >= ((int) settings.page_height - 2)) {
-											helpln_counter = 0;
-											if(wait_for_brcont() == settings.brk_code) { printf("\r\n^cancel"); break; }
-										}
-									}
-								}
-								if(!bf) help_line("");
-							}
-							const sys_const_t *cl = sl->const_table;
-							while(cl && cl->nlen && !bf) {	/* list the library constants */
-								sprintf(str, "const ");
-								if(cl->data.type & FT_UNSIGNED) sprintf(&str[strlen(str)], "unsigned ");
-								if((cl->data.type & DT_MASK) == DT_VOID) sprintf(&str[strlen(str)], "void ");
-								if((cl->data.type & DT_MASK) == DT_BOOL) sprintf(&str[strlen(str)], "BOOL ");
-								if((cl->data.type & DT_MASK) == DT_CHAR) sprintf(&str[strlen(str)], "char ");
-								if((cl->data.type & DT_MASK) == DT_SHORT) sprintf(&str[strlen(str)], "short ");
-								if((cl->data.type & DT_MASK) == DT_INT) sprintf(&str[strlen(str)], "int ");
-								if((cl->data.type & DT_MASK) == DT_LONG) sprintf(&str[strlen(str)], "long ");
-								if((cl->data.type & DT_MASK) == DT_LLONG) sprintf(&str[strlen(str)], "long long ");
-								if((cl->data.type & DT_MASK) == DT_FLOAT) sprintf(&str[strlen(str)], "float ");
-								if((cl->data.type & DT_MASK) == DT_DOUBLE) sprintf(&str[strlen(str)], "double ");
-								if((cl->data.type & DT_MASK) == DT_LDOUBLE) sprintf(&str[strlen(str)], "long double ");
-								if((cl->data.type & DT_MASK) == DT_FILE) sprintf(&str[strlen(str)], "FILE ");
-								if((cl->data.type & DT_MASK) == DT_VA_LIST) sprintf(&str[strlen(str)], "va_list ");
-								if(cl->data.type & FT_CONSTPTR) sprintf(&str[strlen(str)], "const ");
-								unsigned int pp = cl->data.ind;
-								while(pp--) sprintf(&str[strlen(str)], "*");
-								sprintf(&str[strlen(str)], "%s", cl->name);
-								for(pp = 0; pp < MAX_DIMENSIONS && cl->data.dim[pp]; pp++) {
-									sprintf(&str[strlen(str)], "[%d]", cl->data.dim[pp]);
-								}
-								if((cl->data.ind == 1 || (cl->data.dim[0] && (cl->data.dim[1] == 0))) &&
-										(cl->data.type & DT_MASK) == DT_CHAR) {
-									sprintf(&str[strlen(str)], " = \"%s\"", (char *) (uintptr_t) cl->data.val.i);
-								}
-								bf = help_line(str);
-						        cl++;
-						    }
-							if(!bf) help_line("");
-	    					const sys_func_t *fl = sl->func_table;
-							while(fl && fl->nlen && !bf) {	/* list the library functions */
-								if(fl->help && *(fl->help)) {
-									if(*fl->help != ':') {
-										*str = '\0';
-										char *s = interpret_help(fl->help, str);
-										if(*str && str[strlen(str) - 1] != '*') sprintf(&str[strlen(str)], " ");
-										sprintf(&str[strlen(str)], "%s(", fl->name);
-										while(*s == ',') {
-											s = interpret_help(++s, str);
-											if(*s == ',') sprintf(&str[strlen(str)], ", ");
-										}
-										sprintf(&str[strlen(str)], ")");
-										bf = help_line(str);
-									}
-									else bf = help_line(fl->help + 1);
-								}
-								else {
-									sprintf(str, "%s()", fl->name);
-									bf = help_line(str);
-								}
-						        fl++;
-						    }
-				        }
-						else what();	/* unknown library */
-					}
-					else {	/* without parameter - list the built-in libraries */
-						help_line("\r\n");
-						while(sl->name) {
-							if(help_line(sl->name)) break;
-							sl++;
-						}
-					}
-					if(!bf) help_line("");
-				}
-                #endif
 
 				else execute_cmd_fos(c + 1);	/* execute file operating system command (only one per command line) */
 			}

@@ -27,6 +27,8 @@ FATFS FatFs;    /* work area for FatFs */
 FIL File;           /* working area for file operations in RIDE */
 char *file_to_run;	/* filename to run (needed for the run() system library function) */
 
+void execute_cmd_fos(char *pcmd);
+FRESULT fcopy(char *src, char *dst);
 int errfile(FRESULT r, char *msg);
 
 #ifdef	__cplusplus

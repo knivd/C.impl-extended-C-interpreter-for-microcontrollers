@@ -71,8 +71,6 @@ uint8_t fontScale;          // font scaling factor
 int32_t fontFcol, fontBcol; // font colours
 int16_t posX, posY;         // virtual cursor position
 
-#define TABSTR  "  "        // graphical representation of a tabulation
-
 void drawChar(int ch);      // draw character at pixel coordinates (posX,posY) and modify them accordingly
 void drawLine(int x1, int y1, int x2, int y2, int c);
 void drawFrame(int x1, int y1, int x2, int y2, int c);
