@@ -68,7 +68,7 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_CODE_PAGE    437
+#define FF_CODE_PAGE    850
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect code page setting can cause a file open failure.
 /
@@ -196,8 +196,11 @@
 /  funciton will be available. */
 
 
-#define FF_MIN_SS		128
-#define FF_MAX_SS       2048
+#define FF_MIN_SS       128
+#ifndef FF_MAX_SS
+#error "Specify FF_MAX_SS for the platform"
+#endif
+//#define FF_MAX_SS       2048
 /* This set of options configures the range of sector size to be supported. (512,
 /  1024, 2048 or 4096) Always set both 512 for most systems, generic memory card and
 /  harddisk. But a larger value may be required for on-board flash memory and some
@@ -243,7 +246,7 @@
 #define FF_FS_NORTC		0
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
-#define FF_NORTC_YEAR   2021
+#define FF_NORTC_YEAR   2022
 /* The option FF_FS_NORTC switches timestamp functiton. If the system does not have
 /  any RTC function or valid timestamp is not needed, set FF_FS_NORTC = 1 to disable
 /  the timestamp function. Every object modified by FatFs will have a fixed timestamp
