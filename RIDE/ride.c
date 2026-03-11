@@ -999,6 +999,7 @@ void execute_cmd_line(char *buf) {
         else if(*b == 'F' || *b == 'f' || *b == 'R' || *b == 'r') {
             char cmd = *(b++);
             char *lz, *p, *s = NULL;
+			if(*b && *b != ' ' && *b != '`') { what(); break; }	/* this subset must be followed only by these characters */
             while(*b == ' ') b++;
 
             if(*b == '`') { /* define string to search for */
@@ -1446,4 +1447,5 @@ void RIDE(void) {
     }   /* all allocated memory remains after exit from RIDE so it can be continued with a new call */
     x_free((byte **) &filename);
 }
+
 
