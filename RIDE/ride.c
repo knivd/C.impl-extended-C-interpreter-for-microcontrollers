@@ -127,6 +127,7 @@ void help(void) {
 	help_line("./copy mask, mask   Copy files. Accepted wildcards '?', '*'");
 	help_line("./list file   List text file    ./blist file  List bin file");
 	help_line("./date YYMMDD Set date          ./time HHMMSS Set time :24h");
+	help_line("./lsl  <lib>  List consts & funcs in C.impl system library ");
     help_line("./reset       System reset                                 ");
     printf("\n");
     while(kbhit() > 0) getchx();
@@ -208,62 +209,6 @@ uint32_t hash(const char *data, int len) {
     hash ^= hash << 25;
     hash += hash >> 6;
     return hash;
-}
-
-
-/* print one type token from a ./lsl help string; advances *h past the token */
-static void lsl_print_type(const char **h) {
-    int is_const = 0, is_unsigned = 0, ptr_count = 0;
-    const char *base = "?";
-    while(**h && **h != ',') {
-        char tc = *(*h)++;
-        if     (tc == 'C') is_const = 1;
-        else if(tc == 'u') is_unsigned = 1;
-        else if(tc == '*') ptr_count++;
-        else if(tc == '.') { printf("..."); return; }
-        else {
-            switch(tc) {
-                case 'v': base = "void";        break;
-                case 'B': base = "bool";        break;
-                case 'c': base = "char";        break;
-                case 's': base = "short";       break;
-                case 'i': base = "int";         break;
-                case 'l': base = "long";        break;
-                case 'L': base = "long long";   break;
-                case 'f': base = "float";       break;
-                case 'd': base = "double";      break;
-                case 'D': base = "long double"; break;
-                case 'F': base = "FILE";        break;
-                case 'z': base = "size_t";      break;
-                case 't': base = "time_t";      break;
-                case 'm': base = "struct tm";   break;
-                default:                        break;
-            }
-        }
-    }
-    if(is_const)    printf("const ");
-    if(is_unsigned) printf("unsigned ");
-    printf("%s", base);
-    while(ptr_count--) printf("*");
-}
-
-/* print one function entry for ./lsl */
-static void lsl_print_func(const char *name, const char *h) {
-    printf("  ");
-    if(!h || !*h) { printf("%s()\r\n", name); return; }
-    if(*h == ':') { printf("%s  %s\r\n", name, h + 1); return; }
-    const char *p = h;
-    lsl_print_type(&p);
-    printf(" %s(", name);
-    if(*p == ',') p++;
-    int first = 1;
-    while(*p) {
-        if(!first) printf(", ");
-        lsl_print_type(&p);
-        if(*p == ',') p++;
-        first = 0;
-    }
-    printf(")\r\n");
 }
 
 
@@ -1345,6 +1290,38 @@ void execute_cmd_line(char *buf) {
 }
 
 
+#ifdef CIMPL
+/* interpret a single help string token up to a comma or end; appends to str */
+char *interpret_help(char *help_str, char *str) {
+	char *c = help_str;
+	while(c && *c && *c != ',') {
+		char nosp = 0;
+		if(*c == '*') { nosp = 1; sprintf(&str[strlen(str)], "*"); }
+		if(*c == 'v') sprintf(&str[strlen(str)], "void");
+		if(*c == 'B') sprintf(&str[strlen(str)], "BOOL");
+		if(*c == 'c') sprintf(&str[strlen(str)], "char");
+		if(*c == 's') sprintf(&str[strlen(str)], "short");
+		if(*c == 'i') sprintf(&str[strlen(str)], "int");
+		if(*c == 'l') sprintf(&str[strlen(str)], "long");
+		if(*c == 'L') sprintf(&str[strlen(str)], "long long");
+		if(*c == 'f') sprintf(&str[strlen(str)], "float");
+		if(*c == 'd') sprintf(&str[strlen(str)], "double");
+		if(*c == 'D') sprintf(&str[strlen(str)], "long double");
+		if(*c == 'F') sprintf(&str[strlen(str)], "FILE");
+		if(*c == 'z') sprintf(&str[strlen(str)], "size_t");
+		if(*c == 'C') sprintf(&str[strlen(str)], "const");
+		if(*c == 'u') sprintf(&str[strlen(str)], "unsigned");
+		if(*c == '.') sprintf(&str[strlen(str)], "...");
+		if(*c == 't') sprintf(&str[strlen(str)], "time_t");
+		if(*c == 'm') sprintf(&str[strlen(str)], "struct tm");
+		c++;
+		if(*c && *c != ',' && !nosp) sprintf(&str[strlen(str)], " ");
+	}
+	return c;
+}
+#endif
+
+
 /* main RIDE function */
 void RIDE(void) {
 	int ch, bkk = settings.brk_code;
@@ -1499,41 +1476,101 @@ void RIDE(void) {
 					else what();
 				}
 
+				#ifdef CIMPL
 				else if(!strncmp(c, "/lsl", 4)) {	/* ./lsl [<library.h>] - list system libraries */
 					c += 4;
 					while(*c == ' ') c++;
-					printf("\r\n");
-					if(!*c) {
-						/* list all library names */
-						const system_library_t *lib = system_libs;
-						while(lib->name) { printf("  %s\r\n", lib->name); lib++; }
-					}
-					else {
-						/* find and list the named library */
-						char libname[20];
-						int li = 0;
-						if(*c != '<') libname[li++] = '<';
-						while(*c && *c != ' ' && li < 18) libname[li++] = *c++;
-						if(li > 0 && libname[li - 1] != '>') libname[li++] = '>';
-						libname[li] = '\0';
-						const system_library_t *lib = system_libs;
-						while(lib->name && strcmp(lib->name, libname)) lib++;
-						if(!lib->name) { what(); }
-						else {
-							printf("  %s\r\n", lib->name);
-							if(lib->const_table) {
-								printf("  Constants:\r\n");
-								const sys_const_t *ct = lib->const_table;
-								while(ct->name) { printf("    %s\r\n", ct->name); ct++; }
+					helpln_counter = 0;
+					char bf = 0;
+					const system_library_t *sl = system_libs;
+					if(*c) {
+						while(sl->name && strncmp(c, sl->name, strlen(sl->name))) sl++;
+						if(sl->name) {	/* found the library */
+							char str[100];
+							help_line("\r\n");
+							if(sl->src && *sl->src && !bf) {
+								unsigned int hcnt = 0;
+								const char *s = sl->src;
+								while(*s && *s != ETX && !bf) {
+									printf("%c", *s);
+									if(*(s++) == '\n' || hcnt >= settings.page_width) {
+										hcnt = 0;
+										if((int) ++helpln_counter >= ((int) settings.page_height - 2)) {
+											helpln_counter = 0;
+											if(wait_for_brcont() == settings.brk_code) { printf("\r\n^cancel"); break; }
+										}
+									}
+								}
+								if(!bf) help_line("");
 							}
-							if(lib->func_table) {
-								printf("  Functions:\r\n");
-								const sys_func_t *ft = lib->func_table;
-								while(ft->name) { lsl_print_func(ft->name, ft->help); ft++; }
+							const sys_const_t *cl = sl->const_table;
+							while(cl && cl->nlen && !bf) {	/* list the library constants */
+								*str = '\0';
+								sprintf(&str[strlen(str)], "const ");
+								if(cl->data.type & FT_UNSIGNED) sprintf(&str[strlen(str)], "unsigned ");
+								if((cl->data.type & DT_MASK) == DT_VOID)    sprintf(&str[strlen(str)], "void ");
+								if((cl->data.type & DT_MASK) == DT_BOOL)    sprintf(&str[strlen(str)], "BOOL ");
+								if((cl->data.type & DT_MASK) == DT_CHAR)    sprintf(&str[strlen(str)], "char ");
+								if((cl->data.type & DT_MASK) == DT_SHORT)   sprintf(&str[strlen(str)], "short ");
+								if((cl->data.type & DT_MASK) == DT_INT)     sprintf(&str[strlen(str)], "int ");
+								if((cl->data.type & DT_MASK) == DT_LONG)    sprintf(&str[strlen(str)], "long ");
+								if((cl->data.type & DT_MASK) == DT_LLONG)   sprintf(&str[strlen(str)], "long long ");
+								if((cl->data.type & DT_MASK) == DT_FLOAT)   sprintf(&str[strlen(str)], "float ");
+								if((cl->data.type & DT_MASK) == DT_DOUBLE)  sprintf(&str[strlen(str)], "double ");
+								if((cl->data.type & DT_MASK) == DT_LDOUBLE) sprintf(&str[strlen(str)], "long double ");
+								if((cl->data.type & DT_MASK) == DT_FILE)    sprintf(&str[strlen(str)], "FILE ");
+								if((cl->data.type & DT_MASK) == DT_VA_LIST) sprintf(&str[strlen(str)], "va_list ");
+								if(cl->data.type & FT_CONSTPTR) sprintf(&str[strlen(str)], "const ");
+								unsigned int pp = cl->data.ind;
+								while(pp--) sprintf(&str[strlen(str)], "*");
+								sprintf(&str[strlen(str)], "%s", cl->name);
+								for(pp = 0; pp < MAX_DIMENSIONS && cl->data.dim[pp]; pp++) {
+									sprintf(&str[strlen(str)], "[%d]", cl->data.dim[pp]);
+								}
+								if((cl->data.ind == 1 || (cl->data.dim[0] && (cl->data.dim[1] == 0))) &&
+										(cl->data.type & DT_MASK) == DT_CHAR) {
+									sprintf(&str[strlen(str)], " = \"%s\"", (char *) (uintptr_t) cl->data.val.i);
+								}
+								bf = help_line(str);
+								cl++;
+							}
+							if(!bf) help_line("");
+							const sys_func_t *fl = sl->func_table;
+							while(fl && fl->nlen && !bf) {	/* list the library functions */
+								if(fl->help && *(fl->help)) {
+									if(*fl->help != ':') {
+										*str = '\0';
+										char *s = interpret_help(fl->help, str);
+										if(*str && str[strlen(str) - 1] != '*') sprintf(&str[strlen(str)], " ");
+										sprintf(&str[strlen(str)], "%s(", fl->name);
+										while(*s == ',') {
+											s = interpret_help(++s, str);
+											if(*s == ',') sprintf(&str[strlen(str)], ", ");
+										}
+										sprintf(&str[strlen(str)], ")");
+										bf = help_line(str);
+									}
+									else bf = help_line(fl->help + 1);
+								}
+								else {
+									sprintf(str, "%s()", fl->name);
+									bf = help_line(str);
+								}
+								fl++;
 							}
 						}
+						else what();	/* unknown library */
 					}
+					else {	/* without parameter - list the built-in libraries */
+						help_line("\r\n");
+						while(sl->name) {
+							if(help_line(sl->name)) break;
+							sl++;
+						}
+					}
+					if(!bf) help_line("");
 				}
+				#endif
 
 				else execute_cmd_fos(c + 1);	/* execute file operating system command (only one per command line) */
 			}
