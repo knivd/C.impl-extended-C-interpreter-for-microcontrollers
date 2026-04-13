@@ -10,6 +10,10 @@
 #include "fos.h"
 #include <conio.h>          /* needed for getch() and kbhit() */
 #include <time.h>           /* needed for the clock() function */
+#ifndef CIMPL
+#define CIMPL               /* enable cimpl.h type definitions for ./lsl */
+#endif
+#include "../Cimpl/cimpl.h"
 
 #ifndef ETX
 #define ETX		((char) 3)	/* ASCII code of the End-Of-Text character */
@@ -204,6 +208,62 @@ uint32_t hash(const char *data, int len) {
     hash ^= hash << 25;
     hash += hash >> 6;
     return hash;
+}
+
+
+/* print one type token from a ./lsl help string; advances *h past the token */
+static void lsl_print_type(const char **h) {
+    int is_const = 0, is_unsigned = 0, ptr_count = 0;
+    const char *base = "?";
+    while(**h && **h != ',') {
+        char tc = *(*h)++;
+        if     (tc == 'C') is_const = 1;
+        else if(tc == 'u') is_unsigned = 1;
+        else if(tc == '*') ptr_count++;
+        else if(tc == '.') { printf("..."); return; }
+        else {
+            switch(tc) {
+                case 'v': base = "void";        break;
+                case 'B': base = "bool";        break;
+                case 'c': base = "char";        break;
+                case 's': base = "short";       break;
+                case 'i': base = "int";         break;
+                case 'l': base = "long";        break;
+                case 'L': base = "long long";   break;
+                case 'f': base = "float";       break;
+                case 'd': base = "double";      break;
+                case 'D': base = "long double"; break;
+                case 'F': base = "FILE";        break;
+                case 'z': base = "size_t";      break;
+                case 't': base = "time_t";      break;
+                case 'm': base = "struct tm";   break;
+                default:                        break;
+            }
+        }
+    }
+    if(is_const)    printf("const ");
+    if(is_unsigned) printf("unsigned ");
+    printf("%s", base);
+    while(ptr_count--) printf("*");
+}
+
+/* print one function entry for ./lsl */
+static void lsl_print_func(const char *name, const char *h) {
+    printf("  ");
+    if(!h || !*h) { printf("%s()\r\n", name); return; }
+    if(*h == ':') { printf("%s  %s\r\n", name, h + 1); return; }
+    const char *p = h;
+    lsl_print_type(&p);
+    printf(" %s(", name);
+    if(*p == ',') p++;
+    int first = 1;
+    while(*p) {
+        if(!first) printf(", ");
+        lsl_print_type(&p);
+        if(*p == ',') p++;
+        first = 0;
+    }
+    printf(")\r\n");
 }
 
 
@@ -1437,6 +1497,42 @@ void RIDE(void) {
                         enable_flags |= FLAG_RTC_UPDATE;
 					}
 					else what();
+				}
+
+				else if(!strncmp(c, "/lsl", 4)) {	/* ./lsl [<library.h>] - list system libraries */
+					c += 4;
+					while(*c == ' ') c++;
+					printf("\r\n");
+					if(!*c) {
+						/* list all library names */
+						const system_library_t *lib = system_libs;
+						while(lib->name) { printf("  %s\r\n", lib->name); lib++; }
+					}
+					else {
+						/* find and list the named library */
+						char libname[20];
+						int li = 0;
+						if(*c != '<') libname[li++] = '<';
+						while(*c && *c != ' ' && li < 18) libname[li++] = *c++;
+						if(li > 0 && libname[li - 1] != '>') libname[li++] = '>';
+						libname[li] = '\0';
+						const system_library_t *lib = system_libs;
+						while(lib->name && strcmp(lib->name, libname)) lib++;
+						if(!lib->name) { what(); }
+						else {
+							printf("  %s\r\n", lib->name);
+							if(lib->const_table) {
+								printf("  Constants:\r\n");
+								const sys_const_t *ct = lib->const_table;
+								while(ct->name) { printf("    %s\r\n", ct->name); ct++; }
+							}
+							if(lib->func_table) {
+								printf("  Functions:\r\n");
+								const sys_func_t *ft = lib->func_table;
+								while(ft->name) { lsl_print_func(ft->name, ft->help); ft++; }
+							}
+						}
+					}
 				}
 
 				else execute_cmd_fos(c + 1);	/* execute file operating system command (only one per command line) */
