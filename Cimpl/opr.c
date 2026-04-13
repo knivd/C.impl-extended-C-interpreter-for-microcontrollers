@@ -30,6 +30,7 @@ void op_increment_pre(void) {
 	else if(isFPN(accN)) ++fval(accN);
 	else error(INVALID_DATA_TYPE);
 	if(vpost) var_set(vpost, &vpost->data, 0);
+	memcpy(&acc[accN - 1], &acc[accN], sizeof(data_t));
 	accN--;
 }
 
@@ -51,6 +52,7 @@ void op_decrement_pre(void) {
 	else if(isFPN(accN)) --fval(accN);
 	else error(INVALID_DATA_TYPE);
 	if(vpost) var_set(vpost, &vpost->data, 0);
+	memcpy(&acc[accN - 1], &acc[accN], sizeof(data_t));
 	accN--;
 }
 

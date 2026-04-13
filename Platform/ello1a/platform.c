@@ -1354,7 +1354,7 @@ int i2cSetTime(struct tm *t) {
     if(i2cSend(BIN2BCD(t->tm_sec))) goto i2cSetTimeFail;
     if(i2cSend(BIN2BCD(t->tm_min))) goto i2cSetTimeFail;
     if(i2cSend(BIN2BCD(t->tm_hour))) goto i2cSetTimeFail;
-    if(i2cSend(1)) goto i2cSetTimeFail;     // weekday is not used
+    if(i2cSend(t->tm_wday + 1)) goto i2cSetTimeFail;  // DS3231 weekday: 1-7
     if(i2cSend(BIN2BCD(t->tm_mday))) goto i2cSetTimeFail;
     if(i2cSend(BIN2BCD((t->tm_mon + 1) | ((t->tm_year > 199) ? 0x80 : 0)))) goto i2cSetTimeFail;
     if(i2cSend(BIN2BCD(t->tm_year % 100))) goto i2cSetTimeFail;

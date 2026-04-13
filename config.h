@@ -9,7 +9,7 @@
 #define PLATFORM    1
 #endif
 
-#define SW_VERSION  "120"
+#define SW_VERSION  "122"
 
 /* these must be the actual platform headers */
 

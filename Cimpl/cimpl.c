@@ -1048,6 +1048,12 @@ void *get_token(void) {
         if(*prog == ETX || *prog == '\0') error(DQUOTE_EXPECTED);
     }
 
+	/* standalone colon for ternary operator: signal caller to stop evaluating */
+	else if(*prog == ':') {
+		token = UNKNOWN;
+		return NULL;
+	}
+
 	/* operators */
 	else if(isoprC(*prog)) {
 		token = OPERATOR;

@@ -734,10 +734,10 @@ void execute_cmd_line(char *buf) {
             b++;
             unsigned int pw = get_number(&b);
             while(*b == ' ') b++;
-            if(*b != ',') what();
+            if(*b != ',') { what(); break; }
             b++;    /* skip the comma character */
             unsigned int ph = get_number(&b);
-            if(pw < 12 || pw > 999 || ph < 2) what();
+            if(pw < 12 || pw > 999 || ph < 2) { what(); break; }
             settings.page_width = pw;
             printf("\r\n>>> Page width is set to %u characters", settings.page_width);
             settings.page_height = ph;
