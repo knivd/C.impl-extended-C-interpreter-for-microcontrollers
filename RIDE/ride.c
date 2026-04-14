@@ -695,8 +695,8 @@ unsigned long run_file(char *fn) {
         /* the interpreter must clear (*file_to_run) after execution, or have it loaded it with a new file to run */
 
         #if defined(CIMPL)
-        	result = Cimpl(code ? (char *) code : TEXT);
-
+            enable_flags |= FLAG_EXECUTING;
+            result = Cimpl(code ? (char *) code : TEXT);
         #else
             printf("\r\nERROR: Missing code execution engine\r\n");
             file_to_run = NULL;
